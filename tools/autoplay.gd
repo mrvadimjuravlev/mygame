@@ -126,7 +126,7 @@ func _solve_09() -> void:
 	print("  наверху: ", _hero().global_position)
 	await _walk_to(450.0)
 	print("  ключ у героя: ", _hero().has_key)
-	await _walk_to(326.0)
+	await _walk_to(344.0)  # край площадки у верха лестницы
 	await _climb(1.0)   # вниз, пропуская птиц
 	await _walk_to(590.0)
 
@@ -140,7 +140,8 @@ func _climb(direction: float) -> void:
 			print("  герой погиб на высоте ", hero.global_position.y if hero else -1.0)
 			return
 		var y := hero.global_position.y
-		if direction < 0 and y <= 189.0:
+		# Долез: выбрался на площадку наверху.
+		if direction < 0 and not hero.climbing and hero.is_on_floor() and y < 210.0:
 			break
 		if direction > 0 and hero.is_on_floor() and y > 1000.0:
 			break
@@ -220,7 +221,7 @@ func _solve_12() -> void:
 	await _walk_to(480.0)  # в ложную стену, к лестнице
 	print("  ход открыт: ", current_scene.get_node("FalseWall").opened)
 	Input.action_press("jump")
-	await _until(func() -> bool: return _hero().global_position.y <= 270.0)
+	await _until(func() -> bool: return not _hero().climbing and _hero().is_on_floor() and _hero().global_position.y < 285.0)
 	Input.action_release("jump")
 	await _walk_to(490.0)
 	# По ступенькам к двери.

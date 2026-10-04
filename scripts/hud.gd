@@ -11,6 +11,7 @@ const BUTTONS := {
 const ACTIONS := {"left": "move_left", "right": "move_right", "action": "action", "jump": "jump"}
 const HINT_BUTTON := Rect2(598, 8, 34, 34)
 const MENU_BUTTON := Rect2(558, 8, 34, 34)
+const INVENTORY_SLOTS := 3
 
 var level: Node
 
@@ -30,24 +31,18 @@ func _ready() -> void:
 	_pad.draw.connect(_draw_pad)
 	add_child(_pad)
 
-	var title := Label.new()
-	title.text = "%d. %s" % [level.level_number, level.slogan]
-	title.position = Vector2(10, 8)
-	title.add_theme_font_size_override("font_size", 12)
-	title.modulate = Color(1, 1, 1, 0.7)
-	add_child(title)
-
+	# Название зоны: по центру сверху, всё время на экране.
 	_slogan = Label.new()
-	_slogan.text = level.slogan
+	_slogan.text = "%d. %s" % [level.level_number, level.slogan]
 	_slogan.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_slogan.size = Vector2(640, 40)
-	_slogan.position = Vector2(0, 110)
-	_slogan.add_theme_font_size_override("font_size", 28)
+	_slogan.size = Vector2(440, 30)
+	_slogan.position = Vector2(100, 8)
+	_slogan.add_theme_font_size_override("font_size", 18)
 	_slogan.add_theme_color_override("font_color", Color("ffe7a3"))
+	_slogan.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.7))
+	_slogan.add_theme_constant_override("shadow_offset_x", 1)
+	_slogan.add_theme_constant_override("shadow_offset_y", 2)
 	add_child(_slogan)
-	var tween := create_tween()
-	tween.tween_interval(1.5)
-	tween.tween_property(_slogan, "modulate:a", 0.0, 0.6)
 
 	_hint_label = Label.new()
 	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -151,15 +146,31 @@ func _draw_pad() -> void:
 		if name == _tutorial:
 			var t := fmod(_time, 1.2) / 1.2
 			_pad.draw_rect(r.grow(4 + 8 * t), Color(1, 0.9, 0.5, 1.0 - t), false, 2.0)
-	var hero := level.get_node_or_null("Hero")
-	if hero and hero.has_key:
-		_pad.draw_rect(Rect2(10, 28, 24, 18), Color(0, 0, 0, 0.3))
-		preload("res://scripts/key_item.gd").draw_key(_pad, Vector2(22, 37))
+	_draw_inventory()
 	_pad.draw_rect(MENU_BUTTON, Color(1, 1, 1, 0.12))
 	for k in 3:
 		_pad.draw_rect(Rect2(MENU_BUTTON.position + Vector2(9, 10 + k * 6), Vector2(16, 2)), Color(1, 1, 1, 0.8))
 	_pad.draw_rect(HINT_BUTTON, Color(0.4, 0.8, 1.0, 0.25))
 	_pad.draw_string(font, HINT_BUTTON.position + Vector2(0, 25), "?", HORIZONTAL_ALIGNMENT_CENTER, HINT_BUTTON.size.x, 20, Color.WHITE)
+
+
+## Артефакты героя: ячейки внизу между кнопками ходьбы и действия.
+func _draw_inventory() -> void:
+	var hero := level.get_node_or_null("Hero")
+	var items: Array[String] = []
+	if hero and hero.has_key:
+		items.append("key")
+	var slot := Vector2(40, 40)
+	var x0 := 320.0 - (INVENTORY_SLOTS * slot.x + (INVENTORY_SLOTS - 1) * 6.0) / 2.0
+	for i in INVENTORY_SLOTS:
+		var r := Rect2(Vector2(x0 + i * (slot.x + 6.0), 304), slot)
+		_pad.draw_rect(r, Color(0, 0, 0, 0.35))
+		_pad.draw_rect(r, Color(1, 0.9, 0.6, 0.25), false, 1.0)
+		if i < items.size():
+			_pad.draw_set_transform(r.get_center(), 0.0, Vector2(2, 2))
+			_pad.draw_circle(Vector2.ZERO, 8.0, Color(1, 0.85, 0.3, 0.15))
+			preload("res://scripts/key_item.gd").draw_key(_pad, Vector2(-1, 0))
+			_pad.draw_set_transform(Vector2.ZERO)
 
 
 func _draw_icon(name: String, c: Vector2, color: Color) -> void:

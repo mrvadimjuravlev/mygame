@@ -53,9 +53,17 @@ func _physics_process(delta: float) -> void:
 		return
 	var dir := Input.get_axis("move_left", "move_right")
 	var ladder := _find_ladder()
-	if not climbing and ladder and (Input.is_action_pressed("jump") or (Input.is_action_pressed("action") and not is_on_floor())):
+	# За лестницу хватается ниже её верха: стоя наверху, ▲ — обычный прыжок.
+	if not climbing and ladder and ((Input.is_action_pressed("jump") and global_position.y > ladder.global_position.y + 4.0) or (Input.is_action_pressed("action") and not is_on_floor())):
 		climbing = true
 		_ladder = ladder
+	elif not climbing and is_on_floor() and Input.is_action_just_pressed("action"):
+		# Стоит у верха лестницы над пустотой: спускается на неё.
+		var below := _ladder_below()
+		if below:
+			climbing = true
+			_ladder = below
+			global_position.y = below.global_position.y + 2.0
 	if climbing and (ladder == null or dir != 0.0):
 		climbing = false
 	if climbing:
@@ -98,9 +106,42 @@ func _climb() -> void:
 		velocity.y = -CLIMB_SPEED
 	elif Input.is_action_pressed("action"):
 		velocity.y = CLIMB_SPEED
-	# Выше верхней перекладины не залезть.
-	if velocity.y < 0.0 and global_position.y <= _ladder.top_y():
+	# Долез до верха: выбирается на площадку рядом, а не висит над лестницей.
+	if velocity.y < 0.0 and global_position.y <= _ladder.global_position.y + 1.0:
+		_climb_out()
+
+
+func _climb_out() -> void:
+	var top: float = _ladder.global_position.y
+	for dx in [0.0, 16.0, -16.0, 24.0, -24.0]:
+		var x: float = _ladder.global_position.x + dx
+		if _solid_at(Vector2(x, top + 3.0)):
+			global_position = Vector2(x, top - 0.5)
+			velocity = Vector2.ZERO
+			climbing = false
+			if dx != 0.0:
+				facing = signf(dx)
+			return
+	# Площадки рядом нет: выше верхней перекладины не залезть.
+	if global_position.y <= _ladder.top_y():
 		velocity.y = 0.0
+
+
+func _solid_at(point: Vector2) -> bool:
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = point
+	query.exclude = [get_rid()]
+	return not get_world_2d().direct_space_state.intersect_point(query, 1).is_empty()
+
+
+func _ladder_below() -> Node:
+	for node in get_tree().get_nodes_in_group("ladder"):
+		var top: float = node.global_position.y
+		if absf(global_position.y - top) < 6.0 and absf(global_position.x - node.global_position.x) < 22.0 \
+				and not _solid_at(Vector2(node.global_position.x, top + 3.0)):
+			global_position.x = node.global_position.x
+			return node
+	return null
 
 
 func _find_ladder() -> Node:
