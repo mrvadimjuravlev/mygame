@@ -1,15 +1,17 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_vysvr"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_rc51s"]
-[ext_resource type="Script" path="res://scripts/door.gd" id="3_pygld"]
-[ext_resource type="Script" path="res://scripts/key_item.gd" id="4_gkg5f"]
-[ext_resource type="Script" path="res://scripts/lever.gd" id="5_iajp5"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_t6w5v"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="7_3jxrd"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_5d5ev"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_7ovfd"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="3_d5lw6"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="4_j51n5"]
+[ext_resource type="Script" path="res://scripts/lever.gd" id="5_cbj7m"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_ljekj"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_qy7ur"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="8_flphs"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="9_xyc30"]
 
 [node name="Level07" type="Node2D"]
-script = ExtResource("1_vysvr")
+script = ExtResource("1_5d5ev")
 level_number = 7
 slogan = "Ключ"
 hints = PackedStringArray("Дверь заперта, а к ней не перепрыгнуть.", "Кнопка опускает камень с ключом над пропастью.", "Нажми кнопку, запрыгни на опустившийся камень, возьми ключ и прыгай к двери.")
@@ -19,51 +21,51 @@ level_height = 360.0
 fall_limit = 420.0
 restart_on_fall = true
 wrap_horizontal = false
-dark = false
-dust = false
+dark = true
+dust = true
 
 [node name="Back" type="Polygon2D" parent="."]
 color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_rc51s")
+script = ExtResource("2_7ovfd")
 polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_rc51s")
+script = ExtResource("2_7ovfd")
 polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_rc51s")
+script = ExtResource("2_7ovfd")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_rc51s")
+script = ExtResource("2_7ovfd")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("2_rc51s")
+script = ExtResource("2_7ovfd")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Platform" type="AnimatableBody2D" parent="."]
 position = Vector2(320, 137)
-script = ExtResource("3_pygld")
+script = ExtResource("3_d5lw6")
 size = Vector2(60, 14)
 open_offset = Vector2(0, 140)
 
 [node name="Key" type="Area2D" parent="Platform"]
 position = Vector2(0, -7)
-script = ExtResource("4_gkg5f")
+script = ExtResource("4_j51n5")
 
 [node name="Button" type="Area2D" parent="."]
 position = Vector2(150, 280)
-script = ExtResource("5_iajp5")
+script = ExtResource("5_cbj7m")
 targets = Array[NodePath]([NodePath("../Platform")])
 effect = &"activate"
 one_shot = true
@@ -71,11 +73,33 @@ style = "button"
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(580, 280)
-script = ExtResource("6_t6w5v")
+script = ExtResource("6_ljekj")
 start_open = false
 needs_key = true
 upside_down = false
 
+[node name="Torch90_200" type="Area2D" parent="."]
+position = Vector2(90, 200)
+script = ExtResource("7_qy7ur")
+start_lit = true
+
+[node name="Torch560_200" type="Area2D" parent="."]
+position = Vector2(560, 200)
+script = ExtResource("7_qy7ur")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="."]
+position = Vector2(180, 90)
+script = ExtResource("8_flphs")
+columns = 3
+signs = PackedStringArray("eye", "wave", "bird", "ankh", "sun", "reed")
+
+[node name="Glyphs2" type="Node2D" parent="."]
+position = Vector2(420, 90)
+script = ExtResource("8_flphs")
+columns = 2
+signs = PackedStringArray("reed", "eye", "ankh", "bird")
+
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("7_3jxrd")
+script = ExtResource("9_xyc30")

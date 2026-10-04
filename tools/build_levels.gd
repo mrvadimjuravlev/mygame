@@ -36,9 +36,8 @@ func _level_01() -> void:
 	_box(0, 0, 960, 150)         # потолок
 	_box(0, 0, 16, 360)          # стены
 	_box(944, 0, 960, 360)
-	for x in [220, 420, 620, 820]:
-		_add("Torch%d" % x, Area2D.new(), "torch.gd", Vector2(x, 200))
 	_exit(900, 280, true)
+	_decor([[220, 200], [420, 200], [620, 200], [820, 200]], [[300, 180, 3, ["eye", "bird", "sun", "reed", "ankh", "wave"]], [690, 180, 2, ["ankh", "eye", "bird", "reed"]]], false)
 	_hero(60, 280)
 	_save(1)
 
@@ -57,6 +56,7 @@ func _level_02() -> void:
 	_box(20, 110, 90, 122)       # недоступный уступ (задел под рывок)
 	_add("Sparkle", Node2D.new(), "sparkle.gd", Vector2(55, 102))
 	_exit(580, 240, true)
+	_decor([[120, 200], [500, 180]], [[150, 140, 3, ["sun", "ankh", "eye", "wave", "reed", "bird"]]], true)
 	_hero(60, 280)
 	_save(2)
 
@@ -72,6 +72,7 @@ func _level_03() -> void:
 	_box(300, 225, 400, 280)     # уступ с рычагом
 	var exit := _exit(560, 280)
 	_lever("Lever", Vector2(370, 225), [exit])
+	_decor([[150, 210], [470, 210]], [[450, 135, 3, ["eye", "ankh", "bird", "reed", "sun", "wave"]]], true)
 	_hero(60, 280)
 	_save(3)
 
@@ -88,6 +89,7 @@ func _level_04() -> void:
 	_tutorial(Vector2(336, 225), &"tap")
 	var exit := _exit(560, 280)
 	_link(slab, [exit])
+	_decor([[200, 230], [470, 230]], [[90, 180, 2, ["eye", "sun", "ankh", "reed"]]], true)
 	_hero(60, 280)
 	_save(4)
 
@@ -111,6 +113,7 @@ func _level_05() -> void:
 	_tutorial(Vector2(320, 120), &"drag", Vector2(0, 160))
 	var exit := _exit(580, 280)
 	_link(bridge, [exit])
+	_decor([[90, 200], [560, 200]], [[40, 70, 3, ["bird", "eye", "reed", "wave", "ankh", "sun"]]], true)
 	_hero(60, 280)
 	_save(5)
 
@@ -130,6 +133,7 @@ func _level_06() -> void:
 	block.idle_blink_after = 20.0
 	var exit := _exit(590, 280)
 	_lever("Lever", Vector2(470, 190), [exit])
+	_decor([[90, 200], [330, 170]], [[180, 125, 3, ["ankh", "bird", "eye", "sun", "reed", "wave"]]], true)
 	_hero(60, 280)
 	_save(6)
 
@@ -155,6 +159,7 @@ func _level_07() -> void:
 	button.style = "button"
 	var exit := _exit(580, 280)
 	exit.needs_key = true
+	_decor([[90, 200], [560, 200]], [[180, 90, 3, ["eye", "wave", "bird", "ankh", "sun", "reed"]], [420, 90, 2, ["reed", "eye", "ankh", "bird"]]], true)
 	_hero(60, 280)
 	_save(7)
 
@@ -173,6 +178,7 @@ func _level_08() -> void:
 	_add("Key", Area2D.new(), "key_item.gd", Vector2(415, 120))  # ключ висит в воздухе
 	var exit := _exit(580, 280)
 	exit.needs_key = true
+	_decor([[60, 200], [540, 180]], [[450, 190, 2, ["eye", "ankh", "sun", "bird"]]], true)
 	_hero(60, 280)
 	_save(8)
 
@@ -204,6 +210,7 @@ func _level_09() -> void:
 		bird.start_dir = b[2]
 	var exit := _exit(590, 1040)
 	exit.needs_key = true
+	_decor([[100, 1000], [560, 980], [560, 700], [100, 600], [560, 400], [100, 250], [560, 140]], [[60, 880, 3, ["bird", "bird", "eye", "wave", "reed", "ankh"]], [480, 520, 3, ["sun", "eye", "ankh", "bird", "wave", "reed"]], [60, 300, 2, ["eye", "bird", "ankh", "sun"]]], true)
 	_hero(60, 1040)
 	_save(9)
 
@@ -220,6 +227,7 @@ func _level_10() -> void:
 	_add("Potion", Area2D.new(), "potion.gd", Vector2(540, 280))
 	var exit := _exit(40, 60, true)
 	exit.upside_down = true
+	_decor([[180, 200], [470, 200]], [[280, 120, 2, ["sun", "wave", "eye", "reed"]]], true)
 	_hero(120, 280)
 	_save(10)
 
@@ -242,6 +250,7 @@ func _level_11() -> void:
 	_link(hourglass, [key])
 	var exit := _exit(600, 280)
 	exit.needs_key = true
+	_decor([[60, 180], [320, 140]], [[30, 80, 3, ["reed", "sun", "eye", "wave", "ankh", "bird"]]], true)
 	_hero(40, 280)
 	_save(11)
 
@@ -283,22 +292,28 @@ func _level_12() -> void:
 	wall.size = Vector2(55, 308)
 	wall.sensor = Rect2(0, 228, 20, 80)
 	wall.crack_at = Vector2(10, 268)
-	# Оформление: полумрак, факелы, иероглифы, пыль.
-	_root.dark = true
-	_root.dust = true
-	for t in [[90, 210], [290, 210], [420, 545], [555, 150]]:
-		var torch := _add("Torch%d_%d" % [t[0], t[1]], Area2D.new(), "torch.gd", Vector2(t[0], t[1]))
-		torch.start_lit = true
-	var glyphs := _add("Glyphs1", Node2D.new(), "glyphs.gd", Vector2(150, 120))
-	glyphs.signs = PackedStringArray(["eye", "ankh", "bird", "sun", "wave", "reed"])
-	var glyphs2 := _add("Glyphs2", Node2D.new(), "glyphs.gd", Vector2(380, 100))
-	glyphs2.columns = 2
-	glyphs2.signs = PackedStringArray(["bird", "eye", "reed", "ankh"])
+	_decor([[90, 210], [290, 210], [420, 545], [555, 150]], [[150, 120, 3, ["eye", "ankh", "bird", "sun", "wave", "reed"]], [380, 100, 2, ["bird", "eye", "reed", "ankh"]]], true)
 	_hero(60, 280)
 	_save(12)
 
 
 # --- Помощники ------------------------------------------------------------
+
+## Оформление пирамиды: полумрак, пыль, факелы и панели с иероглифами.
+## torches: [[x, y], ...]; glyphs: [[x, y, колонки, [знаки...]], ...];
+## lit: факелы горят сразу (false — загораются, когда герой проходит мимо).
+func _decor(torches: Array, glyphs: Array, lit: bool) -> void:
+	_root.dark = true
+	_root.dust = true
+	for t in torches:
+		var torch := _add("Torch%d_%d" % [t[0], t[1]], Area2D.new(), "torch.gd", Vector2(t[0], t[1]))
+		torch.start_lit = lit
+	for i in glyphs.size():
+		var g: Array = glyphs[i]
+		var panel := _add("Glyphs%d" % (i + 1), Node2D.new(), "glyphs.gd", Vector2(g[0], g[1]))
+		panel.columns = g[2]
+		panel.signs = PackedStringArray(g[3])
+
 
 func _begin(number: int, slogan: String, width: float, tutorial: String, hints: Array) -> void:
 	_root = Node2D.new()

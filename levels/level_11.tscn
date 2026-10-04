@@ -1,14 +1,16 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_mygip"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_6q68f"]
-[ext_resource type="Script" path="res://scripts/elusive_key.gd" id="3_04ank"]
-[ext_resource type="Script" path="res://scripts/hourglass.gd" id="4_g14k6"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_qcwwf"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="6_6wvow"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_8sgac"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_jlbol"]
+[ext_resource type="Script" path="res://scripts/elusive_key.gd" id="3_f7c4s"]
+[ext_resource type="Script" path="res://scripts/hourglass.gd" id="4_4uhuf"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_av5iq"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_icqp7"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_tnsm1"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_m6yfh"]
 
 [node name="Level11" type="Node2D"]
-script = ExtResource("1_mygip")
+script = ExtResource("1_8sgac")
 level_number = 11
 slogan = "Останови время"
 hints = PackedStringArray("Ключ не даётся, пока идёт время.", "Где-то на уровне сыплется песок.", "Под потолком справа висят песочные часы. Переверни их пальцем — и ключ больше не убежит.")
@@ -18,72 +20,88 @@ level_height = 360.0
 fall_limit = 420.0
 restart_on_fall = false
 wrap_horizontal = false
-dark = false
-dust = false
+dark = true
+dust = true
 
 [node name="Back" type="Polygon2D" parent="."]
 color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(80, 230, 160, 230, 160, 244, 80, 244)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid6" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(200, 180, 280, 180, 280, 194, 200, 194)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid7" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(360, 230, 440, 230, 440, 244, 360, 244)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid8" type="StaticBody2D" parent="."]
-script = ExtResource("2_6q68f")
+script = ExtResource("2_jlbol")
 polygon = PackedVector2Array(480, 180, 560, 180, 560, 194, 480, 194)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Key" type="Area2D" parent="."]
 position = Vector2(400, 230)
-script = ExtResource("3_04ank")
+script = ExtResource("3_f7c4s")
 spots = PackedVector2Array(400, 230, 520, 180, 120, 230, 240, 180)
 flee_radius = 46.0
 
 [node name="Hourglass" type="Node2D" parent="."]
 position = Vector2(600, 80)
-script = ExtResource("4_g14k6")
+script = ExtResource("4_4uhuf")
 targets = Array[NodePath]([NodePath("../Key")])
 effect = &"activate"
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(600, 280)
-script = ExtResource("5_qcwwf")
+script = ExtResource("5_av5iq")
 start_open = false
 needs_key = true
 upside_down = false
 
+[node name="Torch60_180" type="Area2D" parent="."]
+position = Vector2(60, 180)
+script = ExtResource("6_icqp7")
+start_lit = true
+
+[node name="Torch320_140" type="Area2D" parent="."]
+position = Vector2(320, 140)
+script = ExtResource("6_icqp7")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="."]
+position = Vector2(30, 80)
+script = ExtResource("7_tnsm1")
+columns = 3
+signs = PackedStringArray("reed", "sun", "eye", "wave", "ankh", "bird")
+
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(40, 280)
-script = ExtResource("6_6wvow")
+script = ExtResource("8_m6yfh")
