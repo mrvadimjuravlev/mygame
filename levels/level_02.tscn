@@ -1,0 +1,85 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_hypqs"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_fgpkg"]
+[ext_resource type="Script" path="res://scripts/sparkle.gd" id="3_huyx6"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_x1735"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="5_f00jr"]
+
+[node name="Level02" type="Node2D"]
+script = ExtResource("1_hypqs")
+level_number = 2
+slogan = "Выше"
+hints = PackedStringArray("Не все пути ровные.", "Нажми прыжок рядом с уступом.", "Прыгни на два уступа подряд, затем к двери.")
+tutorial_button = "jump"
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+wrap_horizontal = false
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(0, 280, 380, 280, 380, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(200, 266, 260, 266, 260, 280, 200, 280)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(300, 240, 380, 240, 380, 280, 300, 280)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid7" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(380, 285, 440, 285, 440, 360, 380, 360)
+color = Color(0.788235, 0.639216, 0.356863, 1)
+
+[node name="Solid8" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(440, 240, 640, 240, 640, 360, 440, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid9" type="StaticBody2D" parent="."]
+script = ExtResource("2_fgpkg")
+polygon = PackedVector2Array(20, 110, 90, 110, 90, 122, 20, 122)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Sparkle" type="Node2D" parent="."]
+position = Vector2(55, 102)
+script = ExtResource("3_huyx6")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(580, 240)
+script = ExtResource("4_x1735")
+start_open = true
+needs_key = false
+upside_down = false
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("5_f00jr")

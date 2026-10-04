@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_vysvr"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_rc51s"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="3_pygld"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="4_gkg5f"]
+[ext_resource type="Script" path="res://scripts/lever.gd" id="5_iajp5"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_t6w5v"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="7_3jxrd"]
+
+[node name="Level07" type="Node2D"]
+script = ExtResource("1_vysvr")
+level_number = 7
+slogan = "Ключ"
+hints = PackedStringArray("Дверь заперта, а к ней не перепрыгнуть.", "Кнопка опускает камень с ключом над пропастью.", "Нажми кнопку, запрыгни на опустившийся камень, возьми ключ и прыгай к двери.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+wrap_horizontal = false
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_rc51s")
+polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_rc51s")
+polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_rc51s")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_rc51s")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_rc51s")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Platform" type="AnimatableBody2D" parent="."]
+position = Vector2(320, 137)
+script = ExtResource("3_pygld")
+size = Vector2(60, 14)
+open_offset = Vector2(0, 140)
+
+[node name="Key" type="Area2D" parent="Platform"]
+position = Vector2(0, -7)
+script = ExtResource("4_gkg5f")
+
+[node name="Button" type="Area2D" parent="."]
+position = Vector2(150, 280)
+script = ExtResource("5_iajp5")
+targets = Array[NodePath]([NodePath("../Platform")])
+effect = &"activate"
+one_shot = true
+style = "button"
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(580, 280)
+script = ExtResource("6_t6w5v")
+start_open = false
+needs_key = true
+upside_down = false
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("7_3jxrd")

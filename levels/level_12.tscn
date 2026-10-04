@@ -1,0 +1,162 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_giy7r"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_ntqla"]
+[ext_resource type="Script" path="res://scripts/spikes.gd" id="3_34s6d"]
+[ext_resource type="Script" path="res://scripts/hatch.gd" id="4_g3s2c"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="5_74x50"]
+[ext_resource type="Script" path="res://scripts/ladder.gd" id="6_kyuet"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="7_2wlm2"]
+[ext_resource type="Script" path="res://scripts/false_wall.gd" id="8_xslxr"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="9_03ukf"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="10_re82f"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="11_lkl3m"]
+
+[node name="Level12" type="Node2D"]
+script = ExtResource("1_giy7r")
+level_number = 12
+slogan = "Не та яма"
+hints = PackedStringArray("Обе ямы можно перепрыгнуть, но не всё нужно перепрыгивать.", "Одна яма смертельна, в другой лежит то, что нужно.", "Прыгни во вторую яму за ключом, потом иди вправо прямо в стену: там потайной ход и лестница наверх. Потом по ступенькам к двери.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 720.0
+fall_limit = 800.0
+restart_on_fall = true
+wrap_horizontal = false
+dark = true
+dust = true
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 720, 0, 720)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 40, 0, 40)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 720, 0, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 720, 624, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(16, 280, 160, 280, 160, 720, 16, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(220, 280, 340, 280, 340, 720, 220, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(160, 660, 220, 660, 220, 720, 160, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Spikes" type="Area2D" parent="."]
+position = Vector2(160, 660)
+script = ExtResource("3_34s6d")
+width = 60.0
+
+[node name="Solid8" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(400, 280, 465, 280, 465, 520, 400, 520)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Hatch" type="StaticBody2D" parent="."]
+position = Vector2(465, 280)
+script = ExtResource("4_g3s2c")
+size = Vector2(30, 12)
+
+[node name="Solid10" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(495, 280, 624, 280, 624, 600, 495, 600)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid11" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(500, 240, 540, 240, 540, 280, 500, 280)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid12" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(540, 200, 580, 200, 580, 280, 540, 280)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid13" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(580, 160, 624, 160, 624, 280, 580, 280)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid14" type="StaticBody2D" parent="."]
+script = ExtResource("2_ntqla")
+polygon = PackedVector2Array(340, 600, 624, 600, 624, 720, 340, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Key" type="Area2D" parent="."]
+position = Vector2(420, 600)
+script = ExtResource("5_74x50")
+
+[node name="Ladder" type="Area2D" parent="."]
+position = Vector2(480, 280)
+script = ExtResource("6_kyuet")
+length = 320.0
+rolled_length = 24.0
+start_unrolled = true
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(602, 160)
+script = ExtResource("7_2wlm2")
+start_open = false
+needs_key = true
+upside_down = false
+
+[node name="FalseWall" type="Node2D" parent="."]
+position = Vector2(440, 292)
+script = ExtResource("8_xslxr")
+size = Vector2(55, 308)
+sensor = Rect2(0, 228, 20, 80)
+crack_at = Vector2(10, 268)
+
+[node name="Torch90_210" type="Area2D" parent="."]
+position = Vector2(90, 210)
+script = ExtResource("9_03ukf")
+start_lit = true
+
+[node name="Torch290_210" type="Area2D" parent="."]
+position = Vector2(290, 210)
+script = ExtResource("9_03ukf")
+start_lit = true
+
+[node name="Torch420_545" type="Area2D" parent="."]
+position = Vector2(420, 545)
+script = ExtResource("9_03ukf")
+start_lit = true
+
+[node name="Torch555_150" type="Area2D" parent="."]
+position = Vector2(555, 150)
+script = ExtResource("9_03ukf")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="."]
+position = Vector2(150, 120)
+script = ExtResource("10_re82f")
+columns = 3
+signs = PackedStringArray("eye", "ankh", "bird", "sun", "wave", "reed")
+
+[node name="Glyphs2" type="Node2D" parent="."]
+position = Vector2(380, 100)
+script = ExtResource("10_re82f")
+columns = 2
+signs = PackedStringArray("bird", "eye", "reed", "ankh")
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("11_lkl3m")

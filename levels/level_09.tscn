@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_snhhv"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_lmq5y"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="3_052oy"]
+[ext_resource type="Script" path="res://scripts/ladder.gd" id="4_h1jq0"]
+[ext_resource type="Script" path="res://scripts/lever.gd" id="5_4ewgh"]
+[ext_resource type="Script" path="res://scripts/bird.gd" id="6_vm6k2"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="7_fpe4u"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_2a8cx"]
+
+[node name="Level09" type="Node2D"]
+script = ExtResource("1_snhhv")
+level_number = 9
+slogan = "Выше птиц"
+hints = PackedStringArray("Лестницу можно опустить.", "Птицы летают по одним и тем же линиям — пережди их, остановившись на лестнице.", "Дёрни рычаг, лезь вверх (▲), замирай под птицей, пока она не пролетит. Ключ на платформе наверху, вниз — кнопкой действия.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 1080.0
+fall_limit = 1200.0
+restart_on_fall = true
+wrap_horizontal = false
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 1080, 0, 1080)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_lmq5y")
+polygon = PackedVector2Array(0, 1040, 640, 1040, 640, 1080, 0, 1080)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_lmq5y")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 40, 0, 40)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_lmq5y")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 1080, 0, 1080)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_lmq5y")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 1080, 624, 1080)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_lmq5y")
+polygon = PackedVector2Array(340, 200, 500, 200, 500, 214, 340, 214)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Key" type="Area2D" parent="."]
+position = Vector2(450, 200)
+script = ExtResource("3_052oy")
+
+[node name="Ladder" type="Area2D" parent="."]
+position = Vector2(326, 200)
+script = ExtResource("4_h1jq0")
+length = 840.0
+rolled_length = 24.0
+start_unrolled = false
+
+[node name="Lever" type="Area2D" parent="."]
+position = Vector2(240, 1040)
+script = ExtResource("5_4ewgh")
+targets = Array[NodePath]([NodePath("../Ladder")])
+effect = &"activate"
+one_shot = true
+style = "lever"
+
+[node name="Bird1" type="Area2D" parent="."]
+position = Vector2(120, 860)
+script = ExtResource("6_vm6k2")
+from_x = 40.0
+to_x = 600.0
+speed = 100.0
+start_dir = 1.0
+
+[node name="Bird2" type="Area2D" parent="."]
+position = Vector2(520, 640)
+script = ExtResource("6_vm6k2")
+from_x = 40.0
+to_x = 600.0
+speed = 130.0
+start_dir = -1.0
+
+[node name="Bird3" type="Area2D" parent="."]
+position = Vector2(200, 420)
+script = ExtResource("6_vm6k2")
+from_x = 40.0
+to_x = 600.0
+speed = 160.0
+start_dir = 1.0
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(590, 1040)
+script = ExtResource("7_fpe4u")
+start_open = false
+needs_key = true
+upside_down = false
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 1040)
+script = ExtResource("8_2a8cx")

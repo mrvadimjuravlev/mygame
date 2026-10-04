@@ -1,0 +1,76 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_3e7x6"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_i5uup"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="3_uqwcg"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_jjuik"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="5_h5j7n"]
+
+[node name="Level01" type="Node2D"]
+script = ExtResource("1_3e7x6")
+level_number = 1
+slogan = "Вперёд"
+hints = PackedStringArray("Иди к свету.", "Нажимай кнопку «вправо».", "Дверь в конце коридора справа.")
+tutorial_button = "right"
+level_width = 960.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+wrap_horizontal = false
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_i5uup")
+polygon = PackedVector2Array(0, 280, 960, 280, 960, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_i5uup")
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 150, 0, 150)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_i5uup")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_i5uup")
+polygon = PackedVector2Array(944, 0, 960, 0, 960, 360, 944, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Torch220" type="Area2D" parent="."]
+position = Vector2(220, 200)
+script = ExtResource("3_uqwcg")
+start_lit = false
+
+[node name="Torch420" type="Area2D" parent="."]
+position = Vector2(420, 200)
+script = ExtResource("3_uqwcg")
+start_lit = false
+
+[node name="Torch620" type="Area2D" parent="."]
+position = Vector2(620, 200)
+script = ExtResource("3_uqwcg")
+start_lit = false
+
+[node name="Torch820" type="Area2D" parent="."]
+position = Vector2(820, 200)
+script = ExtResource("3_uqwcg")
+start_lit = false
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(900, 280)
+script = ExtResource("4_jjuik")
+start_open = true
+needs_key = false
+upside_down = false
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("5_h5j7n")

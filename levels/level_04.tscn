@@ -1,0 +1,76 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_gbkk3"]
+[ext_resource type="Script" path="res://scripts/rune_block.gd" id="2_5jowi"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="3_07e7l"]
+[ext_resource type="Script" path="res://scripts/tutorial_hint.gd" id="4_2pegt"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_7q1ed"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="6_tjsal"]
+
+[node name="Level04" type="Node2D"]
+script = ExtResource("1_gbkk3")
+level_number = 4
+slogan = "Коснись"
+hints = PackedStringArray("Герою здесь не справиться одному.", "Голубые руны откликаются на прикосновение.", "Коснись пальцем руны на плите.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+wrap_horizontal = false
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Slab" type="AnimatableBody2D" parent="."]
+position = Vector2(336, 225)
+script = ExtResource("2_5jowi")
+mode = 0
+size = Vector2(32, 110)
+tap_offset = Vector2(0, 110)
+drag_axis = Vector2(1, 0)
+drag_min = 0.0
+drag_max = 200.0
+idle_blink_after = 0.0
+targets = Array[NodePath]([NodePath("../Exit")])
+effect = &"activate"
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("3_07e7l")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("3_07e7l")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 170, 0, 170)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("3_07e7l")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("3_07e7l")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="TutorialHint" type="Node2D" parent="."]
+position = Vector2(336, 225)
+script = ExtResource("4_2pegt")
+wait_for = &"tap"
+move_to = Vector2(0, 0)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(560, 280)
+script = ExtResource("5_7q1ed")
+start_open = false
+needs_key = false
+upside_down = false
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("6_tjsal")

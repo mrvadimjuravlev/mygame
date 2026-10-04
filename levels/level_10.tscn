@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_rbl6d"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_v5qte"]
+[ext_resource type="Script" path="res://scripts/potion.gd" id="3_32vg6"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_k5kj0"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="5_amcku"]
+
+[node name="Level10" type="Node2D"]
+script = ExtResource("1_rbl6d")
+level_number = 10
+slogan = "Верх — это низ, лево — это право"
+hints = PackedStringArray("Обрыв не перепрыгнуть. Но край экрана — не стена.", "Уйди за левый край экрана — выйдешь справа.", "Иди налево за край, появишься справа. Выпей зелье: гравитация перевернётся, и по потолку дойдёшь до двери у левого края.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+wrap_horizontal = true
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_v5qte")
+polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_v5qte")
+polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_v5qte")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Potion" type="Area2D" parent="."]
+position = Vector2(540, 280)
+script = ExtResource("3_32vg6")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(40, 60)
+script = ExtResource("4_k5kj0")
+start_open = true
+needs_key = false
+upside_down = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(120, 280)
+script = ExtResource("5_amcku")

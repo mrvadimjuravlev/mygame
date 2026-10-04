@@ -1,0 +1,89 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_mygip"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_6q68f"]
+[ext_resource type="Script" path="res://scripts/elusive_key.gd" id="3_04ank"]
+[ext_resource type="Script" path="res://scripts/hourglass.gd" id="4_g14k6"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_qcwwf"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="6_6wvow"]
+
+[node name="Level11" type="Node2D"]
+script = ExtResource("1_mygip")
+level_number = 11
+slogan = "Останови время"
+hints = PackedStringArray("Ключ не даётся, пока идёт время.", "Где-то на уровне сыплется песок.", "Под потолком справа висят песочные часы. Переверни их пальцем — и ключ больше не убежит.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+wrap_horizontal = false
+dark = false
+dust = false
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(80, 230, 160, 230, 160, 244, 80, 244)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(200, 180, 280, 180, 280, 194, 200, 194)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid7" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(360, 230, 440, 230, 440, 244, 360, 244)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid8" type="StaticBody2D" parent="."]
+script = ExtResource("2_6q68f")
+polygon = PackedVector2Array(480, 180, 560, 180, 560, 194, 480, 194)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Key" type="Area2D" parent="."]
+position = Vector2(400, 230)
+script = ExtResource("3_04ank")
+spots = PackedVector2Array(400, 230, 520, 180, 120, 230, 240, 180)
+flee_radius = 46.0
+
+[node name="Hourglass" type="Node2D" parent="."]
+position = Vector2(600, 80)
+script = ExtResource("4_g14k6")
+targets = Array[NodePath]([NodePath("../Key")])
+effect = &"activate"
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(600, 280)
+script = ExtResource("5_qcwwf")
+start_open = false
+needs_key = true
+upside_down = false
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(40, 280)
+script = ExtResource("6_6wvow")
