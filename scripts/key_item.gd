@@ -21,6 +21,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("hero"):
 		body.has_key = true
+		Sfx.play("key")
 		queue_free()
 
 

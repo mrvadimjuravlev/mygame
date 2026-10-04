@@ -6,11 +6,12 @@ config_version=5
 
 config/name="Hidden Chambers"
 config/icon="res://icon.png"
-run/main_scene="res://ui/menu.tscn"
+run/main_scene="res://ui/title.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [autoload]
 
+Sfx="*res://scripts/sfx.gd"
 Game="*res://scripts/game.gd"
 
 [display]

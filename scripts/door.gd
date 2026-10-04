@@ -39,6 +39,7 @@ func _move(open: bool) -> void:
 	if open == is_open:
 		return
 	is_open = open
+	Sfx.play("door", -3.0)
 	var tween := create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(self, "position", _closed_position + (open_offset if open else Vector2.ZERO), 0.7)

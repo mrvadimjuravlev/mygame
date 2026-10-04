@@ -30,6 +30,7 @@ func use() -> void:
 	if pulled and one_shot:
 		return
 	pulled = not pulled
+	Sfx.play("lever")
 	queue_redraw()
 	Game.fire(self, targets, effect)
 

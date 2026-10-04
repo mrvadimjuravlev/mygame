@@ -19,6 +19,13 @@ const LEVELS := [
 ]
 const FINISH_SCENE := "res://ui/finish.tscn"
 const MENU_SCENE := "res://ui/menu.tscn"
+const TITLE_SCENE := "res://ui/title.tscn"
+const SAVE_PATH := "user://progress.cfg"
+
+## Номера пройденных уровней (с нуля).
+var passed: Array[int] = []
+## Для проверки прототипа: все уровни открыты, даже непройденные.
+var unlock_all := false
 
 
 func _ready() -> void:
@@ -26,6 +33,7 @@ func _ready() -> void:
 	_add_action("move_right", [KEY_RIGHT, KEY_D])
 	_add_action("jump", [KEY_SPACE, KEY_UP, KEY_W])
 	_add_action("action", [KEY_E, KEY_ENTER])
+	_load()
 
 
 func _add_action(action: StringName, keys: Array) -> void:
@@ -44,6 +52,7 @@ func current_index() -> int:
 
 
 func next_level() -> void:
+	mark_passed(current_index())
 	var i := current_index() + 1
 	var path: String = LEVELS[i] if i > 0 and i < LEVELS.size() else FINISH_SCENE
 	get_tree().change_scene_to_file.call_deferred(path)
@@ -55,6 +64,57 @@ func start_over() -> void:
 
 func open_level(index: int) -> void:
 	get_tree().change_scene_to_file.call_deferred(LEVELS[index])
+
+
+func go_title() -> void:
+	get_tree().change_scene_to_file.call_deferred(TITLE_SCENE)
+
+
+# --- Прогресс ----------------------------------------------------------------
+
+func mark_passed(index: int) -> void:
+	if index >= 0 and not passed.has(index):
+		passed.append(index)
+		passed.sort()
+		save()
+
+
+## Уровень открыт, если он первый или пройден предыдущий.
+func is_unlocked(index: int) -> bool:
+	return unlock_all or index == 0 or passed.has(index - 1) or passed.has(index)
+
+
+## Первый непройденный уровень — с него продолжает кнопка «Играть».
+func continue_index() -> int:
+	for i in LEVELS.size():
+		if not passed.has(i):
+			return i
+	return 0
+
+
+func reset_progress() -> void:
+	passed.clear()
+	unlock_all = false
+	save()
+
+
+func save() -> void:
+	var cfg := ConfigFile.new()
+	cfg.set_value("progress", "passed", passed)
+	cfg.set_value("progress", "unlock_all", unlock_all)
+	cfg.set_value("settings", "sound", Sfx.enabled)
+	cfg.save(SAVE_PATH)
+
+
+func _load() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(SAVE_PATH) != OK:
+		return
+	passed.clear()
+	for i in cfg.get_value("progress", "passed", []):
+		passed.append(int(i))
+	unlock_all = cfg.get_value("progress", "unlock_all", false)
+	Sfx.enabled = cfg.get_value("settings", "sound", true)
 
 
 ## Запускает эффект у всех целей: так устроена система событий «триггер → эффект».

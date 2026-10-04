@@ -85,9 +85,11 @@ func _button_at(pos: Vector2) -> String:
 
 func _touch_down(index: int, pos: Vector2) -> void:
 	if MENU_BUTTON.grow(2).has_point(pos):
+		Sfx.play("ui")
 		get_tree().change_scene_to_file.call_deferred(Game.MENU_SCENE)
 		return
 	if HINT_BUTTON.grow(4).has_point(pos):
+		Sfx.play("ui")
 		_show_next_hint()
 		return
 	var button := _button_at(pos)

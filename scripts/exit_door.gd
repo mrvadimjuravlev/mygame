@@ -46,6 +46,7 @@ func activate() -> void:
 	if is_open:
 		return
 	is_open = true
+	Sfx.play("door")
 	var tween := create_tween()
 	tween.tween_property(self, "_open_amount", 1.0, 0.8).set_trans(Tween.TRANS_QUAD)
 	tween.tween_callback(_check_hero_inside)
@@ -67,6 +68,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if is_open and _open_amount >= 1.0 and body.is_in_group("hero"):
 		set_deferred("monitoring", false)
+		Sfx.play("exit")
 		Game.next_level()
 
 

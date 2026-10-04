@@ -39,6 +39,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if frozen:
 		body.has_key = true
+		Sfx.play("key")
 		queue_free()
 	else:
 		_flee(body)
@@ -61,6 +62,7 @@ func _flee(hero: Node2D) -> void:
 			break
 	global_position = spots[_index]
 	_appear = 0.0
+	Sfx.play("flee", -3.0)
 
 
 func _process(delta: float) -> void:

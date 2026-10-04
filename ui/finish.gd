@@ -1,5 +1,5 @@
 extends Control
-## Экран после шестого уровня.
+## Экран после последнего уровня.
 
 
 func _ready() -> void:
@@ -17,4 +17,5 @@ func _ready() -> void:
 	button.size = Vector2(140, 40)
 	button.position = Vector2(250, 230)
 	button.pressed.connect(Game.start_over)
+	Sfx.play("exit")
 	add_child(button)

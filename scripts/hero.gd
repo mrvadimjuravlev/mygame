@@ -65,13 +65,17 @@ func _physics_process(delta: float) -> void:
 			velocity.y += GRAVITY * gravity_dir * delta
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY * gravity_dir
+			Sfx.play("jump")
 		velocity.x = dir * SPEED
 		if Input.is_action_just_pressed("action"):
 			_try_interact()
 	if dir != 0.0 and signf(dir) != facing:
 		facing = signf(dir)
 	queue_redraw()
+	var falling := absf(velocity.y) > 200.0
 	move_and_slide()
+	if falling and is_on_floor() and not climbing:
+		Sfx.play("land", -4.0)
 	if wrap_width > 0.0:
 		if global_position.x < -6.0:
 			global_position.x += wrap_width + 12.0
@@ -111,6 +115,7 @@ func die() -> void:
 	if _dead:
 		return
 	_dead = true
+	Sfx.play("die")
 	modulate = Color(1, 0.4, 0.4)
 	get_tree().create_timer(0.4).timeout.connect(get_tree().reload_current_scene)
 
@@ -135,6 +140,7 @@ const C_BAG := Color("8a5a2b")
 const C_BELT := Color("4a3020")
 
 var _anim := 0.0
+var _step_frame := -1
 
 
 func _process(delta: float) -> void:
@@ -142,8 +148,14 @@ func _process(delta: float) -> void:
 		return
 	if absf(velocity.x) > 1.0 and is_on_floor() or (climbing and absf(velocity.y) > 1.0):
 		_anim += delta
+		# Шаг слышен на кадрах 1 и 3, когда ступня касается пола.
+		var frame := int(_anim * (8.0 if climbing else 10.0)) % 4
+		if frame != _step_frame and frame % 2 == 1:
+			Sfx.play("step", -8.0, randf_range(0.85, 1.15))
+		_step_frame = frame
 	else:
 		_anim = 0.0
+		_step_frame = -1
 
 
 func _px(x: float, y: float, w: float, h: float, c: Color) -> void:
