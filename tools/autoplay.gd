@@ -91,8 +91,8 @@ func _solve_06() -> void:
 
 
 func _solve_07() -> void:
-	await _walk_to(150.0)
-	_press("action")
+	await _walk_to(150.0)  # встал на плиту — она нажимается
+	print("  плита нажата: ", current_scene.get_node("Button").pulled)
 	await _frames(70)  # камень опускается
 	await _walk_to(225.0)
 	await _jump_right()  # на камень, ключ подбирается
