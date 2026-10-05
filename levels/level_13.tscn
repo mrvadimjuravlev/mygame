@@ -1,19 +1,19 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_8f3ca"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_jsvri"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="3_r7ed3"]
-[ext_resource type="Script" path="res://scripts/plate_sequence.gd" id="4_dm1s7"]
-[ext_resource type="Script" path="res://scripts/color_plate.gd" id="5_ebayn"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="6_xq4n7"]
-[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_kjobq"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="8_fo6ah"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_16mvr"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_pkreu"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="3_admoa"]
+[ext_resource type="Script" path="res://scripts/plate_sequence.gd" id="4_kwrle"]
+[ext_resource type="Script" path="res://scripts/color_plate.gd" id="5_m4ybk"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_2dkri"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_2bgm0"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_mg25c"]
 
 [node name="Level13" type="Node2D"]
-script = ExtResource("1_8f3ca")
+script = ExtResource("1_16mvr")
 level_number = 13
 slogan = "Кровь, небо, трава"
-hints = PackedStringArray("Название зоны — это порядок.", "Кровь — красная, небо — синее, трава — зелёная. Жёлтая плита лишняя.", "Встань на красную, потом на синюю, потом на зелёную. Через остальные перепрыгивай: наступишь не на ту — всё сначала.")
+hints = PackedStringArray("Название зоны — это порядок.", "Кровь — красная, небо — синее, трава — зелёная. Жёлтая плита лишняя.", "Встань на красную, потом на синюю, потом на зелёную, и чтобы между ними не было других плит: через лишние перепрыгивай.")
 tutorial_button = ""
 level_width = 640.0
 level_height = 360.0
@@ -28,81 +28,81 @@ color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_jsvri")
+script = ExtResource("2_pkreu")
 polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_jsvri")
+script = ExtResource("2_pkreu")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_jsvri")
+script = ExtResource("2_pkreu")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_jsvri")
+script = ExtResource("2_pkreu")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(580, 280)
-script = ExtResource("3_r7ed3")
+script = ExtResource("3_admoa")
 start_open = false
 needs_key = false
 upside_down = false
 
 [node name="Plates" type="Node2D" parent="."]
 position = Vector2(320, 150)
-script = ExtResource("4_dm1s7")
+script = ExtResource("4_kwrle")
 order = PackedStringArray("red", "blue", "green")
 targets = Array[NodePath]([NodePath("../Exit")])
 effect = &"activate"
 
 [node name="Plate_green" type="Area2D" parent="Plates"]
 position = Vector2(-160, 130)
-script = ExtResource("5_ebayn")
+script = ExtResource("5_m4ybk")
 color_name = "green"
 
 [node name="Plate_yellow" type="Area2D" parent="Plates"]
 position = Vector2(-70, 130)
-script = ExtResource("5_ebayn")
+script = ExtResource("5_m4ybk")
 color_name = "yellow"
 
 [node name="Plate_blue" type="Area2D" parent="Plates"]
 position = Vector2(20, 130)
-script = ExtResource("5_ebayn")
+script = ExtResource("5_m4ybk")
 color_name = "blue"
 
 [node name="Plate_red" type="Area2D" parent="Plates"]
 position = Vector2(110, 130)
-script = ExtResource("5_ebayn")
+script = ExtResource("5_m4ybk")
 color_name = "red"
 
 [node name="Torch90_200" type="Area2D" parent="."]
 position = Vector2(90, 200)
-script = ExtResource("6_xq4n7")
+script = ExtResource("6_2dkri")
 start_lit = true
 
 [node name="Torch550_200" type="Area2D" parent="."]
 position = Vector2(550, 200)
-script = ExtResource("6_xq4n7")
+script = ExtResource("6_2dkri")
 start_lit = true
 
 [node name="Glyphs1" type="Node2D" parent="."]
 position = Vector2(200, 100)
-script = ExtResource("7_kjobq")
+script = ExtResource("7_2bgm0")
 columns = 3
 signs = PackedStringArray("eye", "sun", "wave", "reed", "bird", "ankh")
 
 [node name="Glyphs2" type="Node2D" parent="."]
 position = Vector2(400, 100)
-script = ExtResource("7_kjobq")
+script = ExtResource("7_2bgm0")
 columns = 2
 signs = PackedStringArray("sun", "wave", "reed", "eye")
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("8_fo6ah")
+script = ExtResource("8_mg25c")

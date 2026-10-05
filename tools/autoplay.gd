@@ -249,8 +249,9 @@ func _jump_right() -> void:
 
 func _solve_13() -> void:
 	var seq := current_scene.get_node("Plates")
-	await _walk_to(200.0)  # по пути наступил на зелёную — не та, сброс
-	print("  зелёная первой: нажато ", seq._progress, ", решено ", seq.solved)
+	await _walk_to(470.0)  # прошёл по всем плитам слева направо — дверь закрыта
+	await _walk_to(200.0)  # обратно: красная, синяя, жёлтая, зелёная — тоже мимо
+	print("  прошёл по всем плитам туда и обратно: решено ", seq.solved)
 	await _hop("move_right")  # через жёлтую
 	await _hop("move_right")  # через синюю
 	await _walk_to(430.0)  # красная
