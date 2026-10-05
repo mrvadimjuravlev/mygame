@@ -248,18 +248,23 @@ func _jump_right() -> void:
 
 
 func _solve_13() -> void:
+	# Плиты на полу: жёлтая 160, красная 250, зелёная 340, синяя 430.
 	var seq := current_scene.get_node("Plates")
 	await _walk_to(470.0)  # прошёл по всем плитам слева направо — дверь закрыта
-	await _walk_to(200.0)  # обратно: красная, синяя, жёлтая, зелёная — тоже мимо
+	await _walk_to(120.0)  # и обратно — тоже мимо
 	print("  прошёл по всем плитам туда и обратно: решено ", seq.solved)
-	await _hop("move_right")  # через жёлтую
-	await _hop("move_right")  # через синюю
-	await _walk_to(430.0)  # красная
-	await _walk_to(340.0)  # синяя
+	await _walk_to(250.0)  # красная
 	await _walk_to(290.0)
-	await _hop("move_left")  # через жёлтую
-	await _walk_to(160.0)  # зелёная
-	print("  порядок красная, синяя, зелёная: решено ", seq.solved)
+	await _hop("move_right")  # через зелёную
+	await _walk_to(430.0)  # синяя
+	await _walk_to(385.0)
+	await _hop("move_left")  # через зелёную
+	await _hop("move_left")  # через красную
+	await _walk_to(160.0)  # жёлтая
+	await _walk_to(200.0)
+	await _hop("move_right")  # через красную
+	await _walk_to(340.0)  # зелёная
+	print("  порядок красная, синяя, жёлтая, зелёная: решено ", seq.solved, " ", seq._history)
 	await _walk_to(580.0)
 
 
