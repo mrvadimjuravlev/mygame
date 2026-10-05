@@ -1,7 +1,7 @@
 @tool
 extends CharacterBody2D
 ## Каменный блок. Герой толкает его, упираясь сбоку; на него можно залезть.
-## Пока на камне горит голубая руна, его можно толкнуть пальцем (касание) — так его сбрасывают с уступа.
+## Если hand_nudge включён, на камне горит голубая руна и его можно толкнуть пальцем (касание).
 ## Начало координат — середина нижней грани.
 
 const RUNE_COLOR := Color("5fd3ff")
@@ -15,6 +15,11 @@ const NUDGE_SPEED := 120.0
 		queue_redraw()
 ## Куда толкает касание пальца: 1 — вправо, -1 — влево.
 @export var nudge_dir := 1.0
+## Камень с руной: его можно толкнуть пальцем.
+@export var hand_nudge := false:
+	set(value):
+		hand_nudge = value
+		queue_redraw()
 
 var hand_used := false
 var _push := 0.0
@@ -25,14 +30,17 @@ var _glow: PointLight2D
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	add_to_group("rune")
 	add_to_group("pushable")
+	if hand_nudge:
+		add_to_group("rune")
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
 	rect.size = size
 	shape.shape = rect
 	shape.position = Vector2(0, -size.y / 2)
 	add_child(shape)
+	if not hand_nudge:
+		return
 	# Руна чуть светится в полумраке, пока камень ждёт пальца.
 	_glow = PointLight2D.new()
 	_glow.texture = preload("res://scripts/art.gd").light_texture()
@@ -97,7 +105,7 @@ func _draw() -> void:
 	# Сколы по углам.
 	draw_rect(Rect2(r.position + Vector2(size.x - 6, 0), Vector2(6, 3)), Color("5e4630"))
 	draw_rect(Rect2(r.position + Vector2(3, size.y - 8), Vector2(4, 3)), Color("6e5236"))
-	if not hand_used and not Engine.is_editor_hint():
+	if hand_nudge and not hand_used and not Engine.is_editor_hint():
 		var c := r.get_center()
 		var glow := 0.55 + 0.35 * sin(Time.get_ticks_msec() / 300.0)
 		var col := Color(RUNE_COLOR, glow)
@@ -105,5 +113,5 @@ func _draw() -> void:
 		draw_line(c + Vector2(-6 * d, 0), c + Vector2(6 * d, 0), col, 2.0)
 		draw_line(c + Vector2(2 * d, -4), c + Vector2(6 * d, 0), col, 2.0)
 		draw_line(c + Vector2(2 * d, 4), c + Vector2(6 * d, 0), col, 2.0)
-	elif Engine.is_editor_hint():
+	elif hand_nudge and Engine.is_editor_hint():
 		draw_rect(r, Color(RUNE_COLOR, 0.6), false, 1.0)

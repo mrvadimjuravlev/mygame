@@ -270,15 +270,21 @@ func _solve_13() -> void:
 
 func _solve_14() -> void:
 	var stone: Node2D = current_scene.get_node("Stone")
-	await _tap(stone.global_position + Vector2(0, -16))
-	await _frames(70)
+	await _walk_to(147.0)  # толкает камень с уступа
+	await _frames(40)
 	print("  камень сброшен: ", stone.global_position)
-	await _walk_to(190.0)  # толкает камень влево до уступа
+	# Спрыгнул; если оказался слева от камня или на нём — перепрыгивает на правую сторону.
+	await _walk_to(stone.global_position.x + 30.0)
+	for k in 3:
+		if _hero().global_position.x > stone.global_position.x + 22.0 and _hero().global_position.y > 270.0:
+			break
+		await _hop("move_right")
+	await _walk_to(188.0)  # толкает камень влево до уступа
 	print("  камень у уступа: ", stone.global_position)
 	await _hop("move_left")  # на камень
-	await _hop("move_left")  # с камня на уступ — открывается тайник
-	print("  на уступе: ", _hero().global_position, " тайник открыт: ", current_scene.get_node("FalseWall").opened)
-	await _walk_to(46.0)
+	await _hop("move_left")  # с камня в проём в стене уступа
+	print("  в тайнике: ", _hero().global_position, " ход открыт: ", current_scene.get_node("FalseWall").opened)
+	await _walk_to(96.0)
 	print("  ключ у героя: ", _hero().has_key)
 	await _walk_to(580.0)
 
