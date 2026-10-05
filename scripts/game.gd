@@ -25,6 +25,8 @@ const WORLDS := [
 	{"id": "dungeon", "name": "Подземелье", "levels": ["res://levels/dungeon_01.tscn", "res://levels/dungeon_02.tscn"]},
 	{"id": "castle", "name": "Замок", "levels": ["res://levels/castle_01.tscn", "res://levels/castle_02.tscn"]},
 	{"id": "temple", "name": "Затонувший храм", "levels": ["res://levels/temple_01.tscn", "res://levels/temple_02.tscn"]},
+	{"id": "ice", "name": "Ледяные пещеры", "levels": []},
+	{"id": "volcano", "name": "Вулкан", "levels": []},
 ]
 const FINISH_SCENE := "res://ui/finish.tscn"
 const MENU_SCENE := "res://ui/menu.tscn"

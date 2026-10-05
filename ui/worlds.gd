@@ -1,5 +1,6 @@
 extends Control
-## Выбор локации: четыре мира карточками. Список и уровни — Game.WORLDS; локация без уровней — «Скоро».
+## Выбор локации: миры карточками в ленте, ленту листают пальцем (или колесом мыши).
+## Список и уровни — Game.WORLDS; локация без уровней — «Скоро».
 
 const Art := preload("res://scripts/art.gd")
 const Style := preload("res://ui/style.gd")
@@ -7,6 +8,20 @@ const Style := preload("res://ui/style.gd")
 const CARD := Vector2(136, 196)
 const GOLD := Color("e2bf78")
 const DARK := Color("1a120c")
+const GAP := 16.0
+const MARGIN := 24.0
+## Сдвиг пальца, после которого касание считается прокруткой, а не нажатием карточки.
+const DRAG_START := 8.0
+
+var _strip: Control
+var _bar: Control
+var _scroll := 0.0
+var _max_scroll := 0.0
+var _velocity := 0.0
+var _pressing := false
+var _dragged := false
+var _press_x := 0.0
+var _last_x := 0.0
 
 
 func _ready() -> void:
@@ -19,11 +34,22 @@ func _ready() -> void:
 	back.modulate = Color(0.75, 0.68, 0.62)
 	add_child(back)
 	add_child(Style.label(Game.t("Выбери локацию"), Vector2(0, 22), 640, 28, GOLD))
-	for i in Game.WORLDS.size():
+	var view := Control.new()
+	view.clip_contents = true
+	view.position = Vector2(0, 70)
+	view.size = Vector2(640, 216)
+	view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(view)
+	_strip = Control.new()
+	_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	view.add_child(_strip)
+	var count := Game.WORLDS.size()
+	_max_scroll = maxf(0.0, MARGIN * 2 + count * CARD.x + (count - 1) * GAP - 640.0)
+	for i in count:
 		var w: Dictionary = Game.WORLDS[i]
 		var open: bool = not w.levels.is_empty()
 		var card := Style.button("", CARD)
-		card.position = Vector2(24 + i * (CARD.x + 16), 78)
+		card.position = Vector2(MARGIN + i * (CARD.x + GAP), 8)
 		card.disabled = not open
 		if open:
 			card.pressed.connect(func() -> void:
@@ -43,11 +69,85 @@ func _ready() -> void:
 		var note_label := Style.label(note, Vector2(0, 166), CARD.x, 11, Style.TEXT_DIM if open else Color("6e5a44"))
 		note_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(note_label)
-		add_child(card)
+		_strip.add_child(card)
+	# Полоса прокрутки: показывает, что карточек больше, чем помещается.
+	_bar = Control.new()
+	_bar.position = Vector2(MARGIN, 292)
+	_bar.size = Vector2(640 - MARGIN * 2, 4)
+	_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bar.draw.connect(_draw_bar)
+	add_child(_bar)
+	# Начать с выбранной локации.
+	var selected := 0
+	for i in count:
+		if Game.WORLDS[i].id == Game.world:
+			selected = i
+	_set_scroll(selected * (CARD.x + GAP) - (640.0 - CARD.x) / 2 + MARGIN)
 	var back_button := Style.button(Game.t("‹ Назад"), Vector2(110, 36), 16)
 	back_button.position = Vector2(16, 308)
 	back_button.pressed.connect(Game.go_title)
 	add_child(back_button)
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_RIGHT:
+			_set_scroll(_scroll + 40.0)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_LEFT:
+			_set_scroll(_scroll - 40.0)
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			_press(event.pressed, event.position)
+	elif event is InputEventScreenTouch and event.index == 0:
+		_press(event.pressed, event.position)
+	elif (event is InputEventMouseMotion or event is InputEventScreenDrag) and _pressing:
+		var x: float = event.position.x
+		if not _dragged and absf(x - _press_x) > DRAG_START:
+			_dragged = true
+		if _dragged:
+			_velocity = (_last_x - x) * 60.0
+			_set_scroll(_scroll + _last_x - x)
+		_last_x = x
+
+
+func _press(down: bool, pos: Vector2) -> void:
+	# Касание вне ленты не листает.
+	if down and (pos.y < 70 or pos.y > 286):
+		return
+	if down:
+		_pressing = true
+		_dragged = false
+		_velocity = 0.0
+		_press_x = pos.x
+		_last_x = pos.x
+	else:
+		_pressing = false
+		# _dragged сбрасывается на следующем касании: карточка проверяет его в pressed.
+
+
+func _process(delta: float) -> void:
+	# Лента продолжает катиться после броска пальцем и плавно останавливается.
+	if not _pressing and absf(_velocity) > 1.0:
+		_set_scroll(_scroll + _velocity * delta)
+		_velocity *= exp(-5.0 * delta)
+
+
+func _set_scroll(value: float) -> void:
+	_scroll = clampf(value, 0.0, _max_scroll)
+	if _scroll == 0.0 or _scroll == _max_scroll:
+		_velocity = 0.0
+	_strip.position.x = -_scroll
+	_bar.queue_redraw()
+
+
+func _draw_bar() -> void:
+	if _max_scroll <= 0.0:
+		return
+	var w := _bar.size.x
+	var view := 640.0
+	var knob := w * view / (view + _max_scroll)
+	var x := (w - knob) * _scroll / _max_scroll
+	_bar.draw_rect(Rect2(0, 0, w, 4), Color(DARK, 0.6))
+	_bar.draw_rect(Rect2(x, 0, knob, 4), Color(GOLD, 0.8))
 
 
 ## Рисунок локации в верхней части карточки. Закрытые — приглушённые, с замком.
@@ -100,6 +200,27 @@ func _draw_emblem(c: Control, emblem: String, open: bool) -> void:
 				var y := o.y + 12 + k * 8
 				for x in range(18, int(CARD.x) - 22, 16):
 					c.draw_line(Vector2(x, y), Vector2(x + 8, y - 2), Color(Color("8fd0e8"), a), 1.0)
+		"ice":
+			# Ледяная пещера: свод, сосульки и кристаллы на полу.
+			var ice := Color(Color("a9d8ec"), a)
+			c.draw_rect(Rect2(14, 14, CARD.x - 28, 14), Color(Color("5f8fa8"), a))
+			for k in 7:
+				var x := 18.0 + k * 15.0
+				c.draw_colored_polygon(PackedVector2Array([Vector2(x, 28), Vector2(x + 10, 28), Vector2(x + 5, 40 + (k % 3) * 8)]), ice)
+			c.draw_rect(Rect2(14, o.y + 30, CARD.x - 28, 6), Color(Color("5f8fa8"), a))
+			for k in 3:
+				var x := 30.0 + k * 34.0
+				var h := 18.0 + (k % 2) * 12.0
+				c.draw_colored_polygon(PackedVector2Array([Vector2(x - 7, o.y + 30), Vector2(x, o.y + 30 - h), Vector2(x + 7, o.y + 30)]), Color(Color("dff4fb"), a))
+		"volcano":
+			# Вулкан: конус, лава в жерле, дым и красное небо.
+			c.draw_rect(Rect2(10, 10, CARD.x - 20, 110), Color(Color("3a1610"), 0.6 * a))
+			c.draw_colored_polygon(PackedVector2Array([o + Vector2(-54, 36), o + Vector2(-14, -26), o + Vector2(14, -26), o + Vector2(54, 36)]), Color(Color("4a3a34"), a))
+			c.draw_rect(Rect2(o.x - 14, o.y - 28, 28, 5), Color(Color("ff6a2a"), a))
+			c.draw_colored_polygon(PackedVector2Array([o + Vector2(-4, -24), o + Vector2(4, -24), o + Vector2(10, 20), o + Vector2(2, 36), o + Vector2(-6, 10)]), Color(Color("ff8a3a"), a))
+			for k in 3:
+				c.draw_circle(o + Vector2(-6 + k * 9, -38 - k * 9), 6.0 + k * 2.0, Color(Color("6a5a56"), 0.8 * a))
+			c.draw_rect(Rect2(14, o.y + 30, CARD.x - 28, 6), Color(Color("ff6a2a"), 0.7 * a))
 	if not open:
 		var lock := Color("b49c7c")
 		c.draw_arc(o + Vector2(0, -4), 9.0, PI, TAU, 12, lock, 3.0)

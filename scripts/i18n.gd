@@ -28,6 +28,8 @@ const EN := {
 	"Подземелье": "Dungeon",
 	"Замок": "Castle",
 	"Затонувший храм": "Sunken Temple",
+	"Ледяные пещеры": "Ice Caves",
+	"Вулкан": "Volcano",
 	"Скоро": "Coming soon",
 
 	# Уровень 1
