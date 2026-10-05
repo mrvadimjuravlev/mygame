@@ -27,8 +27,8 @@ func _ready() -> void:
 	_grid = GridContainer.new()
 	_grid.columns = 6
 	_grid.add_theme_constant_override("h_separation", 12)
-	_grid.add_theme_constant_override("v_separation", 12)
-	_grid.position = Vector2(110, 104)
+	_grid.add_theme_constant_override("v_separation", 10)
+	_grid.position = Vector2(110, 92)
 	add_child(_grid)
 	_fill()
 	var back_button := Style.button("‹ Назад", Vector2(110, 36), 16)

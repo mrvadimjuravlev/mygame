@@ -1,5 +1,5 @@
 extends SceneTree
-## Собирает сцены уровней 1–6 из описаний ниже и сохраняет их в res://levels/.
+## Собирает сцены уровней из описаний ниже и сохраняет их в res://levels/.
 ## Запуск: godot --headless --path . -s tools/build_levels.gd
 ## После сборки уровни можно править в редакторе Godot как обычные сцены.
 
@@ -23,6 +23,7 @@ func _initialize() -> void:
 	_level_10()
 	_level_11()
 	_level_12()
+	_level_13()
 	print("Уровни собраны")
 	quit()
 
@@ -295,6 +296,32 @@ func _level_12() -> void:
 	_decor([[90, 210], [290, 210], [420, 545], [555, 150]], [[150, 120, 3, ["eye", "ankh", "bird", "sun", "wave", "reed"]], [380, 100, 2, ["bird", "eye", "reed", "ankh"]]], true)
 	_hero(60, 280)
 	_save(12)
+
+
+func _level_13() -> void:
+	_begin(13, "Кровь, небо, трава", 640, "", ["Название зоны — это порядок.", "Кровь — красная, небо — синее, трава — зелёная. Жёлтая плита лишняя.", "Встань на красную, потом на синюю, потом на зелёную. Через остальные перепрыгивай: наступишь не на ту — всё сначала."])
+	_back(640)
+	_box(0, 280, 640, 360)       # пол
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	var exit := _exit(580, 280)
+	# Табличка над залом, под ней четыре плиты; по пути вправо первой встречается не та.
+	var seq := _add("Plates", Node2D.new(), "plate_sequence.gd", Vector2(320, 150))
+	seq.order = PackedStringArray(["red", "blue", "green"])
+	_link(seq, [exit])
+	var plates := [["green", 160.0], ["yellow", 250.0], ["blue", 340.0], ["red", 430.0]]
+	for p in plates:
+		var plate := Area2D.new()
+		plate.name = "Plate_" + p[0]
+		plate.set_script(load("res://scripts/color_plate.gd"))
+		plate.color_name = p[0]
+		plate.position = Vector2(p[1] - 320.0, 130.0)
+		seq.add_child(plate)
+		plate.owner = _root
+	_decor([[90, 200], [550, 200]], [[200, 100, 3, ["eye", "sun", "wave", "reed", "bird", "ankh"]], [400, 100, 2, ["sun", "wave", "reed", "eye"]]], true)
+	_hero(60, 280)
+	_save(13)
 
 
 # --- Помощники ------------------------------------------------------------

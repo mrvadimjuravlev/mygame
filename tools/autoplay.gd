@@ -12,7 +12,7 @@ func _initialize() -> void:
 func _run() -> void:
 	change_scene_to_file("res://levels/level_01.tscn")
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13]
 	for i in solvers.size():
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -244,6 +244,32 @@ func _jump_right() -> void:
 	await _frames(5)
 	await _until(func() -> bool: return _hero().is_on_floor())
 	Input.action_release("move_right")
+	await _frames(5)
+
+
+func _solve_13() -> void:
+	var seq := current_scene.get_node("Plates")
+	await _walk_to(200.0)  # по пути наступил на зелёную — не та, сброс
+	print("  зелёная первой: нажато ", seq._progress, ", решено ", seq.solved)
+	await _hop("move_right")  # через жёлтую
+	await _hop("move_right")  # через синюю
+	await _walk_to(430.0)  # красная
+	await _walk_to(340.0)  # синяя
+	await _walk_to(290.0)
+	await _hop("move_left")  # через жёлтую
+	await _walk_to(160.0)  # зелёная
+	print("  порядок красная, синяя, зелёная: решено ", seq.solved)
+	await _walk_to(580.0)
+
+
+func _hop(action: String) -> void:
+	Input.action_press(action)
+	Input.action_press("jump")
+	await _frames(3)
+	Input.action_release("jump")
+	await _frames(5)
+	await _until(func() -> bool: return _hero().is_on_floor())
+	Input.action_release(action)
 	await _frames(5)
 
 

@@ -16,6 +16,7 @@ const LEVELS := [
 	"res://levels/level_10.tscn",
 	"res://levels/level_11.tscn",
 	"res://levels/level_12.tscn",
+	"res://levels/level_13.tscn",
 ]
 const FINISH_SCENE := "res://ui/finish.tscn"
 const MENU_SCENE := "res://ui/menu.tscn"
