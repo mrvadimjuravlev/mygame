@@ -1,0 +1,93 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_43s4d"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_kv8yl"]
+[ext_resource type="Script" path="res://scripts/water.gd" id="3_fs5jw"]
+[ext_resource type="Script" path="res://scripts/potion.gd" id="4_p7sxy"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_uafab"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="6_710sa"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_70fft"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_18uxv"]
+
+[node name="Temple01" type="Node2D"]
+script = ExtResource("1_43s4d")
+level_number = 1
+slogan = "Отражение"
+hints = PackedStringArray("Вода внизу, а небо отражается в ней.", "Зелье переворачивает мир.", "Выпей зелье и иди по потолку над водой к двери.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "temple"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_kv8yl")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_kv8yl")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_kv8yl")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_kv8yl")
+polygon = PackedVector2Array(16, 280, 200, 280, 200, 360, 16, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Water5" type="Node2D" parent="."]
+position = Vector2(200, 296)
+script = ExtResource("3_fs5jw")
+size = Vector2(424, 64)
+
+[node name="Potion" type="Area2D" parent="."]
+position = Vector2(160, 280)
+script = ExtResource("4_p7sxy")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(580, 60)
+script = ExtResource("5_uafab")
+start_open = true
+needs_key = false
+upside_down = true
+
+[node name="Prop8" type="Node2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("6_710sa")
+kind = "weed"
+length = 26.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop9" type="Node2D" parent="."]
+position = Vector2(180, 280)
+script = ExtResource("6_710sa")
+kind = "weed"
+length = 20.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Torch90_200" type="Area2D" parent="."]
+position = Vector2(90, 200)
+script = ExtResource("7_70fft")
+start_lit = true
+
+[node name="Torch400_160" type="Area2D" parent="."]
+position = Vector2(400, 160)
+script = ExtResource("7_70fft")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(50, 280)
+script = ExtResource("8_18uxv")

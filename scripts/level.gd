@@ -16,6 +16,16 @@ extends Node2D
 @export var dark := false
 ## Пыль, висящая в воздухе.
 @export var dust := false
+## Локация: от неё зависит оттенок полумрака — камень пирамиды тёплый, подземелья холодный и т. д.
+@export_enum("pyramid", "dungeon", "castle", "temple") var theme := "pyramid"
+
+## Цвет полумрака по локациям: он перекрашивает песчаник в нужный камень.
+const SHADE := {
+	"pyramid": Color(0.5, 0.43, 0.4),
+	"dungeon": Color(0.34, 0.37, 0.44),
+	"castle": Color(0.46, 0.47, 0.54),
+	"temple": Color(0.3, 0.46, 0.46),
+}
 
 const Art := preload("res://scripts/art.gd")
 
@@ -40,7 +50,7 @@ func _ready() -> void:
 		back.color = Color.WHITE
 	if dark:
 		var mod := CanvasModulate.new()
-		mod.color = Color(0.5, 0.43, 0.4)
+		mod.color = SHADE[theme]
 		add_child(mod)
 		var lamp := PointLight2D.new()
 		lamp.texture = Art.light_texture()

@@ -1,16 +1,9 @@
 extends Control
-## Выбор локации: четыре мира карточками. Открыта пока только Пирамида, остальные — «Скоро».
+## Выбор локации: четыре мира карточками. Список и уровни — Game.WORLDS; локация без уровней — «Скоро».
 
 const Art := preload("res://scripts/art.gd")
 const Style := preload("res://ui/style.gd")
 
-## Мир: название (ключ перевода), открыт ли, рисунок на карточке.
-const WORLDS := [
-	{"name": "Пирамида", "open": true, "emblem": "pyramid"},
-	{"name": "Подземелье", "open": false, "emblem": "dungeon"},
-	{"name": "Замок", "open": false, "emblem": "castle"},
-	{"name": "Затонувший храм", "open": false, "emblem": "temple"},
-]
 const CARD := Vector2(136, 196)
 const GOLD := Color("e2bf78")
 const DARK := Color("1a120c")
@@ -26,24 +19,28 @@ func _ready() -> void:
 	back.modulate = Color(0.75, 0.68, 0.62)
 	add_child(back)
 	add_child(Style.label(Game.t("Выбери локацию"), Vector2(0, 22), 640, 28, GOLD))
-	for i in WORLDS.size():
-		var w: Dictionary = WORLDS[i]
+	for i in Game.WORLDS.size():
+		var w: Dictionary = Game.WORLDS[i]
+		var open: bool = not w.levels.is_empty()
 		var card := Style.button("", CARD)
 		card.position = Vector2(24 + i * (CARD.x + 16), 78)
-		card.disabled = not w.open
-		if w.open:
-			card.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.MENU_SCENE))
+		card.disabled = not open
+		if open:
+			card.pressed.connect(func() -> void:
+				Game.world = w.id
+				Game.save()
+				get_tree().change_scene_to_file.call_deferred(Game.MENU_SCENE))
 		var face := Control.new()
 		face.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		face.size = CARD
-		face.draw.connect(_draw_emblem.bind(face, w.emblem, w.open))
+		face.draw.connect(_draw_emblem.bind(face, w.id, open))
 		card.add_child(face)
-		var name_label := Style.label(Game.t(w.name), Vector2(0, 128), CARD.x, 15, Style.TEXT if w.open else Color("8a7458"))
+		var name_label := Style.label(Game.t(w.name), Vector2(0, 128), CARD.x, 15, Style.TEXT if open else Color("8a7458"))
 		name_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(name_label)
-		var note := Game.t("%d из %d пройдено") % [Game.passed.size(), Game.LEVELS.size()] if w.open else Game.t("Скоро")
-		var note_label := Style.label(note, Vector2(0, 166), CARD.x, 11, Style.TEXT_DIM if w.open else Color("6e5a44"))
+		var note := Game.t("%d из %d пройдено") % [Game.passed_count(w.id), w.levels.size()] if open else Game.t("Скоро")
+		var note_label := Style.label(note, Vector2(0, 166), CARD.x, 11, Style.TEXT_DIM if open else Color("6e5a44"))
 		note_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(note_label)
 		add_child(card)

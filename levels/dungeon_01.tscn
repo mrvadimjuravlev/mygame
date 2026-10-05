@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_xovc3"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_5wrn6"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="3_482se"]
+[ext_resource type="Script" path="res://scripts/lever.gd" id="4_knier"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_jxhnx"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="6_gm4re"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_7h1mr"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_5ygcu"]
+
+[node name="Dungeon01" type="Node2D"]
+script = ExtResource("1_xovc3")
+level_number = 1
+slogan = "Решётка"
+hints = PackedStringArray("Решётку не поднять руками.", "Рядом есть рычаг.", "Нажми рычаг кнопкой действия — решётка поднимется.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_5wrn6")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_5wrn6")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_5wrn6")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_5wrn6")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Gate" type="AnimatableBody2D" parent="."]
+position = Vector2(400, 200)
+script = ExtResource("3_482se")
+size = Vector2(14, 160)
+open_offset = Vector2(0, -150)
+
+[node name="Lever" type="Area2D" parent="."]
+position = Vector2(250, 280)
+script = ExtResource("4_knier")
+targets = Array[NodePath]([NodePath("../Gate")])
+effect = &"activate"
+one_shot = true
+style = "lever"
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(580, 280)
+script = ExtResource("5_jxhnx")
+start_open = true
+needs_key = false
+upside_down = false
+
+[node name="Prop8" type="Node2D" parent="."]
+position = Vector2(120, 60)
+script = ExtResource("6_gm4re")
+kind = "chain"
+length = 50.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop9" type="Node2D" parent="."]
+position = Vector2(330, 60)
+script = ExtResource("6_gm4re")
+kind = "chain"
+length = 50.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop10" type="Node2D" parent="."]
+position = Vector2(470, 60)
+script = ExtResource("6_gm4re")
+kind = "chain"
+length = 90.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Torch180_200" type="Area2D" parent="."]
+position = Vector2(180, 200)
+script = ExtResource("7_7h1mr")
+start_lit = true
+
+[node name="Torch520_200" type="Area2D" parent="."]
+position = Vector2(520, 200)
+script = ExtResource("7_7h1mr")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("8_5ygcu")

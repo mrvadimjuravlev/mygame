@@ -100,6 +100,32 @@ const EN := {
 	"Камень можно толкать.": "The stone can be pushed.",
 	"Столкни камень с уступа. В самом уступе есть тайник, но вход в него высоко.": "Push the stone off the ledge. There is a hidden chamber inside the ledge, but its entrance is high up.",
 	"Подтолкни камень к уступу, залезь на него и прыгни влево в стену уступа: там потайной ход и ключ.": "Push the stone against the ledge, climb onto it and jump left into the ledge wall: there is a secret passage with the key.",
+	# Подземелье
+	"Решётка": "The Portcullis",
+	"Решётку не поднять руками.": "The portcullis can't be lifted by hand.",
+	"Рядом есть рычаг.": "There is a lever nearby.",
+	"Нажми рычаг кнопкой действия — решётка поднимется.": "Pull the lever with the action button and the portcullis will rise.",
+	"Шипы во тьме": "Spikes in the Dark",
+	"Через яму есть путь, просто его не видно.": "There is a way across the pit, you just can't see it.",
+	"Над шипами висят невидимые камни.": "Invisible stones hang above the spikes.",
+	"Прыгай с края ямы вправо: невидимые камни примерно через каждые два шага.": "Jump right from the edge of the pit: there is an invisible stone about every two steps.",
+	# Замок
+	"Подъёмный мост": "The Drawbridge",
+	"Ров не перепрыгнуть.": "The moat is too wide to jump.",
+	"Мост висит на цепях над рвом.": "The bridge hangs on chains above the moat.",
+	"Коснись пальцем руны на мосту — он опустится.": "Touch the rune on the bridge and it will come down.",
+	"Ключ от башни": "The Tower Key",
+	"Ключ наверху башни.": "The key is at the top of the tower.",
+	"Лестницу можно спустить рычагом.": "A lever lowers the ladder.",
+	"Нажми рычаг, залезь по лестнице за ключом, спустись и иди к двери слева.": "Pull the lever, climb the ladder for the key, climb back down and go to the door on the left.",
+	# Затонувший храм
+	"Отражение": "Reflection",
+	"Вода внизу, а небо отражается в ней.": "The water is below, and the sky is reflected in it.",
+	"Зелье переворачивает мир.": "The potion turns the world upside down.",
+	"Выпей зелье и иди по потолку над водой к двери.": "Drink the potion and walk along the ceiling above the water to the door.",
+	"Море, песок, водоросли": "Sea, sand, seaweed",
+	"Море — синее, песок — жёлтый, водоросли — зелёные. Красная плита лишняя.": "The sea is blue, sand is yellow, seaweed is green. The red plate is not needed.",
+	"Встань на синюю, жёлтую и зелёную плиты по очереди, и чтобы между ними не было других плит: через лишние перепрыгивай.": "Step on the blue, yellow and green plates in turn, with no other plate in between: jump over the ones you don't need.",
 }
 
 

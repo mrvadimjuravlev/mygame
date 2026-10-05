@@ -35,7 +35,37 @@ func _run() -> void:
 		await _frames(5)
 	if not _failed:
 		print("Финальный экран: ", current_scene.scene_file_path)
+		await _run_worlds()
 	quit(1 if _failed else 0)
+
+
+## Тестовые уровни других локаций: каждый запускается отдельно.
+func _run_worlds() -> void:
+	var cases := [
+		["res://levels/dungeon_01.tscn", _solve_dungeon_01],
+		["res://levels/dungeon_02.tscn", _solve_dungeon_02],
+		["res://levels/castle_01.tscn", _solve_castle_01],
+		["res://levels/castle_02.tscn", _solve_castle_02],
+		["res://levels/temple_01.tscn", _solve_temple_01],
+		["res://levels/temple_02.tscn", _solve_temple_02],
+	]
+	for c in cases:
+		change_scene_to_file(c[0])
+		for f in 120:
+			if current_scene and current_scene.scene_file_path == c[0]:
+				break
+			await physics_frame
+		await _frames(5)
+		await c[1].call()
+		var ok := await _wait_scene_change(c[0], 900)
+		_release_all()
+		print(c[0].get_file().get_basename(), ": ", "пройден" if ok else "НЕ ПРОЙДЕН")
+		if not ok:
+			var h := current_scene.get_node_or_null("Hero")
+			if h: print("  герой ", h.global_position)
+			_failed = true
+			return
+		await _frames(5)
 
 
 # --- Решения уровней ------------------------------------------------------
@@ -286,6 +316,69 @@ func _solve_14() -> void:
 	print("  в тайнике: ", _hero().global_position, " ход открыт: ", current_scene.get_node("FalseWall").opened)
 	await _walk_to(96.0)
 	print("  ключ у героя: ", _hero().has_key)
+	await _walk_to(580.0)
+
+
+func _solve_dungeon_01() -> void:
+	await _walk_to(250.0)
+	await _frames(5)
+	_press("action")  # рычаг поднимает решётку
+	await _frames(60)
+	await _walk_to(580.0)
+
+
+func _solve_dungeon_02() -> void:
+	await _walk_to(194.0)
+	for k in 3:
+		await _hop("move_right")  # по невидимым камням над шипами
+		print("  прыжок ", k + 1, ": ", _hero().global_position if _hero() else "погиб")
+	await _walk_to(580.0)
+
+
+func _solve_castle_01() -> void:
+	await _tap(current_scene.get_node("Bridge").global_position)  # мост опускается
+	await _frames(60)
+	await _walk_to(580.0)
+
+
+func _solve_castle_02() -> void:
+	await _walk_to(380.0)
+	await _frames(5)
+	_press("action")  # лестница разворачивается
+	await _frames(90)
+	await _walk_to(436.0)
+	Input.action_press("jump")
+	await _until(func() -> bool: return not _hero().climbing and _hero().is_on_floor() and _hero().global_position.y < 150.0)
+	Input.action_release("jump")
+	await _walk_to(560.0)  # ключ
+	print("  ключ у героя: ", _hero().has_key)
+	await _walk_to(455.0)
+	_press("action")  # спуск на лестницу
+	Input.action_press("action")
+	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 270.0)
+	Input.action_release("action")
+	await _walk_to(60.0)
+
+
+func _solve_temple_01() -> void:
+	await _walk_to(160.0)  # зелье: гравитация вверх
+	await _frames(30)
+	await _walk_to(580.0)
+
+
+func _solve_temple_02() -> void:
+	# Плиты: зелёная 160, синяя 250, красная 340, жёлтая 430. Порядок: синяя, жёлтая, зелёная.
+	var seq := current_scene.get_node("Plates")
+	await _walk_to(250.0)  # зелёная, синяя
+	await _walk_to(290.0)
+	await _hop("move_right")  # через красную
+	await _walk_to(430.0)  # жёлтая
+	await _walk_to(385.0)
+	await _hop("move_left")  # через красную
+	await _walk_to(282.0)
+	await _hop("move_left")  # через синюю
+	await _walk_to(160.0)  # зелёная
+	print("  порядок синяя, жёлтая, зелёная: решено ", seq.solved, " ", seq._history)
 	await _walk_to(580.0)
 
 

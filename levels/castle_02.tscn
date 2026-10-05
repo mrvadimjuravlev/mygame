@@ -1,0 +1,109 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_brs5b"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_3fpw3"]
+[ext_resource type="Script" path="res://scripts/ladder.gd" id="3_ov26h"]
+[ext_resource type="Script" path="res://scripts/lever.gd" id="4_1ns14"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="5_0lvrm"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_7tcxh"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="7_6ssh2"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="8_e8mgo"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="9_julw4"]
+
+[node name="Castle02" type="Node2D"]
+script = ExtResource("1_brs5b")
+level_number = 2
+slogan = "Ключ от башни"
+hints = PackedStringArray("Ключ наверху башни.", "Лестницу можно спустить рычагом.", "Нажми рычаг, залезь по лестнице за ключом, спустись и иди к двери слева.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "castle"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_3fpw3")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_3fpw3")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_3fpw3")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_3fpw3")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_3fpw3")
+polygon = PackedVector2Array(450, 140, 624, 140, 624, 154, 450, 154)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Ladder" type="Area2D" parent="."]
+position = Vector2(436, 140)
+script = ExtResource("3_ov26h")
+length = 140.0
+rolled_length = 24.0
+start_unrolled = false
+
+[node name="Lever" type="Area2D" parent="."]
+position = Vector2(380, 280)
+script = ExtResource("4_1ns14")
+targets = Array[NodePath]([NodePath("../Ladder")])
+effect = &"activate"
+one_shot = true
+style = "lever"
+
+[node name="Key" type="Area2D" parent="."]
+position = Vector2(560, 140)
+script = ExtResource("5_0lvrm")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("6_7tcxh")
+start_open = false
+needs_key = true
+upside_down = false
+
+[node name="Prop10" type="Node2D" parent="."]
+position = Vector2(200, 80)
+script = ExtResource("7_6ssh2")
+kind = "banner"
+length = 80.0
+color = Color(0.168627, 0.290196, 0.541176, 1)
+
+[node name="Prop11" type="Node2D" parent="."]
+position = Vector2(540, 160)
+script = ExtResource("7_6ssh2")
+kind = "banner"
+length = 60.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Torch130_200" type="Area2D" parent="."]
+position = Vector2(130, 200)
+script = ExtResource("8_e8mgo")
+start_lit = true
+
+[node name="Torch300_200" type="Area2D" parent="."]
+position = Vector2(300, 200)
+script = ExtResource("8_e8mgo")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(250, 280)
+script = ExtResource("9_julw4")

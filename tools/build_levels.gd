@@ -25,6 +25,12 @@ func _initialize() -> void:
 	_level_12()
 	_level_13()
 	_level_14()
+	_dungeon_01()
+	_dungeon_02()
+	_castle_01()
+	_castle_02()
+	_temple_01()
+	_temple_02()
 	print("Уровни собраны")
 	quit()
 
@@ -351,6 +357,145 @@ func _level_14() -> void:
 	_save(14)
 
 
+# --- Тестовые уровни других локаций --------------------------------------
+
+## Начало уровня локации: номер внутри локации, оттенок камня.
+func _begin_world(theme: String, number: int, slogan: String, hints: Array) -> void:
+	_begin(number, slogan, 640, "", hints)
+	_root.name = "%s%02d" % [theme.capitalize(), number]
+	_root.theme = theme
+
+
+func _room() -> void:
+	_back(640)
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+
+
+func _prop(kind: String, pos: Vector2, length: float, color := Color("8a2b2b")) -> void:
+	var prop := _add("Prop%d" % _root.get_child_count(), Node2D.new(), "prop.gd", pos)
+	prop.kind = kind
+	prop.length = length
+	prop.color = color
+
+
+func _water(x1: float, y: float, x2: float, depth := 70.0) -> void:
+	var water := _add("Water%d" % _root.get_child_count(), Node2D.new(), "water.gd", Vector2(x1, y))
+	water.size = Vector2(x2 - x1, depth)
+
+
+func _dungeon_01() -> void:
+	_begin_world("dungeon", 1, "Решётка", ["Решётку не поднять руками.", "Рядом есть рычаг.", "Нажми рычаг кнопкой действия — решётка поднимется."])
+	_room()
+	_box(0, 280, 640, 360)       # пол
+	var gate := _door("Gate", Vector2(400, 200), Vector2(14, 160), Vector2(0, -150))
+	_lever("Lever", Vector2(250, 280), [gate])
+	_exit(580, 280, true)
+	for x in [120, 330, 470]:
+		_prop("chain", Vector2(x, 60), 50.0 + (x % 3) * 20.0)
+	_decor([[180, 200], [520, 200]], [], true)
+	_hero(60, 280)
+	_save_as("res://levels/dungeon_01.tscn")
+
+
+func _dungeon_02() -> void:
+	_begin_world("dungeon", 2, "Шипы во тьме", ["Через яму есть путь, просто его не видно.", "Над шипами висят невидимые камни.", "Прыгай с края ямы вправо: невидимые камни примерно через каждые два шага."])
+	_root.restart_on_fall = true
+	_room()
+	_box(0, 280, 200, 360)       # пол слева
+	_box(440, 280, 640, 360)     # пол справа
+	_box(200, 330, 440, 360)     # дно ямы
+	var spikes := _add("Spikes", Area2D.new(), "spikes.gd", Vector2(200, 330))
+	spikes.width = 240.0
+	for i in 2:
+		var block := _add("HiddenBlock%d" % (i + 1), StaticBody2D.new(), "hidden_block.gd", Vector2(265 + i * 110, 262))
+		block.size = Vector2(50, 14)
+	_exit(580, 280, true)
+	for x in [100, 320, 540]:
+		_prop("chain", Vector2(x, 60), 70.0)
+	_decor([[120, 200], [520, 200]], [], true)
+	_hero(60, 280)
+	_save_as("res://levels/dungeon_02.tscn")
+
+
+func _castle_01() -> void:
+	_begin_world("castle", 1, "Подъёмный мост", ["Ров не перепрыгнуть.", "Мост висит на цепях над рвом.", "Коснись пальцем руны на мосту — он опустится."])
+	_root.restart_on_fall = true
+	_room()
+	_box(0, 280, 220, 360)       # берег слева
+	_box(380, 280, 640, 360)     # берег справа
+	_water(220, 300, 380, 60)
+	var bridge := _rune("Bridge", Vector2(300, 147), Vector2(160, 14))
+	bridge.tap_offset = Vector2(0, 140)
+	_prop("chain", Vector2(226, 60), 80.0)
+	_prop("chain", Vector2(374, 60), 80.0)
+	_exit(580, 280, true)
+	_prop("banner", Vector2(110, 90), 70.0, Color("8a2b2b"))
+	_prop("banner", Vector2(500, 90), 70.0, Color("2b4a8a"))
+	_decor([[60, 200], [460, 200]], [], true)
+	_hero(60, 280)
+	_save_as("res://levels/castle_01.tscn")
+
+
+func _castle_02() -> void:
+	_begin_world("castle", 2, "Ключ от башни", ["Ключ наверху башни.", "Лестницу можно спустить рычагом.", "Нажми рычаг, залезь по лестнице за ключом, спустись и иди к двери слева."])
+	_room()
+	_box(0, 280, 640, 360)       # пол
+	_box(450, 140, 624, 154)     # площадка наверху башни
+	var ladder := _add("Ladder", Area2D.new(), "ladder.gd", Vector2(436, 140))
+	ladder.length = 140.0
+	_lever("Lever", Vector2(380, 280), [ladder])
+	_add("Key", Area2D.new(), "key_item.gd", Vector2(560, 140))
+	var exit := _exit(60, 280)
+	exit.needs_key = true
+	_prop("banner", Vector2(200, 80), 80.0, Color("2b4a8a"))
+	_prop("banner", Vector2(540, 160), 60.0, Color("8a2b2b"))
+	_decor([[130, 200], [300, 200]], [], true)
+	_hero(250, 280)
+	_save_as("res://levels/castle_02.tscn")
+
+
+func _temple_01() -> void:
+	_begin_world("temple", 1, "Отражение", ["Вода внизу, а небо отражается в ней.", "Зелье переворачивает мир.", "Выпей зелье и иди по потолку над водой к двери."])
+	_root.restart_on_fall = true
+	_room()
+	_box(16, 280, 200, 360)      # берег
+	_water(200, 296, 624, 64)
+	_add("Potion", Area2D.new(), "potion.gd", Vector2(160, 280))
+	var exit := _exit(580, 60, true)
+	exit.upside_down = true
+	_prop("weed", Vector2(60, 280), 26.0)
+	_prop("weed", Vector2(180, 280), 20.0)
+	_decor([[90, 200], [400, 160]], [], true)
+	_hero(50, 280)
+	_save_as("res://levels/temple_01.tscn")
+
+
+func _temple_02() -> void:
+	_begin_world("temple", 2, "Море, песок, водоросли", ["Название зоны — это порядок.", "Море — синее, песок — жёлтый, водоросли — зелёные. Красная плита лишняя.", "Встань на синюю, жёлтую и зелёную плиты по очереди, и чтобы между ними не было других плит: через лишние перепрыгивай."])
+	_room()
+	_box(0, 280, 640, 360)       # пол
+	var exit := _exit(580, 280)
+	var seq := _add("Plates", Node2D.new(), "plate_sequence.gd", Vector2(320, 150))
+	seq.order = PackedStringArray(["blue", "yellow", "green"])
+	_link(seq, [exit])
+	var plates := [["green", 160.0], ["blue", 250.0], ["red", 340.0], ["yellow", 430.0]]
+	for p in plates:
+		var plate := Area2D.new()
+		plate.name = "Plate_" + p[0]
+		plate.set_script(load("res://scripts/color_plate.gd"))
+		plate.color_name = p[0]
+		plate.position = Vector2(p[1] - 320.0, 130.0)
+		seq.add_child(plate)
+		plate.owner = _root
+	for x in [40, 120, 500, 620]:
+		_prop("weed", Vector2(x, 280), 18.0 + (x % 7) * 2.0)
+	_decor([[90, 200], [550, 200]], [], true)
+	_hero(60, 280)
+	_save_as("res://levels/temple_02.tscn")
+
+
 # --- Помощники ------------------------------------------------------------
 
 ## Оформление пирамиды: полумрак, пыль, факелы и панели с иероглифами.
@@ -449,10 +594,13 @@ func _hero(x: float, y: float) -> void:
 
 
 func _save(number: int) -> void:
+	_save_as("res://levels/level_%02d.tscn" % number)
+
+
+func _save_as(path: String) -> void:
 	var scene := PackedScene.new()
 	var err := scene.pack(_root)
 	assert(err == OK)
-	var path := "res://levels/level_%02d.tscn" % number
 	err = ResourceSaver.save(scene, path)
 	if err != OK:
 		push_error("Не удалось сохранить " + path)

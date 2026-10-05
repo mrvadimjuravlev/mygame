@@ -72,8 +72,8 @@ func _ready() -> void:
 
 
 func _play_text() -> String:
-	if Game.passed.is_empty():
+	if Game.passed_count() == 0:
 		return Game.t("Играть")
-	if Game.passed.size() >= Game.LEVELS.size():
+	if Game.passed_count() >= Game.levels().size():
 		return Game.t("Играть с начала")
 	return Game.t("Продолжить · %d") % (Game.continue_index() + 1)

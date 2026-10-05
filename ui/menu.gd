@@ -19,11 +19,11 @@ func _ready() -> void:
 	back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	back.modulate = Color(0.75, 0.68, 0.62)
 	add_child(back)
-	var title := Style.label(Game.t("Пирамида"), Vector2(0, 22), 640, 28, Color("e2bf78"))
+	var title := Style.label(Game.t(Game.world_info().name), Vector2(0, 22), 640, 28, Color("e2bf78"))
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_title_input)
 	add_child(title)
-	add_child(Style.label(Game.t("%d из %d пройдено") % [Game.passed.size(), Game.LEVELS.size()], Vector2(0, 62), 640, 13, Style.TEXT_DIM))
+	add_child(Style.label(Game.t("%d из %d пройдено") % [Game.passed_count(), Game.levels().size()], Vector2(0, 62), 640, 13, Style.TEXT_DIM))
 	_grid = GridContainer.new()
 	_grid.columns = 6
 	_grid.add_theme_constant_override("h_separation", 12)
@@ -45,9 +45,9 @@ func _fill() -> void:
 	for child in _grid.get_children():
 		child.queue_free()
 	var next := Game.continue_index()
-	for i in Game.LEVELS.size():
+	for i in Game.levels().size():
 		var open := Game.is_unlocked(i)
-		var done := Game.passed.has(i)
+		var done := Game.is_passed(i)
 		var b := Style.button(str(i + 1) if open else "", Vector2(64, 56), 22)
 		b.disabled = not open
 		var mark := Control.new()

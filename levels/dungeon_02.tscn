@@ -1,0 +1,116 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_gv31q"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_vwe0p"]
+[ext_resource type="Script" path="res://scripts/spikes.gd" id="3_nfxfe"]
+[ext_resource type="Script" path="res://scripts/hidden_block.gd" id="4_gshdo"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_e1shy"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="6_n31gc"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_ufnub"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_navvf"]
+
+[node name="Dungeon02" type="Node2D"]
+script = ExtResource("1_gv31q")
+level_number = 2
+slogan = "Шипы во тьме"
+hints = PackedStringArray("Через яму есть путь, просто его не видно.", "Над шипами висят невидимые камни.", "Прыгай с края ямы вправо: невидимые камни примерно через каждые два шага.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_vwe0p")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_vwe0p")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_vwe0p")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_vwe0p")
+polygon = PackedVector2Array(0, 280, 200, 280, 200, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_vwe0p")
+polygon = PackedVector2Array(440, 280, 640, 280, 640, 360, 440, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_vwe0p")
+polygon = PackedVector2Array(200, 330, 440, 330, 440, 360, 200, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Spikes" type="Area2D" parent="."]
+position = Vector2(200, 330)
+script = ExtResource("3_nfxfe")
+width = 240.0
+
+[node name="HiddenBlock1" type="StaticBody2D" parent="."]
+position = Vector2(265, 262)
+script = ExtResource("4_gshdo")
+size = Vector2(50, 14)
+
+[node name="HiddenBlock2" type="StaticBody2D" parent="."]
+position = Vector2(375, 262)
+script = ExtResource("4_gshdo")
+size = Vector2(50, 14)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(580, 280)
+script = ExtResource("5_e1shy")
+start_open = true
+needs_key = false
+upside_down = false
+
+[node name="Prop11" type="Node2D" parent="."]
+position = Vector2(100, 60)
+script = ExtResource("6_n31gc")
+kind = "chain"
+length = 70.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop12" type="Node2D" parent="."]
+position = Vector2(320, 60)
+script = ExtResource("6_n31gc")
+kind = "chain"
+length = 70.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop13" type="Node2D" parent="."]
+position = Vector2(540, 60)
+script = ExtResource("6_n31gc")
+kind = "chain"
+length = 70.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Torch120_200" type="Area2D" parent="."]
+position = Vector2(120, 200)
+script = ExtResource("7_ufnub")
+start_lit = true
+
+[node name="Torch520_200" type="Area2D" parent="."]
+position = Vector2(520, 200)
+script = ExtResource("7_ufnub")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("8_navvf")

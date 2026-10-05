@@ -1,5 +1,5 @@
 extends Node
-## Глобальное состояние: список уровней, переходы, ввод с клавиатуры.
+## Глобальное состояние: локации и их уровни, переходы, прогресс, ввод с клавиатуры.
 
 signal hand_used(kind: String)
 
@@ -19,6 +19,13 @@ const LEVELS := [
 	"res://levels/level_13.tscn",
 	"res://levels/level_14.tscn",
 ]
+## Локации по порядку: id, название (ключ перевода), уровни. Пустой список — «Скоро».
+const WORLDS := [
+	{"id": "pyramid", "name": "Пирамида", "levels": LEVELS},
+	{"id": "dungeon", "name": "Подземелье", "levels": ["res://levels/dungeon_01.tscn", "res://levels/dungeon_02.tscn"]},
+	{"id": "castle", "name": "Замок", "levels": ["res://levels/castle_01.tscn", "res://levels/castle_02.tscn"]},
+	{"id": "temple", "name": "Затонувший храм", "levels": ["res://levels/temple_01.tscn", "res://levels/temple_02.tscn"]},
+]
 const FINISH_SCENE := "res://ui/finish.tscn"
 const MENU_SCENE := "res://ui/menu.tscn"
 const TITLE_SCENE := "res://ui/title.tscn"
@@ -27,8 +34,10 @@ const WORLDS_SCENE := "res://ui/worlds.tscn"
 const I18n := preload("res://scripts/i18n.gd")
 const SAVE_PATH := "user://progress.cfg"
 
-## Номера пройденных уровней (с нуля).
-var passed: Array[int] = []
+## Пройденные уровни: пути сцен.
+var passed: Array[String] = []
+## Выбранная локация: из неё «Играть» и выбор уровня.
+var world := "pyramid"
 ## Для проверки прототипа: все уровни открыты, даже непройденные.
 var unlock_all := false
 ## Язык интерфейса и текстов уровней: "ru" или "en".
@@ -55,16 +64,46 @@ func _add_action(action: StringName, keys: Array) -> void:
 		InputMap.action_add_event(action, ev)
 
 
+func world_info(id := "") -> Dictionary:
+	for w in WORLDS:
+		if w.id == (id if id != "" else world):
+			return w
+	return WORLDS[0]
+
+
+## Уровни выбранной локации.
+func levels() -> Array:
+	return world_info().levels
+
+
+## Локация, к которой относится сцена уровня.
+func world_of(path: String) -> String:
+	for w in WORLDS:
+		if w.levels.has(path):
+			return w.id
+	return ""
+
+
 func current_index() -> int:
 	var scene := get_tree().current_scene
-	return LEVELS.find(scene.scene_file_path) if scene else -1
+	if not scene:
+		return -1
+	return world_info(world_of(scene.scene_file_path)).levels.find(scene.scene_file_path)
 
 
 func next_level() -> void:
-	mark_passed(current_index())
-	var i := current_index() + 1
-	var path: String = LEVELS[i] if i > 0 and i < LEVELS.size() else FINISH_SCENE
-	get_tree().change_scene_to_file.call_deferred(path)
+	var path: String = get_tree().current_scene.scene_file_path
+	mark_passed(path)
+	world = world_of(path)
+	var list := levels()
+	var i := list.find(path) + 1
+	var next: String
+	if i > 0 and i < list.size():
+		next = list[i]
+	else:
+		# Пирамида заканчивается финальным экраном, тестовые локации — выбором уровня.
+		next = FINISH_SCENE if world == "pyramid" else MENU_SCENE
+	get_tree().change_scene_to_file.call_deferred(next)
 
 
 func start_over() -> void:
@@ -72,7 +111,7 @@ func start_over() -> void:
 
 
 func open_level(index: int) -> void:
-	get_tree().change_scene_to_file.call_deferred(LEVELS[index])
+	get_tree().change_scene_to_file.call_deferred(levels()[index])
 
 
 ## Текст на выбранном языке.
@@ -91,22 +130,34 @@ func go_title() -> void:
 
 # --- Прогресс ----------------------------------------------------------------
 
-func mark_passed(index: int) -> void:
-	if index >= 0 and not passed.has(index):
-		passed.append(index)
-		passed.sort()
+func mark_passed(path: String) -> void:
+	if path != "" and not passed.has(path):
+		passed.append(path)
 		save()
 
 
-## Уровень открыт, если он первый или пройден предыдущий.
+func is_passed(index: int) -> bool:
+	return passed.has(levels()[index])
+
+
+## Уровень открыт, если он первый в локации или пройден предыдущий.
 func is_unlocked(index: int) -> bool:
-	return unlock_all or index == 0 or passed.has(index - 1) or passed.has(index)
+	return unlock_all or index == 0 or is_passed(index - 1) or is_passed(index)
 
 
-## Первый непройденный уровень — с него продолжает кнопка «Играть».
+## Сколько уровней локации пройдено.
+func passed_count(id := "") -> int:
+	var n := 0
+	for path in world_info(id).levels:
+		if passed.has(path):
+			n += 1
+	return n
+
+
+## Первый непройденный уровень локации — с него продолжает кнопка «Играть».
 func continue_index() -> int:
-	for i in LEVELS.size():
-		if not passed.has(i):
+	for i in levels().size():
+		if not is_passed(i):
 			return i
 	return 0
 
@@ -121,6 +172,7 @@ func save() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("progress", "passed", passed)
 	cfg.set_value("progress", "unlock_all", unlock_all)
+	cfg.set_value("progress", "world", world)
 	cfg.set_value("settings", "sound", Sfx.enabled)
 	cfg.set_value("settings", "lang", lang)
 	cfg.save(SAVE_PATH)
@@ -131,8 +183,12 @@ func _load() -> void:
 	if cfg.load(SAVE_PATH) != OK:
 		return
 	passed.clear()
-	for i in cfg.get_value("progress", "passed", []):
-		passed.append(int(i))
+	for item in cfg.get_value("progress", "passed", []):
+		# Старые сохранения хранили номера уровней Пирамиды.
+		var path: String = LEVELS[int(item)] if typeof(item) == TYPE_INT and int(item) < LEVELS.size() else str(item)
+		if not passed.has(path):
+			passed.append(path)
+	world = cfg.get_value("progress", "world", "pyramid")
 	unlock_all = cfg.get_value("progress", "unlock_all", false)
 	Sfx.enabled = cfg.get_value("settings", "sound", true)
 	lang = cfg.get_value("settings", "lang", lang)
