@@ -82,6 +82,13 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 	var falling := absf(velocity.y) > 200.0
 	move_and_slide()
+	# Упёрся сбоку в каменный блок — толкает его.
+	if dir != 0.0 and not climbing:
+		for i in get_slide_collision_count():
+			var hit := get_slide_collision(i)
+			var body := hit.get_collider()
+			if body and body.is_in_group("pushable") and absf(hit.get_normal().x) > 0.7 and signf(-hit.get_normal().x) == signf(dir):
+				body.push(dir)
 	if falling and is_on_floor() and not climbing:
 		Sfx.play("land", -4.0)
 	if wrap_width > 0.0:

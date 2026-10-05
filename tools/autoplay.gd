@@ -12,7 +12,7 @@ func _initialize() -> void:
 func _run() -> void:
 	change_scene_to_file("res://levels/level_01.tscn")
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14]
 	for i in solvers.size():
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -265,6 +265,21 @@ func _solve_13() -> void:
 	await _hop("move_right")  # через красную
 	await _walk_to(340.0)  # зелёная
 	print("  порядок красная, синяя, жёлтая, зелёная: решено ", seq.solved, " ", seq._history)
+	await _walk_to(580.0)
+
+
+func _solve_14() -> void:
+	var stone: Node2D = current_scene.get_node("Stone")
+	await _tap(stone.global_position + Vector2(0, -16))
+	await _frames(70)
+	print("  камень сброшен: ", stone.global_position)
+	await _walk_to(190.0)  # толкает камень влево до уступа
+	print("  камень у уступа: ", stone.global_position)
+	await _hop("move_left")  # на камень
+	await _hop("move_left")  # с камня на уступ — открывается тайник
+	print("  на уступе: ", _hero().global_position, " тайник открыт: ", current_scene.get_node("FalseWall").opened)
+	await _walk_to(46.0)
+	print("  ключ у героя: ", _hero().has_key)
 	await _walk_to(580.0)
 
 
