@@ -33,7 +33,7 @@ func _ready() -> void:
 
 	# Название зоны: по центру сверху, всё время на экране.
 	_slogan = Label.new()
-	_slogan.text = "%d. %s" % [level.level_number, level.slogan]
+	_slogan.text = "%d. %s" % [level.level_number, Game.t(level.slogan)]
 	_slogan.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_slogan.size = Vector2(440, 30)
 	_slogan.position = Vector2(100, 8)
@@ -132,7 +132,7 @@ func _show_next_hint() -> void:
 	if level.hints.is_empty():
 		return
 	_hint_index = mini(_hint_index + 1, level.hints.size() - 1)
-	_hint_label.text = "Подсказка %d: %s" % [_hint_index + 1, level.hints[_hint_index]]
+	_hint_label.text = Game.t("Подсказка %d: %s") % [_hint_index + 1, Game.t(level.hints[_hint_index])]
 
 
 func _draw_pad() -> void:

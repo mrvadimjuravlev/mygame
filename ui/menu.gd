@@ -19,11 +19,11 @@ func _ready() -> void:
 	back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	back.modulate = Color(0.75, 0.68, 0.62)
 	add_child(back)
-	var title := Style.label("Пирамида", Vector2(0, 22), 640, 28, Color("e2bf78"))
+	var title := Style.label(Game.t("Пирамида"), Vector2(0, 22), 640, 28, Color("e2bf78"))
 	title.mouse_filter = Control.MOUSE_FILTER_STOP
 	title.gui_input.connect(_on_title_input)
 	add_child(title)
-	add_child(Style.label("%d из %d пройдено" % [Game.passed.size(), Game.LEVELS.size()], Vector2(0, 62), 640, 13, Style.TEXT_DIM))
+	add_child(Style.label(Game.t("%d из %d пройдено") % [Game.passed.size(), Game.LEVELS.size()], Vector2(0, 62), 640, 13, Style.TEXT_DIM))
 	_grid = GridContainer.new()
 	_grid.columns = 6
 	_grid.add_theme_constant_override("h_separation", 12)
@@ -31,11 +31,11 @@ func _ready() -> void:
 	_grid.position = Vector2(110, 92)
 	add_child(_grid)
 	_fill()
-	var back_button := Style.button("‹ Назад", Vector2(110, 36), 16)
+	var back_button := Style.button(Game.t("‹ Назад"), Vector2(110, 36), 16)
 	back_button.position = Vector2(16, 308)
 	back_button.pressed.connect(Game.go_title)
 	add_child(back_button)
-	_reset = Style.button("Сбросить прогресс", Vector2(170, 36), 14)
+	_reset = Style.button(Game.t("Сбросить прогресс"), Vector2(170, 36), 14)
 	_reset.position = Vector2(454, 308)
 	_reset.pressed.connect(_on_reset)
 	add_child(_reset)
@@ -86,8 +86,8 @@ func _on_title_input(event: InputEvent) -> void:
 
 func _on_reset() -> void:
 	# Защита от случайного нажатия: сбрасывает второе касание.
-	if _reset.text != "Точно сбросить?":
-		_reset.text = "Точно сбросить?"
+	if _reset.text != Game.t("Точно сбросить?"):
+		_reset.text = Game.t("Точно сбросить?")
 		return
 	Game.reset_progress()
 	get_tree().reload_current_scene()

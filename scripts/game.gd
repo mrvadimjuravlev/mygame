@@ -22,12 +22,16 @@ const LEVELS := [
 const FINISH_SCENE := "res://ui/finish.tscn"
 const MENU_SCENE := "res://ui/menu.tscn"
 const TITLE_SCENE := "res://ui/title.tscn"
+const SETTINGS_SCENE := "res://ui/settings.tscn"
+const I18n := preload("res://scripts/i18n.gd")
 const SAVE_PATH := "user://progress.cfg"
 
 ## Номера пройденных уровней (с нуля).
 var passed: Array[int] = []
 ## Для проверки прототипа: все уровни открыты, даже непройденные.
 var unlock_all := false
+## Язык интерфейса и текстов уровней: "ru" или "en".
+var lang := "ru"
 
 
 func _ready() -> void:
@@ -35,6 +39,8 @@ func _ready() -> void:
 	_add_action("move_right", [KEY_RIGHT, KEY_D])
 	_add_action("jump", [KEY_SPACE, KEY_UP, KEY_W])
 	_add_action("action", [KEY_E, KEY_ENTER])
+	# По умолчанию язык системы: русский для русской системы, иначе английский.
+	lang = "ru" if OS.get_locale_language() == "ru" else "en"
 	_load()
 
 
@@ -66,6 +72,16 @@ func start_over() -> void:
 
 func open_level(index: int) -> void:
 	get_tree().change_scene_to_file.call_deferred(LEVELS[index])
+
+
+## Текст на выбранном языке.
+func t(text: String) -> String:
+	return I18n.translate(text, lang)
+
+
+func set_lang(value: String) -> void:
+	lang = value
+	save()
 
 
 func go_title() -> void:
@@ -105,6 +121,7 @@ func save() -> void:
 	cfg.set_value("progress", "passed", passed)
 	cfg.set_value("progress", "unlock_all", unlock_all)
 	cfg.set_value("settings", "sound", Sfx.enabled)
+	cfg.set_value("settings", "lang", lang)
 	cfg.save(SAVE_PATH)
 
 
@@ -117,6 +134,7 @@ func _load() -> void:
 		passed.append(int(i))
 	unlock_all = cfg.get_value("progress", "unlock_all", false)
 	Sfx.enabled = cfg.get_value("settings", "sound", true)
+	lang = cfg.get_value("settings", "lang", lang)
 
 
 ## Запускает эффект у всех целей: так устроена система событий «триггер → эффект».

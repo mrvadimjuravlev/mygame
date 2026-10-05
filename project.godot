@@ -6,7 +6,7 @@ config_version=5
 
 config/name="Hidden Chambers"
 config/icon="res://icon.png"
-run/main_scene="res://ui/title.tscn"
+run/main_scene="res://ui/splash.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [autoload]

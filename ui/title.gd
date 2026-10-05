@@ -1,10 +1,8 @@
 extends Node2D
-## Экран старта: зал пирамиды в полумраке, герой у факела, кнопки «Играть», «Уровни», «Звук».
+## Главное меню: зал пирамиды в полумраке, герой у факела, кнопки «Играть», «Уровни», «Настройки».
 
 const Art := preload("res://scripts/art.gd")
 const Style := preload("res://ui/style.gd")
-
-var _sound: Button
 
 
 func _ready() -> void:
@@ -56,7 +54,7 @@ func _ready() -> void:
 	var ui := CanvasLayer.new()
 	add_child(ui)
 	ui.add_child(Style.label("Hidden Chambers", Vector2(0, 34), 640, 40, Color("e2bf78")))
-	ui.add_child(Style.label("Мир 1 · Пирамида", Vector2(0, 86), 640, 15, Style.TEXT_DIM))
+	ui.add_child(Style.label(Game.t("Мир 1 · Пирамида"), Vector2(0, 86), 640, 15, Style.TEXT_DIM))
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 10)
 	column.position = Vector2(220, 136)
@@ -64,29 +62,18 @@ func _ready() -> void:
 	var play := Style.button(_play_text(), Vector2(200, 44), 20)
 	play.pressed.connect(func() -> void: Game.open_level(Game.continue_index()))
 	column.add_child(play)
-	var levels := Style.button("Уровни", Vector2(200, 40))
+	var levels := Style.button(Game.t("Уровни"), Vector2(200, 40))
 	levels.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.MENU_SCENE))
 	column.add_child(levels)
-	_sound = Style.button("", Vector2(200, 40))
-	_sound.pressed.connect(_toggle_sound)
-	column.add_child(_sound)
-	_update_sound()
-	ui.add_child(Style.label("Прототип", Vector2(0, 274), 640, 11, Color(1, 1, 1, 0.3)))
+	var settings := Style.button(Game.t("Настройки"), Vector2(200, 40))
+	settings.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.SETTINGS_SCENE))
+	column.add_child(settings)
+	ui.add_child(Style.label(Game.t("Прототип"), Vector2(0, 274), 640, 11, Color(1, 1, 1, 0.3)))
 
 
 func _play_text() -> String:
 	if Game.passed.is_empty():
-		return "Играть"
+		return Game.t("Играть")
 	if Game.passed.size() >= Game.LEVELS.size():
-		return "Играть с начала"
-	return "Продолжить · %d" % (Game.continue_index() + 1)
-
-
-func _toggle_sound() -> void:
-	Sfx.enabled = not Sfx.enabled
-	Game.save()
-	_update_sound()
-
-
-func _update_sound() -> void:
-	_sound.text = "Звук: вкл" if Sfx.enabled else "Звук: выкл"
+		return Game.t("Играть с начала")
+	return Game.t("Продолжить · %d") % (Game.continue_index() + 1)
