@@ -24,6 +24,11 @@ const EN := {
 	"Прототип пройден!\nУровни 1–%d мира «Пирамида»": "Prototype complete!\nLevels 1–%d of the Pyramid world",
 	"К уровням": "To levels",
 	"Подсказка %d: %s": "Hint %d: %s",
+	"Выбери локацию": "Choose a location",
+	"Подземелье": "Dungeon",
+	"Замок": "Castle",
+	"Затонувший храм": "Sunken Temple",
+	"Скоро": "Coming soon",
 
 	# Уровень 1
 	"Вперёд": "Forward",

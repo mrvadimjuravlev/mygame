@@ -33,7 +33,7 @@ func _ready() -> void:
 	_fill()
 	var back_button := Style.button(Game.t("‹ Назад"), Vector2(110, 36), 16)
 	back_button.position = Vector2(16, 308)
-	back_button.pressed.connect(Game.go_title)
+	back_button.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.WORLDS_SCENE))
 	add_child(back_button)
 	_reset = Style.button(Game.t("Сбросить прогресс"), Vector2(170, 36), 14)
 	_reset.position = Vector2(454, 308)

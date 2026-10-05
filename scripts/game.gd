@@ -23,6 +23,7 @@ const FINISH_SCENE := "res://ui/finish.tscn"
 const MENU_SCENE := "res://ui/menu.tscn"
 const TITLE_SCENE := "res://ui/title.tscn"
 const SETTINGS_SCENE := "res://ui/settings.tscn"
+const WORLDS_SCENE := "res://ui/worlds.tscn"
 const I18n := preload("res://scripts/i18n.gd")
 const SAVE_PATH := "user://progress.cfg"
 

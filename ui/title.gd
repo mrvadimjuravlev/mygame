@@ -63,7 +63,7 @@ func _ready() -> void:
 	play.pressed.connect(func() -> void: Game.open_level(Game.continue_index()))
 	column.add_child(play)
 	var levels := Style.button(Game.t("Уровни"), Vector2(200, 40))
-	levels.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.MENU_SCENE))
+	levels.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.WORLDS_SCENE))
 	column.add_child(levels)
 	var settings := Style.button(Game.t("Настройки"), Vector2(200, 40))
 	settings.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.SETTINGS_SCENE))
