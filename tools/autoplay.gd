@@ -104,6 +104,11 @@ func _solve_07() -> void:
 
 
 func _solve_08() -> void:
+	# Прыжок снизу проходит сквозь невидимый камень и не выдаёт его.
+	await _walk_to(255.0)
+	_press("jump")
+	await _frames(90)
+	print("  прыжок снизу: камень скрыт ", not current_scene.get_node("HiddenBlock").revealed, ", герой на полу ", _hero().is_on_floor())
 	await _walk_to(120.0)
 	await _jump_right()  # на камень 1
 	await _walk_to(184.0)

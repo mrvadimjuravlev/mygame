@@ -1,7 +1,8 @@
 @tool
 extends StaticBody2D
-## Невидимый блок: твёрдый, но его не видно, пока герой на него не встанет.
-## После этого блок проявляется навсегда. Начало координат — центр.
+## Невидимый блок: его не видно, пока герой не приземлится на него сверху.
+## Снизу блок проницаем: прыжок снизу проходит сквозь него и не выдаёт его.
+## После приземления блок проявляется навсегда. Начало координат — центр.
 
 @export var size := Vector2(50, 14):
 	set(value):
@@ -10,6 +11,7 @@ extends StaticBody2D
 
 var revealed := false
 var _reveal := 0.0
+var _sensor: Area2D
 
 
 func _ready() -> void:
@@ -20,9 +22,11 @@ func _ready() -> void:
 	var rect := RectangleShape2D.new()
 	rect.size = size
 	shape.shape = rect
+	shape.one_way_collision = true
 	add_child(shape)
 	# Датчик над верхней гранью: герой встал на блок.
-	var sensor := Area2D.new()
+	_sensor = Area2D.new()
+	var sensor := _sensor
 	var sensor_shape := CollisionShape2D.new()
 	var sensor_rect := RectangleShape2D.new()
 	sensor_rect.size = Vector2(size.x, 6)
@@ -30,9 +34,16 @@ func _ready() -> void:
 	sensor_shape.position = Vector2(0, -size.y / 2 - 3)
 	sensor.add_child(sensor_shape)
 	add_child(sensor)
-	sensor.body_entered.connect(func(body: Node) -> void:
-		if body.is_in_group("hero"):
-			reveal())
+
+
+func _physics_process(_delta: float) -> void:
+	if revealed or Engine.is_editor_hint():
+		return
+	# Проявляется, только когда герой стоит на верхней грани, а не пролетает сквозь неё снизу.
+	var top := global_position.y - size.y / 2
+	for body in _sensor.get_overlapping_bodies():
+		if body.is_in_group("hero") and body.is_on_floor() and absf(body.global_position.y - top) < 2.0:
+			reveal()
 
 
 func reveal() -> void:
