@@ -1,16 +1,16 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_u0voa"]
-[ext_resource type="Script" path="res://scripts/rune_block.gd" id="2_dgjr8"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="3_yfpbp"]
-[ext_resource type="Script" path="res://scripts/tutorial_hint.gd" id="4_jqlwe"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_8q522"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="6_3o04h"]
-[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_v7mbm"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="8_hxfxj"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_c34tf"]
+[ext_resource type="Script" path="res://scripts/rune_block.gd" id="2_wiurl"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="3_57oh0"]
+[ext_resource type="Script" path="res://scripts/tutorial_hint.gd" id="4_0d2j0"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_3ymws"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_3xqbe"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_ml61j"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_pb8bl"]
 
 [node name="Level04" type="Node2D"]
-script = ExtResource("1_u0voa")
+script = ExtResource("1_c34tf")
 level_number = 4
 slogan = "Коснись"
 hints = PackedStringArray("Герою здесь не справиться одному.", "Голубые руны откликаются на прикосновение.", "Коснись пальцем руны на плите.")
@@ -22,6 +22,7 @@ restart_on_fall = false
 wrap_horizontal = false
 dark = true
 dust = true
+theme = "pyramid"
 
 [node name="Back" type="Polygon2D" parent="."]
 color = Color(0.164706, 0.121569, 0.0901961, 1)
@@ -29,7 +30,7 @@ polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Slab" type="AnimatableBody2D" parent="."]
 position = Vector2(336, 225)
-script = ExtResource("2_dgjr8")
+script = ExtResource("2_wiurl")
 mode = 0
 size = Vector2(32, 110)
 tap_offset = Vector2(0, 110)
@@ -41,54 +42,66 @@ targets = Array[NodePath]([NodePath("../Exit")])
 effect = &"activate"
 
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("3_yfpbp")
+script = ExtResource("3_57oh0")
 polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("3_yfpbp")
+script = ExtResource("3_57oh0")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 170, 0, 170)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 170, 0, 170)
+
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("3_yfpbp")
+script = ExtResource("3_57oh0")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
 [node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("3_yfpbp")
+script = ExtResource("3_57oh0")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
 [node name="TutorialHint" type="Node2D" parent="."]
 position = Vector2(336, 225)
-script = ExtResource("4_jqlwe")
+script = ExtResource("4_0d2j0")
 wait_for = &"tap"
 move_to = Vector2(0, 0)
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(560, 280)
-script = ExtResource("5_8q522")
+script = ExtResource("5_3ymws")
 start_open = false
 needs_key = false
 upside_down = false
 
 [node name="Torch200_230" type="Area2D" parent="."]
 position = Vector2(200, 230)
-script = ExtResource("6_3o04h")
+script = ExtResource("6_3xqbe")
 start_lit = true
 
 [node name="Torch470_230" type="Area2D" parent="."]
 position = Vector2(470, 230)
-script = ExtResource("6_3o04h")
+script = ExtResource("6_3xqbe")
 start_lit = true
 
 [node name="Glyphs1" type="Node2D" parent="."]
 position = Vector2(90, 180)
-script = ExtResource("7_v7mbm")
+script = ExtResource("7_ml61j")
 columns = 2
 signs = PackedStringArray("eye", "sun", "ankh", "reed")
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("8_hxfxj")
+script = ExtResource("8_pb8bl")

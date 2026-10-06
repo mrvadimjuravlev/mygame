@@ -1,7 +1,9 @@
 extends SceneTree
 ## Собирает сцены уровней из описаний ниже и сохраняет их в res://levels/.
 ## Запуск: godot --headless --path . -s tools/build_levels.gd
-## После сборки уровни можно править в редакторе Godot как обычные сцены.
+## После сборки уровни правятся в редакторе Godot как обычные сцены, и правки главнее этого файла:
+## уже существующие сцены сборка не трогает. Пересобрать всё заново (правки пропадут):
+## godot --headless --path . -s tools/build_levels.gd -- --force
 
 const SAND := Color("c9a35b")
 const STONE := Color("8a6a43")
@@ -545,6 +547,10 @@ func _back(width: float) -> void:
 
 func _box(x1: float, y1: float, x2: float, y2: float, color := STONE) -> Node:
 	var solid := _add("Solid%d" % _root.get_child_count(), StaticBody2D.new(), "solid.gd", Vector2.ZERO)
+	var shape := CollisionPolygon2D.new()
+	shape.name = "Shape"
+	solid.add_child(shape)
+	shape.owner = _root
 	solid.polygon = PackedVector2Array([Vector2(x1, y1), Vector2(x2, y1), Vector2(x2, y2), Vector2(x1, y2)])
 	solid.color = color
 	return solid
@@ -598,6 +604,10 @@ func _save(number: int) -> void:
 
 
 func _save_as(path: String) -> void:
+	if FileAccess.file_exists(path) and not OS.get_cmdline_user_args().has("--force"):
+		print("Уже есть, не трогаю: " + path)
+		_root.free()
+		return
 	var scene := PackedScene.new()
 	var err := scene.pack(_root)
 	assert(err == OK)

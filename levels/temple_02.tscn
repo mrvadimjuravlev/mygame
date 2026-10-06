@@ -1,16 +1,16 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_5cdts"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_ed011"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="3_mce0i"]
-[ext_resource type="Script" path="res://scripts/plate_sequence.gd" id="4_c8der"]
-[ext_resource type="Script" path="res://scripts/color_plate.gd" id="5_3rjej"]
-[ext_resource type="Script" path="res://scripts/prop.gd" id="6_wr5cq"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="7_67sdm"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="8_unmup"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_tmivq"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_lubkb"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="3_vv3df"]
+[ext_resource type="Script" path="res://scripts/plate_sequence.gd" id="4_5spwh"]
+[ext_resource type="Script" path="res://scripts/color_plate.gd" id="5_0cunw"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="6_uj3ok"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_fq0l3"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_35ust"]
 
 [node name="Temple02" type="Node2D"]
-script = ExtResource("1_5cdts")
+script = ExtResource("1_tmivq")
 level_number = 2
 slogan = "Море, песок, водоросли"
 hints = PackedStringArray("Название зоны — это порядок.", "Море — синее, песок — жёлтый, водоросли — зелёные. Красная плита лишняя.", "Встань на синюю, жёлтую и зелёную плиты по очереди, и чтобы между ними не было других плит: через лишние перепрыгивай.")
@@ -29,97 +29,109 @@ color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_ed011")
+script = ExtResource("2_lubkb")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_ed011")
+script = ExtResource("2_lubkb")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_ed011")
+script = ExtResource("2_lubkb")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_ed011")
+script = ExtResource("2_lubkb")
 polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(580, 280)
-script = ExtResource("3_mce0i")
+script = ExtResource("3_vv3df")
 start_open = false
 needs_key = false
 upside_down = false
 
 [node name="Plates" type="Node2D" parent="."]
 position = Vector2(320, 150)
-script = ExtResource("4_c8der")
+script = ExtResource("4_5spwh")
 order = PackedStringArray("blue", "yellow", "green")
 targets = Array[NodePath]([NodePath("../Exit")])
 effect = &"activate"
 
 [node name="Plate_green" type="Area2D" parent="Plates"]
 position = Vector2(-160, 130)
-script = ExtResource("5_3rjej")
+script = ExtResource("5_0cunw")
 color_name = "green"
 
 [node name="Plate_blue" type="Area2D" parent="Plates"]
 position = Vector2(-70, 130)
-script = ExtResource("5_3rjej")
+script = ExtResource("5_0cunw")
 color_name = "blue"
 
 [node name="Plate_red" type="Area2D" parent="Plates"]
 position = Vector2(20, 130)
-script = ExtResource("5_3rjej")
+script = ExtResource("5_0cunw")
 color_name = "red"
 
 [node name="Plate_yellow" type="Area2D" parent="Plates"]
 position = Vector2(110, 130)
-script = ExtResource("5_3rjej")
+script = ExtResource("5_0cunw")
 color_name = "yellow"
 
 [node name="Prop7" type="Node2D" parent="."]
 position = Vector2(40, 280)
-script = ExtResource("6_wr5cq")
+script = ExtResource("6_uj3ok")
 kind = "weed"
 length = 28.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop8" type="Node2D" parent="."]
 position = Vector2(120, 280)
-script = ExtResource("6_wr5cq")
+script = ExtResource("6_uj3ok")
 kind = "weed"
 length = 20.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop9" type="Node2D" parent="."]
 position = Vector2(500, 280)
-script = ExtResource("6_wr5cq")
+script = ExtResource("6_uj3ok")
 kind = "weed"
 length = 24.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop10" type="Node2D" parent="."]
 position = Vector2(620, 280)
-script = ExtResource("6_wr5cq")
+script = ExtResource("6_uj3ok")
 kind = "weed"
 length = 26.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Torch90_200" type="Area2D" parent="."]
 position = Vector2(90, 200)
-script = ExtResource("7_67sdm")
+script = ExtResource("7_fq0l3")
 start_lit = true
 
 [node name="Torch550_200" type="Area2D" parent="."]
 position = Vector2(550, 200)
-script = ExtResource("7_67sdm")
+script = ExtResource("7_fq0l3")
 start_lit = true
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("8_unmup")
+script = ExtResource("8_35ust")

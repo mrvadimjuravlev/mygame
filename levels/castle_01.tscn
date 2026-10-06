@@ -1,16 +1,16 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_yff4b"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_448vk"]
-[ext_resource type="Script" path="res://scripts/water.gd" id="3_v2hrg"]
-[ext_resource type="Script" path="res://scripts/rune_block.gd" id="4_ulbug"]
-[ext_resource type="Script" path="res://scripts/prop.gd" id="5_1g5mj"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_6y6bb"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="7_o2cjv"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="8_5v4bd"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_of4c3"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_elv43"]
+[ext_resource type="Script" path="res://scripts/water.gd" id="3_uxrh7"]
+[ext_resource type="Script" path="res://scripts/rune_block.gd" id="4_hn6r4"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="5_v12k2"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_65flm"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_s46x7"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_fwix6"]
 
 [node name="Castle01" type="Node2D"]
-script = ExtResource("1_yff4b")
+script = ExtResource("1_of4c3")
 level_number = 1
 slogan = "Подъёмный мост"
 hints = PackedStringArray("Ров не перепрыгнуть.", "Мост висит на цепях над рвом.", "Коснись пальцем руны на мосту — он опустится.")
@@ -29,38 +29,53 @@ color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_448vk")
+script = ExtResource("2_elv43")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_448vk")
+script = ExtResource("2_elv43")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_448vk")
+script = ExtResource("2_elv43")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_448vk")
+script = ExtResource("2_elv43")
 polygon = PackedVector2Array(0, 280, 220, 280, 220, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 280, 220, 280, 220, 360, 0, 360)
+
 [node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("2_448vk")
+script = ExtResource("2_elv43")
 polygon = PackedVector2Array(380, 280, 640, 280, 640, 360, 380, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(380, 280, 640, 280, 640, 360, 380, 360)
+
 [node name="Water6" type="Node2D" parent="."]
 position = Vector2(220, 300)
-script = ExtResource("3_v2hrg")
+script = ExtResource("3_uxrh7")
 size = Vector2(160, 60)
 
 [node name="Bridge" type="AnimatableBody2D" parent="."]
 position = Vector2(300, 147)
-script = ExtResource("4_ulbug")
+script = ExtResource("4_hn6r4")
 mode = 0
 size = Vector2(160, 14)
 tap_offset = Vector2(0, 140)
@@ -73,49 +88,49 @@ effect = &"activate"
 
 [node name="Prop8" type="Node2D" parent="."]
 position = Vector2(226, 60)
-script = ExtResource("5_1g5mj")
+script = ExtResource("5_v12k2")
 kind = "chain"
 length = 80.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop9" type="Node2D" parent="."]
 position = Vector2(374, 60)
-script = ExtResource("5_1g5mj")
+script = ExtResource("5_v12k2")
 kind = "chain"
 length = 80.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(580, 280)
-script = ExtResource("6_6y6bb")
+script = ExtResource("6_65flm")
 start_open = true
 needs_key = false
 upside_down = false
 
 [node name="Prop11" type="Node2D" parent="."]
 position = Vector2(110, 90)
-script = ExtResource("5_1g5mj")
+script = ExtResource("5_v12k2")
 kind = "banner"
 length = 70.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop12" type="Node2D" parent="."]
 position = Vector2(500, 90)
-script = ExtResource("5_1g5mj")
+script = ExtResource("5_v12k2")
 kind = "banner"
 length = 70.0
 color = Color(0.168627, 0.290196, 0.541176, 1)
 
 [node name="Torch60_200" type="Area2D" parent="."]
 position = Vector2(60, 200)
-script = ExtResource("7_o2cjv")
+script = ExtResource("7_s46x7")
 start_lit = true
 
 [node name="Torch460_200" type="Area2D" parent="."]
 position = Vector2(460, 200)
-script = ExtResource("7_o2cjv")
+script = ExtResource("7_s46x7")
 start_lit = true
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("8_5v4bd")
+script = ExtResource("8_fwix6")

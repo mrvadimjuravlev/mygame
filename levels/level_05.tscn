@@ -1,17 +1,17 @@
 [gd_scene load_steps=10 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_2n2vq"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_45cdn"]
-[ext_resource type="Script" path="res://scripts/rune_block.gd" id="3_sv1b5"]
-[ext_resource type="Script" path="res://scripts/sparkle.gd" id="4_qhggt"]
-[ext_resource type="Script" path="res://scripts/tutorial_hint.gd" id="5_ao2bw"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_pvup2"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="7_7hpum"]
-[ext_resource type="Script" path="res://scripts/glyphs.gd" id="8_fudki"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="9_4n6ho"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_haox5"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_x0tir"]
+[ext_resource type="Script" path="res://scripts/rune_block.gd" id="3_p64it"]
+[ext_resource type="Script" path="res://scripts/sparkle.gd" id="4_kuxq4"]
+[ext_resource type="Script" path="res://scripts/tutorial_hint.gd" id="5_dlagb"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_fhrfm"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_qokqn"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="8_0l3ij"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="9_tm7bn"]
 
 [node name="Level05" type="Node2D"]
-script = ExtResource("1_2n2vq")
+script = ExtResource("1_haox5")
 level_number = 5
 slogan = "Сдвинь"
 hints = PackedStringArray("Мост можно построить.", "Камень с руной можно двигать пальцем.", "Перетащи камень с руной вниз на яму и перейди по нему.")
@@ -23,49 +23,71 @@ restart_on_fall = false
 wrap_horizontal = false
 dark = true
 dust = true
+theme = "pyramid"
 
 [node name="Back" type="Polygon2D" parent="."]
 color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
+
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(240, 345, 400, 345, 400, 360, 240, 360)
 color = Color(0.788235, 0.639216, 0.356863, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(240, 345, 400, 345, 400, 360, 240, 360)
+
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(240, 315, 265, 315, 265, 345, 240, 345)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(240, 315, 265, 315, 265, 345, 240, 345)
+
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+
 [node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 40, 0, 40)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 40, 0, 40)
+
 [node name="Solid6" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid6"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
 [node name="Solid7" type="StaticBody2D" parent="."]
-script = ExtResource("2_45cdn")
+script = ExtResource("2_x0tir")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
+[node name="Shape" type="CollisionPolygon2D" parent="Solid7"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
 [node name="Bridge" type="AnimatableBody2D" parent="."]
 position = Vector2(320, 120)
-script = ExtResource("3_sv1b5")
+script = ExtResource("3_p64it")
 mode = 1
 size = Vector2(160, 14)
 tap_offset = Vector2(0, 110)
@@ -78,37 +100,37 @@ effect = &"activate"
 
 [node name="Sparkle" type="Node2D" parent="."]
 position = Vector2(520, 70)
-script = ExtResource("4_qhggt")
+script = ExtResource("4_kuxq4")
 
 [node name="TutorialHint" type="Node2D" parent="."]
 position = Vector2(320, 120)
-script = ExtResource("5_ao2bw")
+script = ExtResource("5_dlagb")
 wait_for = &"drag"
 move_to = Vector2(0, 160)
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(580, 280)
-script = ExtResource("6_pvup2")
+script = ExtResource("6_fhrfm")
 start_open = false
 needs_key = false
 upside_down = false
 
 [node name="Torch90_200" type="Area2D" parent="."]
 position = Vector2(90, 200)
-script = ExtResource("7_7hpum")
+script = ExtResource("7_qokqn")
 start_lit = true
 
 [node name="Torch560_200" type="Area2D" parent="."]
 position = Vector2(560, 200)
-script = ExtResource("7_7hpum")
+script = ExtResource("7_qokqn")
 start_lit = true
 
 [node name="Glyphs1" type="Node2D" parent="."]
 position = Vector2(40, 70)
-script = ExtResource("8_fudki")
+script = ExtResource("8_0l3ij")
 columns = 3
 signs = PackedStringArray("bird", "eye", "reed", "wave", "ankh", "sun")
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("9_4n6ho")
+script = ExtResource("9_tm7bn")

@@ -2,12 +2,17 @@
 extends StaticBody2D
 ## Векторная геометрия уровня: произвольный многоугольник без сетки.
 ## Рисуется старым камнем, местами осыпавшимся до кладки; грани, смотрящие вверх, — песчаный край, вниз — тень.
+## Форма задаётся дочерним CollisionPolygon2D «Shape»: в редакторе выдели его и двигай точки мышью,
+## камень перерисуется сразу.
 
 const Art := preload("res://scripts/art.gd")
 
 @export var polygon := PackedVector2Array():
 	set(value):
 		polygon = value
+		var shape := _shape()
+		if shape and shape.polygon != value:
+			shape.polygon = value
 		queue_redraw()
 @export var color := Color("8a6a43"):
 	set(value):
@@ -17,12 +22,43 @@ const Art := preload("res://scripts/art.gd")
 
 func _ready() -> void:
 	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	var shape := _shape()
+	if shape == null:
+		# Старые сцены без «Shape»: форма только в polygon.
+		shape = CollisionPolygon2D.new()
+		shape.name = "Shape"
+		shape.polygon = polygon
+		add_child(shape)
+	_sync()
+	set_process(Engine.is_editor_hint())
 	if Engine.is_editor_hint():
 		return
 	add_to_group("solid")
-	var shape := CollisionPolygon2D.new()
-	shape.polygon = polygon
-	add_child(shape)
+
+
+func _shape() -> CollisionPolygon2D:
+	return get_node_or_null("Shape") as CollisionPolygon2D
+
+
+## Форма берётся из «Shape» с учётом его сдвига, сам «Shape» держим в нуле.
+func _sync() -> void:
+	var shape := _shape()
+	if shape == null:
+		return
+	if shape.position != Vector2.ZERO:
+		var moved := PackedVector2Array()
+		for p in shape.polygon:
+			moved.append(p + shape.position)
+		shape.position = Vector2.ZERO
+		shape.polygon = moved
+	if shape.polygon != polygon:
+		polygon = shape.polygon
+
+
+func _process(_delta: float) -> void:
+	# В редакторе следим за точками «Shape», чтобы камень перерисовывался во время правки.
+	if Engine.is_editor_hint():
+		_sync()
 
 
 ## Точка не внутри другого камня: значит, грань здесь смотрит в воздух.
@@ -31,7 +67,7 @@ func _exposed(point: Vector2) -> bool:
 	if Engine.is_editor_hint():
 		return true
 	for other in get_tree().get_nodes_in_group("solid"):
-		if other != self and Geometry2D.is_point_in_polygon(point, other.polygon):
+		if other != self and Geometry2D.is_point_in_polygon(other.to_local(to_global(point)), other.polygon):
 			return false
 	# Ложная стена, пока закрыта, тоже камень: кромки у тайника не рисуем.
 	for wall in get_tree().get_nodes_in_group("false_wall"):
