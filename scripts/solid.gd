@@ -76,26 +76,32 @@ func _exposed(point: Vector2) -> bool:
 
 
 func _draw() -> void:
-	if polygon.size() < 3:
+	# Рисуем форму «Shape» в его собственных координатах и сдвигаем целиком: так кладка, пятна и камешки
+	# едут вместе с камнем, когда его тянут в редакторе, а не остаются на месте и не перескакивают.
+	var shape := _shape()
+	var base: PackedVector2Array = shape.polygon if shape else polygon
+	var offset: Vector2 = shape.position if shape else Vector2.ZERO
+	if base.size() < 3:
 		return
-	Art.draw_textured(self, polygon, Art.plaster())
+	draw_set_transform(offset)
+	Art.draw_textured(self, base, Art.plaster(), Color.WHITE, Vector2.ZERO)
 	# Пятна не заходят под ложную стену: иначе на её краю пятно обрежется и выдаст тайник.
 	var avoid := []
 	if not Engine.is_editor_hint():
 		for wall in get_tree().get_nodes_in_group("false_wall"):
-			avoid.append(Rect2(wall.global_position, wall.size))
-	Art.draw_crumbled(self, polygon, hash(polygon), 1.0, avoid)
+			avoid.append(Rect2(wall.global_position - offset, wall.size))
+	Art.draw_crumbled(self, base, hash(base), 1.0, avoid, Vector2.ZERO)
 	var area := 0.0
-	for i in polygon.size():
-		var a := polygon[i]
-		var b := polygon[(i + 1) % polygon.size()]
+	for i in base.size():
+		var a := base[i]
+		var b := base[(i + 1) % base.size()]
 		area += a.x * b.y - b.x * a.y
 	var sign := 1.0 if area > 0.0 else -1.0
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash(polygon) + 1
-	for i in polygon.size():
-		var a := polygon[i]
-		var b := polygon[(i + 1) % polygon.size()]
+	rng.seed = hash(base) + 1
+	for i in base.size():
+		var a := base[i]
+		var b := base[(i + 1) % base.size()]
 		var length := a.distance_to(b)
 		var d := (b - a) / maxf(length, 0.001)
 		var normal := Vector2(d.y, -d.x) * sign  # наружу
@@ -105,7 +111,7 @@ func _draw() -> void:
 			var step := minf(2.0, length - t)
 			var p := a + d * t
 			var q := a + d * (t + step)
-			if _exposed((p + q) / 2.0 + normal * 2.0):
+			if _exposed((p + q) / 2.0 + normal * 2.0 + offset):
 				if normal.y < -0.7:
 					# Верхняя грань: песок на кромке, осыпавшиеся камешки.
 					draw_line(p + Vector2(0, 0.5), q + Vector2(0, 0.5), Art.SAND_LIGHT, 1.0)
@@ -120,6 +126,7 @@ func _draw() -> void:
 					var shift := Vector2(-0.5 * normal.x, 0)
 					draw_line(p + shift, q + shift, Color(0, 0, 0, 0.25), 1.0)
 			t += step
+	draw_set_transform(Vector2.ZERO)
 
 
 func _pebble(at: Vector2, rng: RandomNumberGenerator) -> void:

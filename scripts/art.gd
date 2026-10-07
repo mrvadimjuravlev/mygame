@@ -134,8 +134,10 @@ static func plaster() -> ImageTexture:
 
 
 ## Залить многоугольник текстурой в мировых координатах (швы и пятна совпадают у соседей).
-static func draw_textured(canvas: CanvasItem, polygon: PackedVector2Array, tex: Texture2D, modulate := Color.WHITE) -> void:
-	var origin := canvas.get_global_transform().origin
+## Текстура привязана к миру, чтобы соседние камни сходились без шва. uv_origin задаёт привязку
+## вручную (камень рисует свою текстуру в своих координатах, чтобы она ехала вместе с ним).
+static func draw_textured(canvas: CanvasItem, polygon: PackedVector2Array, tex: Texture2D, modulate := Color.WHITE, uv_origin = null) -> void:
+	var origin: Vector2 = canvas.get_global_transform().origin if uv_origin == null else uv_origin
 	var uvs := PackedVector2Array()
 	for p in polygon:
 		uvs.append((p + origin) / Vector2(tex.get_size()))
@@ -146,7 +148,7 @@ static func draw_textured(canvas: CanvasItem, polygon: PackedVector2Array, tex: 
 ## Пятна целиком внутри камня (inner — многоугольник, в котором им можно быть).
 ## Расположение случайное, но одинаковое при каждом запуске (seed).
 ## avoid — прямоугольники (в координатах canvas), куда пятна заходить не должны.
-static func draw_crumbled(canvas: CanvasItem, polygon: PackedVector2Array, seed: int, alpha := 1.0, avoid: Array = []) -> void:
+static func draw_crumbled(canvas: CanvasItem, polygon: PackedVector2Array, seed: int, alpha := 1.0, avoid: Array = [], uv_origin = null) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed
 	var box := Rect2(polygon[0], Vector2.ZERO)
@@ -167,7 +169,7 @@ static func draw_crumbled(canvas: CanvasItem, polygon: PackedVector2Array, seed:
 			var blob := _blob(center, rx, ry, rng)
 			if not _poly_inside(blob, inner) or _touches(blob, avoid):
 				continue
-			_patch(canvas, blob, alpha)
+			_patch(canvas, blob, alpha, uv_origin)
 			break
 
 
@@ -200,7 +202,7 @@ static func _poly_inside(poly: PackedVector2Array, container: PackedVector2Array
 	return true
 
 
-static func _patch(canvas: CanvasItem, blob: PackedVector2Array, alpha: float) -> void:
+static func _patch(canvas: CanvasItem, blob: PackedVector2Array, alpha: float, uv_origin = null) -> void:
 	# Край штукатурки: светлый скол снизу-справа, тёмная тень сверху-слева, внутри кладка.
 	var rim := Geometry2D.offset_polygon(blob, 2.0)
 	if not rim.is_empty():
@@ -212,7 +214,7 @@ static func _patch(canvas: CanvasItem, blob: PackedVector2Array, alpha: float) -
 	var edge := Geometry2D.offset_polygon(blob, 1.0)
 	if not edge.is_empty():
 		canvas.draw_colored_polygon(edge[0], Color("4a3420", alpha))
-	draw_textured(canvas, blob, bricks(), Color(0.86, 0.8, 0.76, alpha))
+	draw_textured(canvas, blob, bricks(), Color(0.86, 0.8, 0.76, alpha), uv_origin)
 	# Тень от верхнего края штукатурки на кирпичах.
 	var shade := PackedVector2Array()
 	for p in blob:
