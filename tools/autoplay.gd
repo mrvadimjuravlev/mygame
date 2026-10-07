@@ -376,8 +376,13 @@ func _solve_14() -> void:
 		await _hop("move_right")
 	await _walk_to(188.0)  # толкает камень влево до уступа
 	print("  камень у уступа: ", stone.global_position)
+	print("  спрыгнул с уступа вдоль стены, ход открыт: ", current_scene.get_node("FalseWall").opened)
 	await _hop("move_left")  # на камень
-	await _hop("move_left")  # с камня в проём в стене уступа
+	await _walk_to(150.0)    # вплотную к стене уступа
+	print("  стоит на камне у стены, ход открыт: ", current_scene.get_node("FalseWall").opened)
+	await _hop("jump")       # прыжок вверх вдоль стены
+	print("  прыгнул вдоль стены, ход открыт: ", current_scene.get_node("FalseWall").opened)
+	await _hop("move_left")  # в проём
 	print("  в тайнике: ", _hero().global_position, " ход открыт: ", current_scene.get_node("FalseWall").opened)
 	await _walk_to(96.0)
 	print("  ключ у героя: ", _hero().has_key)

@@ -101,7 +101,7 @@ const EN := {
 	"Толкай": "Push",
 	"Камень можно толкать.": "The stone can be pushed.",
 	"Столкни камень с уступа. В самом уступе есть тайник, но вход в него высоко.": "Push the stone off the ledge. There is a hidden chamber inside the ledge, but its entrance is high up.",
-	"Подтолкни камень к уступу, залезь на него и прыгни влево в стену уступа: там потайной ход и ключ.": "Push the stone against the ledge, climb onto it and jump left into the ledge wall: there is a secret passage with the key.",
+	"Подтолкни камень к уступу, встань на него вплотную к стене и прыгни вверх: откроется потайной ход. Заходи влево, там ключ.": "Push the stone against the ledge, stand on it right by the wall and jump straight up: a secret passage opens. Go in to the left for the key.",
 	# Уровень 15
 	"Рука помощи": "A Helping Hand",
 	"Обрыв не перепрыгнуть, и обходного пути нет.": "The chasm is too wide to jump, and there is no way around.",

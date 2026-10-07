@@ -14,7 +14,7 @@
 script = ExtResource("1_1uljs")
 level_number = 14
 slogan = "Толкай"
-hints = PackedStringArray("Камень можно толкать.", "Столкни камень с уступа. В самом уступе есть тайник, но вход в него высоко.", "Подтолкни камень к уступу, залезь на него и прыгни влево в стену уступа: там потайной ход и ключ.")
+hints = PackedStringArray("Камень можно толкать.", "Столкни камень с уступа. В самом уступе есть тайник, но вход в него высоко.", "Подтолкни камень к уступу, встань на него вплотную к стене и прыгни вверх: откроется потайной ход. Заходи влево, там ключ.")
 tutorial_button = ""
 level_width = 640.0
 level_height = 360.0
@@ -100,7 +100,8 @@ script = ExtResource("4_3ndmr")
 position = Vector2(70, 166)
 script = ExtResource("5_kfpxo")
 size = Vector2(80, 48)
-sensor = Rect2(56, 0, 24, 48)
+sensor = Rect2(80, 0, 10, 48)
+need_jump = true
 crack_at = Vector2(72, 24)
 
 [node name="Exit" type="Area2D" parent="."]

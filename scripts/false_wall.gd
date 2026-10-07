@@ -10,12 +10,16 @@ extends Node2D
 		queue_redraw()
 ## Зона, войдя в которую герой открывает ход (в локальных координатах).
 @export var sensor := Rect2(0, 160, 20, 80)
+## Ход открывается, только если герой в зоне sensor летит вверх (прыжок вдоль стены),
+## а не просто вошёл в неё или падает мимо.
+@export var need_jump := false
 ## Где нарисовать трещину — едва заметный намёк (в локальных координатах).
 @export var crack_at := Vector2(10, 190)
 
 const Art := preload("res://scripts/art.gd")
 
 var opened := false
+var _area: Area2D
 var _alpha := 1.0
 
 
@@ -33,11 +37,26 @@ func _ready() -> void:
 	area.add_child(shape)
 	add_child(area)
 	area.body_entered.connect(func(body: Node) -> void:
-		if body.is_in_group("hero") and not opened:
-			opened = true
-			# Теперь видно, где у камня края: перерисовать соседей.
-			get_tree().call_group("solid", "queue_redraw")
-			create_tween().tween_property(self, "_alpha", 0.0, 0.5))
+		if body.is_in_group("hero") and not need_jump:
+			open())
+	_area = area
+
+
+func _physics_process(_delta: float) -> void:
+	if Engine.is_editor_hint() or opened or not need_jump or _area == null:
+		return
+	for body in _area.get_overlapping_bodies():
+		if body.is_in_group("hero") and body.velocity.y < -1.0:
+			open()
+
+
+func open() -> void:
+	if opened:
+		return
+	opened = true
+	# Теперь видно, где у камня края: перерисовать соседей.
+	get_tree().call_group("solid", "queue_redraw")
+	create_tween().tween_property(self, "_alpha", 0.0, 0.5)
 
 
 func covers(point: Vector2) -> bool:
