@@ -3,16 +3,18 @@ extends StaticBody2D
 ## Векторная геометрия уровня: произвольный многоугольник без сетки.
 ## Рисуется старым камнем, местами осыпавшимся до кладки; грани, смотрящие вверх, — песчаный край, вниз — тень.
 ## Форма задаётся дочерним CollisionPolygon2D «Shape»: в редакторе выдели его и двигай точки мышью
-## или весь «Shape» целиком, камень перерисуется сразу.
+## или весь «Shape» целиком (сдвиг, масштаб, поворот), камень перерисуется сразу.
 
 const Art := preload("res://scripts/art.gd")
+## Размер текстуры камня: сдвиг опоры «Shape» на такой шаг не сдвигает рисунок.
+const TEXTURE_STEP := 128.0
 
 @export var polygon := PackedVector2Array():
 	set(value):
 		polygon = value
-		# Правка polygon в инспекторе доходит до «Shape», если тот не сдвинут.
+		# Правка polygon в инспекторе доходит до «Shape», если тот не сдвинут и не растянут.
 		var shape := _shape()
-		if shape and shape.position == Vector2.ZERO and shape.polygon != value:
+		if shape and shape.transform == Transform2D.IDENTITY and shape.polygon != value:
 			shape.polygon = value
 		queue_redraw()
 @export var color := Color("8a6a43"):
@@ -30,6 +32,20 @@ func _ready() -> void:
 		shape.name = "Shape"
 		shape.polygon = polygon
 		add_child(shape)
+	elif Engine.is_editor_hint() and shape.transform == Transform2D.IDENTITY and shape.polygon.size() > 2:
+		# Точка опоры «Shape» — около середины камня, чтобы растягивать и вращать его вокруг себя,
+		# а не вокруг угла уровня. Форма от этого не меняется. Опора кратна 128 (размер текстуры),
+		# поэтому кладка соседних камней по-прежнему сходится без шва.
+		var box := Rect2(shape.polygon[0], Vector2.ZERO)
+		for p in shape.polygon:
+			box = box.expand(p)
+		var center := (box.get_center() / TEXTURE_STEP).round() * TEXTURE_STEP
+		if center != Vector2.ZERO:
+			var local := PackedVector2Array()
+			for p in shape.polygon:
+				local.append(p - center)
+			shape.polygon = local
+			shape.position = center
 	_sync()
 	set_process(Engine.is_editor_hint())
 	if Engine.is_editor_hint():
@@ -41,15 +57,14 @@ func _shape() -> CollisionPolygon2D:
 	return get_node_or_null("Shape") as CollisionPolygon2D
 
 
-## Форма берётся из «Shape» с учётом его сдвига. Сам «Shape» здесь не трогаем: редактор, пока тянет
-## узел мышью, каждый кадр ставит ему положение от точки захвата, и любая наша правка складывалась бы с ней.
+## Форма берётся из «Shape» с учётом его сдвига, масштаба и поворота. Сам «Shape» здесь не трогаем:
+## редактор, пока тянет узел мышью, каждый кадр ставит ему положение и размер от точки захвата,
+## и любая наша правка складывалась бы с ними.
 func _sync() -> void:
 	var shape := _shape()
 	if shape == null:
 		return
-	var points := PackedVector2Array()
-	for p in shape.polygon:
-		points.append(p + shape.position)
+	var points: PackedVector2Array = shape.transform * shape.polygon
 	if points != polygon:
 		polygon = points
 
@@ -76,21 +91,21 @@ func _exposed(point: Vector2) -> bool:
 
 
 func _draw() -> void:
-	# Рисуем форму «Shape» в его собственных координатах и сдвигаем целиком: так кладка, пятна и камешки
-	# едут вместе с камнем, когда его тянут в редакторе, а не остаются на месте и не перескакивают.
+	# Текстура и пятна привязаны к «Shape»: едут вместе с камнем, когда его тянут в редакторе,
+	# а при растягивании кладка не растягивается, камень просто становится больше.
 	var shape := _shape()
-	var base: PackedVector2Array = shape.polygon if shape else polygon
+	var base := polygon
 	var offset: Vector2 = shape.position if shape else Vector2.ZERO
+	var seed: int = hash(shape.polygon) if shape else hash(polygon)
 	if base.size() < 3:
 		return
-	draw_set_transform(offset)
-	Art.draw_textured(self, base, Art.plaster(), Color.WHITE, Vector2.ZERO)
+	Art.draw_textured(self, base, Art.plaster(), Color.WHITE, -offset)
 	# Пятна не заходят под ложную стену: иначе на её краю пятно обрежется и выдаст тайник.
 	var avoid := []
 	if not Engine.is_editor_hint():
 		for wall in get_tree().get_nodes_in_group("false_wall"):
-			avoid.append(Rect2(wall.global_position - offset, wall.size))
-	Art.draw_crumbled(self, base, hash(base), 1.0, avoid, Vector2.ZERO)
+			avoid.append(Rect2(wall.global_position, wall.size))
+	Art.draw_crumbled(self, base, seed, 1.0, avoid, -offset)
 	var area := 0.0
 	for i in base.size():
 		var a := base[i]
@@ -98,7 +113,7 @@ func _draw() -> void:
 		area += a.x * b.y - b.x * a.y
 	var sign := 1.0 if area > 0.0 else -1.0
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash(base) + 1
+	rng.seed = seed + 1
 	for i in base.size():
 		var a := base[i]
 		var b := base[(i + 1) % base.size()]
@@ -111,7 +126,7 @@ func _draw() -> void:
 			var step := minf(2.0, length - t)
 			var p := a + d * t
 			var q := a + d * (t + step)
-			if _exposed((p + q) / 2.0 + normal * 2.0 + offset):
+			if _exposed((p + q) / 2.0 + normal * 2.0):
 				if normal.y < -0.7:
 					# Верхняя грань: песок на кромке, осыпавшиеся камешки.
 					draw_line(p + Vector2(0, 0.5), q + Vector2(0, 0.5), Art.SAND_LIGHT, 1.0)
@@ -126,7 +141,6 @@ func _draw() -> void:
 					var shift := Vector2(-0.5 * normal.x, 0)
 					draw_line(p + shift, q + shift, Color(0, 0, 0, 0.25), 1.0)
 			t += step
-	draw_set_transform(Vector2.ZERO)
 
 
 func _pebble(at: Vector2, rng: RandomNumberGenerator) -> void:
