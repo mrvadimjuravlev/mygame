@@ -1,21 +1,21 @@
 [gd_scene load_steps=11 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_akjoe"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_ugiv8"]
-[ext_resource type="Script" path="res://scripts/light_beam.gd" id="3_rnns1"]
-[ext_resource type="Script" path="res://scripts/prop.gd" id="4_gkkof"]
-[ext_resource type="Script" path="res://scripts/mirror.gd" id="5_lxsfv"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_eq51h"]
-[ext_resource type="Script" path="res://scripts/sun_target.gd" id="7_cstl6"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="8_6ug5s"]
-[ext_resource type="Script" path="res://scripts/glyphs.gd" id="9_uy3o5"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="10_4cjpi"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_e0jos"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_xau8g"]
+[ext_resource type="Script" path="res://scripts/light_beam.gd" id="3_j4fyo"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="4_515li"]
+[ext_resource type="Script" path="res://scripts/mirror.gd" id="5_dt7ej"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="6_y22ya"]
+[ext_resource type="Script" path="res://scripts/sun_target.gd" id="7_fhcot"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="8_eiq2l"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="9_wnx6b"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="10_hqmyi"]
 
 [node name="Level16" type="Node2D"]
-script = ExtResource("1_akjoe")
+script = ExtResource("1_e0jos")
 level_number = 16
 slogan = "Солнечный зайчик"
-hints = PackedStringArray("Свет должен попасть на солнце.", "Коснись зеркала пальцем: оно повернётся.", "Луч идёт лесенкой: вниз, вправо, вверх, вправо, вниз, вправо, вверх и вправо на солнце.")
+hints = PackedStringArray("Свет должен попасть на солнце.", "Коснись зеркала пальцем: оно повернётся.", "Лучи могут пересекаться. Путь: наискосок вверх, прямо вниз, наискосок вверх-влево и вправо на солнце.")
 tutorial_button = ""
 level_width = 640.0
 level_height = 360.0
@@ -32,7 +32,7 @@ color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_ugiv8")
+script = ExtResource("2_xau8g")
 polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -40,7 +40,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
 
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_ugiv8")
+script = ExtResource("2_xau8g")
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -48,7 +48,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
 
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_ugiv8")
+script = ExtResource("2_xau8g")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -56,180 +56,117 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_ugiv8")
+script = ExtResource("2_xau8g")
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 
-[node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("2_ugiv8")
-polygon = PackedVector2Array(430, 60, 446, 60, 446, 130, 430, 130)
-color = Color(0.541176, 0.415686, 0.262745, 1)
-
-[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
-polygon = PackedVector2Array(430, 60, 446, 60, 446, 130, 430, 130)
-
 [node name="Beam" type="Node2D" parent="."]
-position = Vector2(16, 100)
-script = ExtResource("3_rnns1")
+position = Vector2(16, 240)
+script = ExtResource("3_j4fyo")
 direction = Vector2(1, 0)
 
-[node name="Prop7" type="Node2D" parent="."]
-position = Vector2(110, 60)
-script = ExtResource("4_gkkof")
+[node name="Prop6" type="Node2D" parent="."]
+position = Vector2(140, 60)
+script = ExtResource("4_515li")
 kind = "chain"
-length = 20.0
+length = 160.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Mirror1" type="Area2D" parent="."]
-position = Vector2(110, 100)
-script = ExtResource("5_lxsfv")
-step = 0
+position = Vector2(140, 240)
+script = ExtResource("5_dt7ej")
+step = 5
 
-[node name="Prop9" type="Node2D" parent="."]
-position = Vector2(110, 60)
-script = ExtResource("4_gkkof")
+[node name="Prop8" type="Node2D" parent="."]
+position = Vector2(260, 60)
+script = ExtResource("4_515li")
 kind = "chain"
-length = 150.0
+length = 40.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Mirror2" type="Area2D" parent="."]
-position = Vector2(110, 230)
-script = ExtResource("5_lxsfv")
-step = 2
-
-[node name="Prop11" type="Node2D" parent="."]
-position = Vector2(230, 60)
-script = ExtResource("4_gkkof")
-kind = "chain"
-length = 150.0
-color = Color(0.541176, 0.168627, 0.168627, 1)
+position = Vector2(260, 120)
+script = ExtResource("5_dt7ej")
+step = 5
 
 [node name="Mirror3" type="Area2D" parent="."]
-position = Vector2(230, 230)
-script = ExtResource("5_lxsfv")
-step = 2
+position = Vector2(260, 250)
+script = ExtResource("5_dt7ej")
+step = 4
 
-[node name="Prop13" type="Node2D" parent="."]
-position = Vector2(230, 60)
-script = ExtResource("4_gkkof")
+[node name="Prop11" type="Node2D" parent="."]
+position = Vector2(150, 60)
+script = ExtResource("4_515li")
 kind = "chain"
-length = 70.0
+length = 60.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Mirror4" type="Area2D" parent="."]
-position = Vector2(230, 150)
-script = ExtResource("5_lxsfv")
-step = 0
-
-[node name="Prop15" type="Node2D" parent="."]
-position = Vector2(370, 60)
-script = ExtResource("4_gkkof")
-kind = "chain"
-length = 70.0
-color = Color(0.541176, 0.168627, 0.168627, 1)
-
-[node name="Mirror5" type="Area2D" parent="."]
-position = Vector2(370, 150)
-script = ExtResource("5_lxsfv")
-step = 3
-
-[node name="Prop17" type="Node2D" parent="."]
-position = Vector2(370, 60)
-script = ExtResource("4_gkkof")
-kind = "chain"
-length = 160.0
-color = Color(0.541176, 0.168627, 0.168627, 1)
-
-[node name="Mirror6" type="Area2D" parent="."]
-position = Vector2(370, 240)
-script = ExtResource("5_lxsfv")
-step = 2
-
-[node name="Prop19" type="Node2D" parent="."]
-position = Vector2(500, 60)
-script = ExtResource("4_gkkof")
-kind = "chain"
-length = 160.0
-color = Color(0.541176, 0.168627, 0.168627, 1)
-
-[node name="Mirror7" type="Area2D" parent="."]
-position = Vector2(500, 240)
-script = ExtResource("5_lxsfv")
-step = 1
-
-[node name="Prop21" type="Node2D" parent="."]
-position = Vector2(500, 60)
-script = ExtResource("4_gkkof")
-kind = "chain"
-length = 30.0
-color = Color(0.541176, 0.168627, 0.168627, 1)
-
-[node name="Mirror8" type="Area2D" parent="."]
-position = Vector2(500, 110)
-script = ExtResource("5_lxsfv")
+position = Vector2(150, 140)
+script = ExtResource("5_dt7ej")
 step = 2
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(580, 280)
-script = ExtResource("6_eq51h")
+script = ExtResource("6_y22ya")
 start_open = false
 needs_key = false
 upside_down = false
 
 [node name="Sun" type="Node2D" parent="."]
-position = Vector2(608, 110)
-script = ExtResource("7_cstl6")
+position = Vector2(606, 140)
+script = ExtResource("7_fhcot")
 targets = Array[NodePath]([NodePath("../Exit")])
 effect = &"activate"
 
-[node name="Torch60_200" type="Area2D" parent="."]
-position = Vector2(60, 200)
-script = ExtResource("8_6ug5s")
+[node name="Torch60_170" type="Area2D" parent="."]
+position = Vector2(60, 170)
+script = ExtResource("8_eiq2l")
 start_lit = true
 
 [node name="Glyphs1" type="Node2D" parent="."]
-position = Vector2(300, 90)
-script = ExtResource("9_uy3o5")
+position = Vector2(400, 200)
+script = ExtResource("9_wnx6b")
 columns = 2
 signs = PackedStringArray("sun", "eye", "bird", "sun")
 
 [node name="Glyphs2" type="Node2D" parent="."]
-position = Vector2(560, 180)
-script = ExtResource("9_uy3o5")
+position = Vector2(500, 90)
+script = ExtResource("9_wnx6b")
 columns = 2
 signs = PackedStringArray("sun", "wave", "reed", "sun")
 
-[node name="Prop28" type="Node2D" parent="."]
+[node name="Prop18" type="Node2D" parent="."]
 position = Vector2(16, 60)
-script = ExtResource("4_gkkof")
+script = ExtResource("4_515li")
 kind = "web"
 length = 50.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
-[node name="Prop29" type="Node2D" parent="."]
-position = Vector2(320, 60)
-script = ExtResource("4_gkkof")
+[node name="Prop19" type="Node2D" parent="."]
+position = Vector2(470, 60)
+script = ExtResource("4_515li")
 kind = "roots"
 length = 40.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
-[node name="Prop30" type="Node2D" parent="."]
+[node name="Prop20" type="Node2D" parent="."]
 position = Vector2(160, 280)
-script = ExtResource("4_gkkof")
+script = ExtResource("4_515li")
 kind = "bones"
 length = 0.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
-[node name="Prop31" type="Node2D" parent="."]
+[node name="Prop21" type="Node2D" parent="."]
 position = Vector2(530, 280)
-script = ExtResource("4_gkkof")
+script = ExtResource("4_515li")
 kind = "vase"
 length = 0.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(50, 280)
-script = ExtResource("10_4cjpi")
+script = ExtResource("10_hqmyi")

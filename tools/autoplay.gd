@@ -54,8 +54,8 @@ func _solve_15() -> void:
 func _solve_16() -> void:
 	var lv := current_scene
 	print("  луч сначала: ", lv.get_node("Beam").points)
-	# Сколько раз коснуться каждого зеркала, чтобы луч пошёл лесенкой.
-	var taps := [1, 3, 1, 3, 2, 3, 2, 1]
+	# Сколько раз коснуться каждого зеркала, чтобы луч дошёл до солнца.
+	var taps := [2, 4, 3, 3]
 	for i in taps.size():
 		var mirror: Node2D = lv.get_node("Mirror%d" % (i + 1))
 		for k in taps[i]:

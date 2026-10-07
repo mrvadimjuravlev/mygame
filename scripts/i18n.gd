@@ -111,7 +111,7 @@ const EN := {
 	"Солнечный зайчик": "Sunbeam",
 	"Свет должен попасть на солнце.": "The light has to reach the sun.",
 	"Коснись зеркала пальцем: оно повернётся.": "Tap a mirror with your finger and it turns.",
-	"Луч идёт лесенкой: вниз, вправо, вверх, вправо, вниз, вправо, вверх и вправо на солнце.": "The beam zigzags: down, right, up, right, down, right, up and right into the sun.",
+	"Лучи могут пересекаться. Путь: наискосок вверх, прямо вниз, наискосок вверх-влево и вправо на солнце.": "Beams can cross. The path: diagonally up, straight down, diagonally up and left, then right into the sun.",
 	# Подземелье
 	"Решётка": "The Portcullis",
 	"Решётку не поднять руками.": "The portcullis can't be lifted by hand.",

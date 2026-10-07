@@ -1,14 +1,18 @@
 @tool
 extends Area2D
-## Поворотное зеркало на бронзовой оси. Касание пальцем поворачивает его на 45°.
-## Положения: 0 «—», 1 «\», 2 «|», 3 «/». Отражает луч обеими сторонами.
+## Поворотное зеркало на бронзовой оси. Касание пальцем поворачивает его на 22,5°,
+## поэтому луч уходит и под прямым углом, и наискосок (кратно 45°).
+## Положения 0–7: 0 «—», 2 «\», 4 «|», 6 «/», нечётные — между ними. Отражает луч обеими сторонами.
+
+const STEPS := 8
+const TURN := PI / STEPS
 
 const HALF := 12.0
 
-@export_range(0, 3) var step := 0:
+@export_range(0, 7) var step := 0:
 	set(value):
-		step = posmod(value, 4)
-		_shown = step * PI / 4
+		step = posmod(value, STEPS)
+		_shown = step * TURN
 		queue_redraw()
 
 var _shown := 0.0
@@ -36,19 +40,19 @@ func hand_tap() -> void:
 	# Плавный поворот на глаз; луч считает новое положение сразу.
 	_shown = from
 	var tween := create_tween()
-	tween.tween_property(self, "_shown", from + PI / 4, 0.15)
-	tween.tween_callback(func() -> void: _shown = step * PI / 4)
+	tween.tween_property(self, "_shown", from + TURN, 0.12)
+	tween.tween_callback(func() -> void: _shown = step * TURN)
 	Sfx.play("lever", -2.0, 1.4)
 
 
 ## Отражающий отрезок в мировых координатах.
 func segment() -> PackedVector2Array:
-	var d := Vector2.from_angle(step * PI / 4) * HALF
+	var d := Vector2.from_angle(step * TURN) * HALF
 	return PackedVector2Array([global_position - d, global_position + d])
 
 
 func normal() -> Vector2:
-	return Vector2.from_angle(step * PI / 4).orthogonal()
+	return Vector2.from_angle(step * TURN).orthogonal()
 
 
 func _process(_delta: float) -> void:
