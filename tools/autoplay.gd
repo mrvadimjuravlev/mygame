@@ -88,7 +88,7 @@ func _solve_17() -> void:
 	await _frames(10)
 	print("  в другой комнате: ", _hero().global_position)
 	await _walk_to(1100.0)
-	print("  у сосудов: ", _hero().global_position, " ход открыт: ", lv.get_node("FalseWall").opened)
+	print("  у сосудов: ", _hero().global_position)
 	await _walk_to(690.0)
 	await _frames(10)
 	print("  вернулся: ", _hero().global_position)

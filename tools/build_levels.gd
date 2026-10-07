@@ -453,34 +453,30 @@ func _level_17() -> void:
 	_decor([[240, 200], [520, 110]], [[470, 70, 3, ["eye", "ankh", "sun"]]], true)
 	_prop("web", Vector2(16, 60), 46)
 	_prop("roots", Vector2(150, 60), 36)
-	# Другая комната (656–1264): камень другого оттенка; справа стена, внизу в ней узкий потайной проход.
+	# Другая комната (656–1264): камень другого оттенка, всё вокруг — кладка.
+	# Ниша с порталом, узкий проход в рост героя и комната с сосудами.
 	var back2 := Polygon2D.new()
 	back2.color = Color(0.5, 0.72, 0.95)
 	back2.polygon = PackedVector2Array([Vector2(656, 60), Vector2(1264, 60), Vector2(1264, 280), Vector2(656, 280)])
 	_add("Back2", back2, "", Vector2.ZERO)
+	_box(656, 60, 1264, 160)     # над всем
+	_box(656, 160, 1060, 220)    # над нишей и проходом
+	_box(760, 220, 1060, 250)    # потолок узкого прохода
 	var back := _add("PortalBack", Area2D.new(), "portal.gd", Vector2(690, 280))
 	back.destination = Vector2(345, 116)
 	back.room_left = 0
 	back.room_right = 640
 	back.color = Color("5fd3ff")
-	_box(940, 60, 980, 248)
-	var wall := _add("FalseWall", Node2D.new(), "false_wall.gd", Vector2(940, 248))
-	wall.size = Vector2(40, 32)
-	wall.sensor = Rect2(0, 0, 12, 32)
-	wall.crack_at = Vector2(6, 16)
 	# Сосуды по порядку: зелёный, красный, жёлтый, синий.
 	var urns := ["5cb85c", "d9534f", "f2c14e", "4a8fe7"]
 	for i in urns.size():
-		_prop("urn", Vector2(1040 + i * 50, 280), 0, Color(urns[i]))
-	for t in [[1110, 180], [800, 200]]:
+		_prop("urn", Vector2(1110 + i * 40, 280), 0, Color(urns[i]))
+	for t in [[1160, 200], [735, 245]]:
 		var torch := _add("Torch%d_%d" % [t[0], t[1]], Area2D.new(), "torch.gd", Vector2(t[0], t[1]))
 		torch.start_lit = true
-	var panel := _add("Glyphs2", Node2D.new(), "glyphs.gd", Vector2(780, 100))
-	panel.columns = 2
-	panel.signs = PackedStringArray(["wave", "bird", "reed", "eye"])
-	_prop("web", Vector2(980, 60), 40)
-	_prop("roots", Vector2(860, 60), 50)
+	_prop("web", Vector2(1060, 160), 34)
 	_prop("bones", Vector2(900, 280), 0)
+	_prop("roots", Vector2(1220, 160), 30)
 	_hero(60, 280)
 	_save(17)
 
