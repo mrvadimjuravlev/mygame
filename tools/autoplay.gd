@@ -12,7 +12,7 @@ func _initialize() -> void:
 func _run() -> void:
 	change_scene_to_file("res://levels/level_01.tscn")
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17]
 	for i in solvers.size():
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -63,6 +63,45 @@ func _solve_16() -> void:
 			await _frames(12)
 	print("  солнце горит: ", lv.get_node("Sun").lit, " луч ", lv.get_node("Beam").points)
 	await _walk_to(580.0)
+
+
+func _solve_17() -> void:
+	var lv := current_scene
+	# Стирает пыль с цифр: несколько движений пальцем туда-обратно.
+	for i in 4:
+		var d: Node2D = lv.get_node("Digit%d" % (i + 1))
+		for k in 3:
+			await _drag(d.global_position + Vector2(-20, 0), d.global_position + Vector2(20, 0), 6)
+			await _drag(d.global_position + Vector2(20, 4), d.global_position + Vector2(-20, 4), 6)
+	print("  пыль на цифрах: ", [lv.get_node("Digit1").dust, lv.get_node("Digit2").dust, lv.get_node("Digit3").dust, lv.get_node("Digit4").dust])
+	# Вверх по платформам к двери-порталу.
+	await _walk_to(500.0)
+	await _hop("move_left")
+	await _walk_to(470.0)
+	await _hop("move_right")
+	await _walk_to(530.0)
+	await _hop("move_left")
+	await _walk_to(425.0)
+	await _hop("move_left")
+	print("  на верхней платформе: ", _hero().global_position)
+	await _walk_to(275.0)
+	await _frames(10)
+	print("  в другой комнате: ", _hero().global_position)
+	await _walk_to(1100.0)
+	print("  у сосудов: ", _hero().global_position, " ход открыт: ", lv.get_node("FalseWall").opened)
+	await _walk_to(690.0)
+	await _frames(10)
+	print("  вернулся: ", _hero().global_position)
+	# Код: зелёная 5, красная 7, жёлтая 9, синяя 2.
+	var pad: Node2D = lv.get_node("Keypad")
+	var code := [5, 7, 9, 2]
+	for i in 4:
+		for k in code[i]:
+			await _tap(pad.global_position + Vector2(8 + 13 + i * 32, 25))
+	print("  набрано: ", pad.digits, " решено ", pad.solved)
+	await _walk_to(395.0)
+	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 270.0)
+	await _walk_to(300.0)
 
 
 ## Тестовые уровни других локаций: каждый запускается отдельно.

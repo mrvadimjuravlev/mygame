@@ -10,6 +10,8 @@ extends Node2D
 @export var level_height := 360.0
 @export var fall_limit := 420.0
 @export var restart_on_fall := false
+## Ширина части уровня, видимой камерой в начале (0 — весь уровень). Остальное — другие комнаты, куда ведут порталы.
+@export var view_width := 0.0
 ## Героя можно поднять пальцем и перенести.
 @export var hero_grab := false
 ## Уровень закольцован по горизонтали: левый и правый края экрана связаны.
@@ -42,7 +44,7 @@ func _ready() -> void:
 	var cam := Camera2D.new()
 	cam.limit_left = 0
 	cam.limit_top = 0
-	cam.limit_right = int(level_width)
+	cam.limit_right = int(view_width if view_width > 0.0 else level_width)
 	cam.position_smoothing_enabled = true
 	cam.limit_bottom = int(level_height)
 	hero.add_child(cam)
@@ -51,6 +53,11 @@ func _ready() -> void:
 		back.texture = Art.back_wall()
 		back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 		back.color = Color.WHITE
+	# Фон другой комнаты: та же кладка, свой оттенок (цвет задан в сцене).
+	var back2 := get_node_or_null("Back2") as Polygon2D
+	if back2:
+		back2.texture = Art.back_wall()
+		back2.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	if dark:
 		var mod := CanvasModulate.new()
 		mod.color = SHADE[theme]

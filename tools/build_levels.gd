@@ -29,6 +29,7 @@ func _initialize() -> void:
 	_level_14()
 	_level_15()
 	_level_16()
+	_level_17()
 	_dungeon_01()
 	_dungeon_02()
 	_castle_01()
@@ -417,6 +418,71 @@ func _level_16() -> void:
 	_prop("vase", Vector2(530, 280), 0)
 	_hero(50, 280)
 	_save(16)
+
+
+func _level_17() -> void:
+	_begin(17, "Пыль веков", 1280, "", ["Код из четырёх цифр. Где-то есть подсказка, в каком порядке их вводить.", "Цифры на стенах этого зала засыпаны пылью: потри их пальцем. А дверь наверху ведёт в другое место.", "Поднимись по платформам к двери, там иди вправо сквозь стену. Цвета сосудов — порядок цифр: зелёная, красная, жёлтая, синяя."])
+	_root.view_width = 640
+	_back(1280)
+	_box(0, 280, 1280, 360)      # пол обеих комнат
+	_box(0, 0, 1280, 60)         # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 656, 360)       # толстая стена между главным залом и другой комнатой
+	_box(1264, 0, 1280, 360)
+	# Главный зал (0–640). Платформы наверх, к двери-порталу.
+	_box(420, 232, 480, 244)
+	_box(520, 184, 580, 196)
+	_box(420, 140, 480, 152)
+	_box(250, 116, 380, 128)
+	var exit := _exit(300, 280)
+	var pad := _add("Keypad", Node2D.new(), "keypad.gd", Vector2(40, 190))
+	pad.code = "5792"
+	_link(pad, [exit])
+	# Цифры в пыли на стенах: красная 7, синяя 2, зелёная 5, жёлтая 9.
+	var digits := [[7, "d9534f", Vector2(590, 100)], [2, "4a8fe7", Vector2(70, 100)], [5, "5cb85c", Vector2(360, 200)], [9, "f2c14e", Vector2(200, 150)]]
+	for i in digits.size():
+		var d: Array = digits[i]
+		var node := _add("Digit%d" % (i + 1), Node2D.new(), "dust_digit.gd", d[2])
+		node.digit = d[0]
+		node.color = Color(d[1])
+		node.dust = 0.75
+	var up := _add("PortalUp", Area2D.new(), "portal.gd", Vector2(275, 116))
+	up.destination = Vector2(750, 280)
+	up.room_left = 640
+	up.room_right = 1280
+	_decor([[240, 200], [520, 110]], [[470, 70, 3, ["eye", "ankh", "sun"]]], true)
+	_prop("web", Vector2(16, 60), 46)
+	_prop("roots", Vector2(150, 60), 36)
+	# Другая комната (656–1264): камень другого оттенка; справа стена, внизу в ней узкий потайной проход.
+	var back2 := Polygon2D.new()
+	back2.color = Color(0.5, 0.72, 0.95)
+	back2.polygon = PackedVector2Array([Vector2(656, 60), Vector2(1264, 60), Vector2(1264, 280), Vector2(656, 280)])
+	_add("Back2", back2, "", Vector2.ZERO)
+	var back := _add("PortalBack", Area2D.new(), "portal.gd", Vector2(690, 280))
+	back.destination = Vector2(345, 116)
+	back.room_left = 0
+	back.room_right = 640
+	back.color = Color("5fd3ff")
+	_box(940, 60, 980, 248)
+	var wall := _add("FalseWall", Node2D.new(), "false_wall.gd", Vector2(940, 248))
+	wall.size = Vector2(40, 32)
+	wall.sensor = Rect2(0, 0, 12, 32)
+	wall.crack_at = Vector2(6, 16)
+	# Сосуды по порядку: зелёный, красный, жёлтый, синий.
+	var urns := ["5cb85c", "d9534f", "f2c14e", "4a8fe7"]
+	for i in urns.size():
+		_prop("urn", Vector2(1040 + i * 50, 280), 0, Color(urns[i]))
+	for t in [[1110, 180], [800, 200]]:
+		var torch := _add("Torch%d_%d" % [t[0], t[1]], Area2D.new(), "torch.gd", Vector2(t[0], t[1]))
+		torch.start_lit = true
+	var panel := _add("Glyphs2", Node2D.new(), "glyphs.gd", Vector2(780, 100))
+	panel.columns = 2
+	panel.signs = PackedStringArray(["wave", "bird", "reed", "eye"])
+	_prop("web", Vector2(980, 60), 40)
+	_prop("roots", Vector2(860, 60), 50)
+	_prop("bones", Vector2(900, 280), 0)
+	_hero(60, 280)
+	_save(17)
 
 
 # --- Тестовые уровни других локаций --------------------------------------

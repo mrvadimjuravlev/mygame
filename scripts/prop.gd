@@ -1,11 +1,11 @@
 @tool
 extends Node2D
 ## Украшения локаций: цепь (подземелье), знамя (замок), водоросли (храм), паутина, корни,
-## кости, разбитый кувшин. Чистая красота.
+## кости, разбитый кувшин, цветной сосуд на подставке (urn, цвет — color). Чистая красота.
 ## Начало координат — точка крепления сверху (у водорослей, костей и кувшина — на полу).
 ## Паутина висит в углу: length — размер, color.a не важен; scale.x = -1 зеркалит её в правый угол.
 
-@export_enum("chain", "banner", "weed", "web", "roots", "bones", "vase") var kind := "chain":
+@export_enum("chain", "banner", "weed", "web", "roots", "bones", "vase", "urn") var kind := "chain":
 	set(value):
 		kind = value
 		queue_redraw()
@@ -114,3 +114,12 @@ func _draw() -> void:
 			draw_rect(Rect2(-6, -22, 12, 2), clay.lightened(0.15))
 			draw_colored_polygon(PackedVector2Array([Vector2(13, 0), Vector2(19, -4), Vector2(21, 0)]), clay.darkened(0.15))
 			draw_colored_polygon(PackedVector2Array([Vector2(23, 0), Vector2(26, -2), Vector2(29, 0)]), clay)
+		"urn":
+			# Расписной сосуд на каменной подставке; цвет — подсказка.
+			draw_rect(Rect2(-12, -8, 24, 8), Color("6e5236"))
+			draw_rect(Rect2(-12, -8, 24, 1), Color("8a6a43"))
+			var body := PackedVector2Array([Vector2(-5, -36), Vector2(5, -36), Vector2(4, -32), Vector2(10, -24), Vector2(9, -13), Vector2(5, -8), Vector2(-5, -8), Vector2(-9, -13), Vector2(-10, -24), Vector2(-4, -32)])
+			draw_colored_polygon(body, color)
+			draw_rect(Rect2(-9, -24, 18, 2), color.lightened(0.35))
+			draw_rect(Rect2(-6, -36, 12, 2), color.lightened(0.2))
+			draw_rect(Rect2(-8, -16, 3, 6), color.darkened(0.25))

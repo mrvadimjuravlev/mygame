@@ -112,6 +112,11 @@ const EN := {
 	"Свет должен попасть на солнце.": "The light has to reach the sun.",
 	"Коснись зеркала пальцем: оно повернётся.": "Tap a mirror with your finger and it turns.",
 	"Лучи могут пересекаться. Путь: наискосок вверх, прямо вниз, наискосок вверх-влево и вправо на солнце.": "Beams can cross. The path: diagonally up, straight down, diagonally up and left, then right into the sun.",
+	# Уровень 17
+	"Пыль веков": "Dust of Ages",
+	"Код из четырёх цифр. Где-то есть подсказка, в каком порядке их вводить.": "A four-digit code. Somewhere there is a clue to the order of the digits.",
+	"Цифры на стенах этого зала засыпаны пылью: потри их пальцем. А дверь наверху ведёт в другое место.": "The digits on the walls of this hall are covered in dust: rub them with your finger. The door up top leads somewhere else.",
+	"Поднимись по платформам к двери, там иди вправо сквозь стену. Цвета сосудов — порядок цифр: зелёная, красная, жёлтая, синяя.": "Climb the platforms to the door, then walk right through the wall. The colors of the vessels give the order: green, red, yellow, blue.",
 	# Подземелье
 	"Решётка": "The Portcullis",
 	"Решётку не поднять руками.": "The portcullis can't be lifted by hand.",
