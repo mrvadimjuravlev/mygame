@@ -27,6 +27,8 @@ func _initialize() -> void:
 	_level_12()
 	_level_13()
 	_level_14()
+	_level_15()
+	_level_16()
 	_dungeon_01()
 	_dungeon_02()
 	_castle_01()
@@ -357,6 +359,65 @@ func _level_14() -> void:
 	_decor([[250, 200], [470, 200]], [[330, 110, 3, ["eye", "ankh", "sun", "bird", "wave", "reed"]]], true)
 	_hero(40, 150)
 	_save(14)
+
+
+func _level_15() -> void:
+	_begin(15, "Рука помощи", 640, "", ["Обрыв не перепрыгнуть, и обходного пути нет.", "Над героем светится голубая руна: его самого можно взять рукой.", "Прижми палец к герою и перетащи его через обрыв. Отпусти над полом на той стороне."])
+	_root.hero_grab = true
+	_root.restart_on_fall = true
+	_back(640)
+	_box(0, 280, 240, 360)       # пол слева
+	_box(400, 280, 640, 360)     # пол справа; между ними бездонный обрыв
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	_exit(580, 280, true)
+	_decor([[110, 200], [530, 200]], [[300, 100, 4, ["eye", "bird", "ankh", "reed", "sun", "wave", "eye", "ankh"]], [470, 120, 2, ["sun", "bird", "reed", "eye"]]], true)
+	# Паутина в верхних углах, корни из потолка, кости и кувшин на полу.
+	_prop("web", Vector2(16, 60), 72)
+	var web := _root.get_child(_root.get_child_count() - 1)
+	web.scale.x = -1
+	web.position.x = 624
+	_prop("web", Vector2(16, 60), 60)
+	_prop("roots", Vector2(190, 60), 50)
+	_prop("roots", Vector2(430, 60), 38)
+	_prop("roots", Vector2(330, 60), 70)
+	_prop("bones", Vector2(212, 280), 0)
+	_prop("vase", Vector2(36, 280), 0)
+	_prop("vase", Vector2(470, 280), 0)
+	_hero(60, 280)
+	_save(15)
+
+
+func _level_16() -> void:
+	_begin(16, "Солнечный зайчик", 640, "", ["Свет должен попасть на солнце.", "Встань рядом с зеркалом и нажми кнопку действия: зеркало повернётся.", "Луч должен идти так: у первого зеркала вниз, по полу вправо, у третьего зеркала вверх и дальше прямо на солнце."])
+	_back(640)
+	_box(0, 280, 640, 360)       # пол
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	_box(296, 60, 316, 200)      # каменный столб с потолка: прямой луч до солнца не пройдёт
+	# Висящие платформы на цепях.
+	for p in [[30, 228, 90], [100, 176, 160], [330, 228, 390], [440, 184, 510]]:
+		_box(p[0], p[1], p[2], p[1] + 12)
+		_prop("chain", Vector2(p[0] + 6, 60), p[1] - 66)
+		_prop("chain", Vector2(p[2] - 6, 60), p[1] - 66)
+	var beam := _add("Beam", Node2D.new(), "light_beam.gd", Vector2(16, 150))
+	beam.direction = Vector2.RIGHT
+	# Зеркала стоят не так; верно: «\», «\», «/», «/».
+	for m in [["Mirror1", Vector2(172, 150), 0], ["Mirror2", Vector2(172, 262), 2], ["Mirror3", Vector2(425, 262), 1], ["Mirror4", Vector2(425, 158), 2]]:
+		var mirror := _add(m[0], Area2D.new(), "mirror.gd", m[1])
+		mirror.step = m[2]
+	var exit := _exit(580, 280)
+	var sun := _add("Sun", Node2D.new(), "sun_target.gd", Vector2(608, 158))
+	_link(sun, [exit])
+	_decor([[60, 120]], [[230, 90, 2, ["sun", "eye", "bird", "sun"]], [540, 100, 2, ["sun", "wave", "reed", "sun"]]], true)
+	_prop("web", Vector2(16, 60), 50)
+	_prop("roots", Vector2(370, 60), 40)
+	_prop("bones", Vector2(240, 280), 0)
+	_prop("vase", Vector2(520, 280), 0)
+	_hero(50, 280)
+	_save(16)
 
 
 # --- Тестовые уровни других локаций --------------------------------------

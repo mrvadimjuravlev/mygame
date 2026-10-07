@@ -102,6 +102,16 @@ const EN := {
 	"Камень можно толкать.": "The stone can be pushed.",
 	"Столкни камень с уступа. В самом уступе есть тайник, но вход в него высоко.": "Push the stone off the ledge. There is a hidden chamber inside the ledge, but its entrance is high up.",
 	"Подтолкни камень к уступу, залезь на него и прыгни влево в стену уступа: там потайной ход и ключ.": "Push the stone against the ledge, climb onto it and jump left into the ledge wall: there is a secret passage with the key.",
+	# Уровень 15
+	"Рука помощи": "A Helping Hand",
+	"Обрыв не перепрыгнуть, и обходного пути нет.": "The chasm is too wide to jump, and there is no way around.",
+	"Над героем светится голубая руна: его самого можно взять рукой.": "A blue rune glows above the hero: you can pick him up with your hand.",
+	"Прижми палец к герою и перетащи его через обрыв. Отпусти над полом на той стороне.": "Press your finger on the hero and drag him across the chasm. Let go above the floor on the other side.",
+	# Уровень 16
+	"Солнечный зайчик": "Sunbeam",
+	"Свет должен попасть на солнце.": "The light has to reach the sun.",
+	"Встань рядом с зеркалом и нажми кнопку действия: зеркало повернётся.": "Stand next to a mirror and press the action button: the mirror turns.",
+	"Луч должен идти так: у первого зеркала вниз, по полу вправо, у третьего зеркала вверх и дальше прямо на солнце.": "The beam must go like this: down at the first mirror, right along the floor, up at the third mirror and then straight to the sun.",
 	# Подземелье
 	"Решётка": "The Portcullis",
 	"Решётку не поднять руками.": "The portcullis can't be lifted by hand.",

@@ -98,6 +98,11 @@ func _touch_down(index: int, pos: Vector2) -> void:
 			rune.hand_tap()
 			_finger_hand[index] = {"rune": rune, "last": world}
 			return
+	var hero := level.get_node_or_null("Hero")
+	if hero and hero.grab_contains(world):
+		hero.carry_start(world)
+		_finger_hand[index] = {"rune": null, "hero": hero, "last": world}
+		return
 	_finger_hand[index] = {"rune": null, "last": world}
 
 
@@ -114,6 +119,8 @@ func _touch_move(index: int, pos: Vector2) -> void:
 		var data: Dictionary = _finger_hand[index]
 		if data.rune and is_instance_valid(data.rune):
 			data.rune.hand_drag(world - data.last)
+		elif data.has("hero") and is_instance_valid(data.hero):
+			data.hero.carry_move(world)
 		data.last = world
 
 
@@ -121,6 +128,8 @@ func _touch_up(index: int) -> void:
 	if _finger_button.has(index):
 		Input.action_release(ACTIONS[_finger_button[index]])
 		_finger_button.erase(index)
+	if _finger_hand.has(index) and _finger_hand[index].has("hero") and is_instance_valid(_finger_hand[index].hero):
+		_finger_hand[index].hero.carry_end()
 	_finger_hand.erase(index)
 
 

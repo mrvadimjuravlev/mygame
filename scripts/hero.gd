@@ -23,6 +23,12 @@ var gravity_dir := 1.0
 ## Ширина закольцованного уровня: ушёл за левый край — появился справа. 0 — без кольца.
 var wrap_width := 0.0
 var _shape: CollisionShape2D
+## Рука игрока может поднять героя и перенести (уровни с Level.hero_grab).
+var grabbable := false
+var carried := false
+var _carry_target := Vector2.ZERO
+var _carry_offset := Vector2.ZERO
+var _glow := 0.0
 
 
 func _ready() -> void:
@@ -48,8 +54,36 @@ func flip_gravity() -> void:
 	climbing = false
 
 
+func grab_contains(point: Vector2) -> bool:
+	return grabbable and not _dead and Rect2(global_position + Vector2(-SIZE.x / 2, -SIZE.y), SIZE).grow(14).has_point(point)
+
+
+func carry_start(point: Vector2) -> void:
+	carried = true
+	climbing = false
+	_carry_offset = global_position - point
+	_carry_target = global_position
+	Game.hand_used.emit("tap")
+
+
+func carry_move(point: Vector2) -> void:
+	_carry_target = point + _carry_offset
+
+
+func carry_end() -> void:
+	if carried:
+		carried = false
+		velocity = Vector2.ZERO
+
+
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or _dead:
+		return
+	if carried:
+		# Тянется за пальцем, но сквозь камень не проходит.
+		velocity = ((_carry_target - global_position) / delta).limit_length(500.0)
+		move_and_slide()
+		queue_redraw()
 		return
 	var dir := Input.get_axis("move_left", "move_right")
 	var ladder := _find_ladder()
@@ -194,6 +228,7 @@ var _step_frame := -1
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
+	_glow += delta
 	if absf(velocity.x) > 1.0 and is_on_floor() or (climbing and absf(velocity.y) > 1.0):
 		_anim += delta
 		# Шаг слышен на кадрах 1 и 3, когда ступня касается пола.
@@ -211,13 +246,15 @@ func _px(x: float, y: float, w: float, h: float, c: Color) -> void:
 
 
 func _draw() -> void:
+	if grabbable and not _dead:
+		_draw_grab_glow()
 	# Вверх ногами, если гравитация перевёрнута; зеркально, если смотрит влево.
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, gravity_dir))
 	if climbing:
 		_draw_climbing()
 		return
 	var frame := int(_anim * 10.0) % 4
-	var airborne := not is_on_floor() and not Engine.is_editor_hint()
+	var airborne := (not is_on_floor() or carried) and not Engine.is_editor_hint()
 	var bob := 1.0 if frame % 2 == 1 else 0.0
 	# Ноги: шаг вперёд-назад.
 	var front: float = [0.0, 2.0, 0.0, -2.0][frame]
@@ -252,6 +289,19 @@ func _draw() -> void:
 	_px(-4, -28 + y, 8, 4, C_HAT)
 	_px(-4, -25 + y, 8, 1, C_HAT_BAND)
 	_px(-3, -28 + y, 6, 1, C_HAT.lightened(0.15))
+
+
+## Голубое сияние руки, как у камней с руной: героя можно взять пальцем.
+func _draw_grab_glow() -> void:
+	var rune := Color("5fd3ff")
+	if carried:
+		draw_circle(Vector2(0, -12), 18.0, Color(rune, 0.18))
+		draw_arc(Vector2(0, -12), 18.0, 0.0, TAU, 24, Color(rune, 0.7), 1.0)
+		return
+	var a := 0.35 + 0.35 * absf(sin(_glow * 3.0))
+	var c := Vector2(0, -36)
+	draw_polyline(PackedVector2Array([c + Vector2(0, -4), c + Vector2(4, 0), c + Vector2(0, 4), c + Vector2(-4, 0), c + Vector2(0, -4)]), Color(rune, a), 1.5)
+	draw_arc(Vector2(0, -12), 16.0, 0.0, TAU, 24, Color(rune, a * 0.5), 1.0)
 
 
 func _draw_climbing() -> void:

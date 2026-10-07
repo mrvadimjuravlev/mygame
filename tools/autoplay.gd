@@ -12,7 +12,7 @@ func _initialize() -> void:
 func _run() -> void:
 	change_scene_to_file("res://levels/level_01.tscn")
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16]
 	for i in solvers.size():
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -37,6 +37,50 @@ func _run() -> void:
 		print("Финальный экран: ", current_scene.scene_file_path)
 		await _run_worlds()
 	quit(1 if _failed else 0)
+
+
+func _solve_15() -> void:
+	# Прыжок с края не долетает: проверяем, что обрыв шире прыжка.
+	var c: Dictionary = _hero().get_script().get_script_constant_map()
+	var reach: float = c.SPEED * 2.0 * absf(c.JUMP_VELOCITY) / c.GRAVITY
+	print("  дальность прыжка ", reach, " < ширина обрыва 160: ", reach < 160.0)
+	var h := _hero()
+	await _drag(h.global_position + Vector2(0, -12), Vector2(470, 200), 30)
+	print("  перенесён рукой: ", _hero().global_position)
+	await _frames(40)
+	await _walk_to(580.0)
+
+
+func _solve_16() -> void:
+	var lv := current_scene
+	print("  луч сначала упирается в столб: ", lv.get_node("Beam").points)
+	await _walk_to(115.0)     # правее нижней платформы, чтобы не удариться о неё головой
+	await _hop("move_left")    # на нижнюю платформу
+	await _walk_to(80.0)
+	await _hop("move_right")   # на платформу у первого зеркала
+	await _walk_to(154.0)
+	await _press("action")     # первое зеркало: «\»
+	await _frames(10)
+	await _walk_to(172.0)      # спрыгнул на пол ко второму зеркалу
+	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 270.0)
+	await _walk_to(172.0)
+	for k in 3:
+		await _press("action")
+		await _frames(10)
+	await _walk_to(425.0)
+	for k in 2:
+		await _press("action")
+		await _frames(10)
+	await _walk_to(410.0)
+	await _hop("move_left")    # на платформу у столба
+	await _walk_to(388.0)
+	await _hop("move_right")   # на правую верхнюю платформу
+	await _walk_to(446.0)
+	print("  зеркала: ", [lv.get_node("Mirror1").step, lv.get_node("Mirror2").step, lv.get_node("Mirror3").step, lv.get_node("Mirror4").step], " герой ", _hero().global_position)
+	await _press("action")     # четвёртое зеркало: «/»
+	await _frames(10)
+	print("  солнце горит: ", lv.get_node("Sun").lit, " луч ", lv.get_node("Beam").points)
+	await _walk_to(580.0)
 
 
 ## Тестовые уровни других локаций: каждый запускается отдельно.

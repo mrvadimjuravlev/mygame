@@ -10,6 +10,8 @@ extends Node2D
 @export var level_height := 360.0
 @export var fall_limit := 420.0
 @export var restart_on_fall := false
+## Героя можно поднять пальцем и перенести.
+@export var hero_grab := false
 ## Уровень закольцован по горизонтали: левый и правый края экрана связаны.
 @export var wrap_horizontal := false
 ## Полумрак: всё затемнено, светят факелы и фонарь героя.
@@ -34,6 +36,7 @@ func _ready() -> void:
 	var hero := get_node("Hero")
 	hero.fall_limit = fall_limit
 	hero.restart_on_fall = restart_on_fall
+	hero.grabbable = hero_grab
 	if wrap_horizontal:
 		hero.wrap_width = level_width
 	var cam := Camera2D.new()
