@@ -2,16 +2,17 @@
 extends StaticBody2D
 ## Векторная геометрия уровня: произвольный многоугольник без сетки.
 ## Рисуется старым камнем, местами осыпавшимся до кладки; грани, смотрящие вверх, — песчаный край, вниз — тень.
-## Форма задаётся дочерним CollisionPolygon2D «Shape»: в редакторе выдели его и двигай точки мышью,
-## камень перерисуется сразу.
+## Форма задаётся дочерним CollisionPolygon2D «Shape»: в редакторе выдели его и двигай точки мышью
+## или весь «Shape» целиком, камень перерисуется сразу.
 
 const Art := preload("res://scripts/art.gd")
 
 @export var polygon := PackedVector2Array():
 	set(value):
 		polygon = value
+		# Правка polygon в инспекторе доходит до «Shape», если тот не сдвинут.
 		var shape := _shape()
-		if shape and shape.polygon != value:
+		if shape and shape.position == Vector2.ZERO and shape.polygon != value:
 			shape.polygon = value
 		queue_redraw()
 @export var color := Color("8a6a43"):
@@ -40,19 +41,17 @@ func _shape() -> CollisionPolygon2D:
 	return get_node_or_null("Shape") as CollisionPolygon2D
 
 
-## Форма берётся из «Shape» с учётом его сдвига, сам «Shape» держим в нуле.
+## Форма берётся из «Shape» с учётом его сдвига. Сам «Shape» здесь не трогаем: редактор, пока тянет
+## узел мышью, каждый кадр ставит ему положение от точки захвата, и любая наша правка складывалась бы с ней.
 func _sync() -> void:
 	var shape := _shape()
 	if shape == null:
 		return
-	if shape.position != Vector2.ZERO:
-		var moved := PackedVector2Array()
-		for p in shape.polygon:
-			moved.append(p + shape.position)
-		shape.position = Vector2.ZERO
-		shape.polygon = moved
-	if shape.polygon != polygon:
-		polygon = shape.polygon
+	var points := PackedVector2Array()
+	for p in shape.polygon:
+		points.append(p + shape.position)
+	if points != polygon:
+		polygon = points
 
 
 func _process(_delta: float) -> void:
