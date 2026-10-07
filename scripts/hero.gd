@@ -28,7 +28,6 @@ var grabbable := false
 var carried := false
 var _carry_target := Vector2.ZERO
 var _carry_offset := Vector2.ZERO
-var _glow := 0.0
 
 
 func _ready() -> void:
@@ -228,7 +227,6 @@ var _step_frame := -1
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
-	_glow += delta
 	if absf(velocity.x) > 1.0 and is_on_floor() or (climbing and absf(velocity.y) > 1.0):
 		_anim += delta
 		# Шаг слышен на кадрах 1 и 3, когда ступня касается пола.
@@ -246,7 +244,7 @@ func _px(x: float, y: float, w: float, h: float, c: Color) -> void:
 
 
 func _draw() -> void:
-	if grabbable and not _dead:
+	if carried:
 		_draw_grab_glow()
 	# Вверх ногами, если гравитация перевёрнута; зеркально, если смотрит влево.
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(facing, gravity_dir))
@@ -291,17 +289,11 @@ func _draw() -> void:
 	_px(-3, -28 + y, 6, 1, C_HAT.lightened(0.15))
 
 
-## Голубое сияние руки, как у камней с руной: героя можно взять пальцем.
+## Голубое сияние руки, пока герой в руке.
 func _draw_grab_glow() -> void:
 	var rune := Color("5fd3ff")
-	if carried:
-		draw_circle(Vector2(0, -12), 18.0, Color(rune, 0.18))
-		draw_arc(Vector2(0, -12), 18.0, 0.0, TAU, 24, Color(rune, 0.7), 1.0)
-		return
-	var a := 0.35 + 0.35 * absf(sin(_glow * 3.0))
-	var c := Vector2(0, -36)
-	draw_polyline(PackedVector2Array([c + Vector2(0, -4), c + Vector2(4, 0), c + Vector2(0, 4), c + Vector2(-4, 0), c + Vector2(0, -4)]), Color(rune, a), 1.5)
-	draw_arc(Vector2(0, -12), 16.0, 0.0, TAU, 24, Color(rune, a * 0.5), 1.0)
+	draw_circle(Vector2(0, -12), 18.0, Color(rune, 0.18))
+	draw_arc(Vector2(0, -12), 18.0, 0.0, TAU, 24, Color(rune, 0.7), 1.0)
 
 
 func _draw_climbing() -> void:

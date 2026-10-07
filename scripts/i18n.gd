@@ -105,13 +105,13 @@ const EN := {
 	# Уровень 15
 	"Рука помощи": "A Helping Hand",
 	"Обрыв не перепрыгнуть, и обходного пути нет.": "The chasm is too wide to jump, and there is no way around.",
-	"Над героем светится голубая руна: его самого можно взять рукой.": "A blue rune glows above the hero: you can pick him up with your hand.",
+	"Рука может взять не только камни.": "Your hand can pick up more than stones.",
 	"Прижми палец к герою и перетащи его через обрыв. Отпусти над полом на той стороне.": "Press your finger on the hero and drag him across the chasm. Let go above the floor on the other side.",
 	# Уровень 16
 	"Солнечный зайчик": "Sunbeam",
 	"Свет должен попасть на солнце.": "The light has to reach the sun.",
-	"Встань рядом с зеркалом и нажми кнопку действия: зеркало повернётся.": "Stand next to a mirror and press the action button: the mirror turns.",
-	"Луч должен идти так: у первого зеркала вниз, по полу вправо, у третьего зеркала вверх и дальше прямо на солнце.": "The beam must go like this: down at the first mirror, right along the floor, up at the third mirror and then straight to the sun.",
+	"Коснись зеркала пальцем: оно повернётся.": "Tap a mirror with your finger and it turns.",
+	"Луч идёт лесенкой: вниз, вправо, вверх, вправо, вниз, вправо, вверх и вправо на солнце.": "The beam zigzags: down, right, up, right, down, right, up and right into the sun.",
 	# Подземелье
 	"Решётка": "The Portcullis",
 	"Решётку не поднять руками.": "The portcullis can't be lifted by hand.",

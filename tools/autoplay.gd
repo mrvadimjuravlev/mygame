@@ -53,32 +53,14 @@ func _solve_15() -> void:
 
 func _solve_16() -> void:
 	var lv := current_scene
-	print("  луч сначала упирается в столб: ", lv.get_node("Beam").points)
-	await _walk_to(115.0)     # правее нижней платформы, чтобы не удариться о неё головой
-	await _hop("move_left")    # на нижнюю платформу
-	await _walk_to(80.0)
-	await _hop("move_right")   # на платформу у первого зеркала
-	await _walk_to(154.0)
-	await _press("action")     # первое зеркало: «\»
-	await _frames(10)
-	await _walk_to(172.0)      # спрыгнул на пол ко второму зеркалу
-	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 270.0)
-	await _walk_to(172.0)
-	for k in 3:
-		await _press("action")
-		await _frames(10)
-	await _walk_to(425.0)
-	for k in 2:
-		await _press("action")
-		await _frames(10)
-	await _walk_to(410.0)
-	await _hop("move_left")    # на платформу у столба
-	await _walk_to(388.0)
-	await _hop("move_right")   # на правую верхнюю платформу
-	await _walk_to(446.0)
-	print("  зеркала: ", [lv.get_node("Mirror1").step, lv.get_node("Mirror2").step, lv.get_node("Mirror3").step, lv.get_node("Mirror4").step], " герой ", _hero().global_position)
-	await _press("action")     # четвёртое зеркало: «/»
-	await _frames(10)
+	print("  луч сначала: ", lv.get_node("Beam").points)
+	# Сколько раз коснуться каждого зеркала, чтобы луч пошёл лесенкой.
+	var taps := [1, 3, 1, 3, 2, 3, 2, 1]
+	for i in taps.size():
+		var mirror: Node2D = lv.get_node("Mirror%d" % (i + 1))
+		for k in taps[i]:
+			await _tap(mirror.global_position)
+			await _frames(12)
 	print("  солнце горит: ", lv.get_node("Sun").lit, " луч ", lv.get_node("Beam").points)
 	await _walk_to(580.0)
 

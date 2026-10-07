@@ -1,6 +1,6 @@
 @tool
 extends Area2D
-## Поворотное зеркало на бронзовой оси. Герой рядом жмёт кнопку действия — зеркало поворачивается на 45°.
+## Поворотное зеркало на бронзовой оси. Касание пальцем поворачивает его на 45°.
 ## Положения: 0 «—», 1 «\», 2 «|», 3 «/». Отражает луч обеими сторонами.
 
 const HALF := 12.0
@@ -17,16 +17,20 @@ var _shown := 0.0
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	add_to_group("interactable")
+	add_to_group("rune")
 	add_to_group("mirror")
-	var shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = 26.0
-	shape.shape = circle
-	add_child(shape)
 
 
-func use() -> void:
+func contains_world_point(point: Vector2) -> bool:
+	return global_position.distance_to(point) < HALF + 8.0
+
+
+func hand_drag(_world_delta: Vector2) -> void:
+	pass
+
+
+func hand_tap() -> void:
+	Game.hand_used.emit("tap")
 	var from := _shown
 	step += 1
 	# Плавный поворот на глаз; луч считает новое положение сразу.
