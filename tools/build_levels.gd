@@ -496,14 +496,28 @@ func _level_18() -> void:
 		_box(p[0], p[1], p[2], p[1] + 12)
 	var exit := _exit(1220, 280)
 	# Группы кирпичей задней стены: [сколько, ряд, столбец] в сетке кладки 32x16
-	# (нечётные ряды сдвинуты на полкирпича, как у фона).
+	# (нечётные ряды сдвинуты на полкирпича, как у фона). Кирпичи группы — кучкой, как точки на кубике.
+	var shapes := {
+		1: [[0, 0]],
+		2: [[0, 0], [1, 0]],
+		3: [[0, 0], [1, 0], [1, 1]],
+		4: [[0, 0], [0, 1], [1, 0], [1, 1]],
+		5: [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]],
+	}
 	var seq := _add("Bricks", Node2D.new(), "brick_sequence.gd", Vector2.ZERO)
-	for g in [[3, 5, 12], [5, 9, 2], [1, 14, 32], [2, 6, 25], [4, 11, 35]]:
+	for g in [[3, 4, 12], [5, 8, 3], [1, 13, 32], [2, 5, 25], [4, 10, 35]]:
 		var group := Node2D.new()
 		group.name = "Group%d" % g[0]
 		group.set_script(load("res://scripts/brick_group.gd"))
 		group.count = g[0]
-		group.position = Vector2(g[2] * 32 - (16 if g[1] % 2 == 1 else 0), g[1] * 16)
+		var cells := PackedVector2Array()
+		for c in shapes[g[0]]:
+			var row: int = g[1] + c[0]
+			cells.append(Vector2((g[2] + c[1]) * 32 - (16 if row % 2 == 1 else 0), row * 16))
+		group.position = cells[0]
+		for i in cells.size():
+			cells[i] -= group.position
+		group.bricks = cells
 		seq.add_child(group)
 		group.owner = _root
 	_link(seq, [exit])

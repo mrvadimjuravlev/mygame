@@ -110,7 +110,7 @@ func _solve_18() -> void:
 	var tap_group := func(n: int) -> void:
 		await _frames(60)  # камера доехала
 		var g: Node2D = seq.get_node("Group%d" % n)
-		var world := g.global_position + Vector2(16 * n, 8)
+		var world := g.global_position + Vector2(16, 8)
 		await _tap(current_scene.get_viewport().get_canvas_transform() * world)
 		await _frames(5)
 	await tap_group.call(3)  # не с той группы: счёт сбрасывается
