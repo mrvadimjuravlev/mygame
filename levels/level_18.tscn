@@ -1,0 +1,215 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_skoo5"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_smy2n"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="3_cxjrs"]
+[ext_resource type="Script" path="res://scripts/brick_sequence.gd" id="4_83lsd"]
+[ext_resource type="Script" path="res://scripts/brick_group.gd" id="5_grtbx"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_kyhr0"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="7_yre2u"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_1qxrb"]
+
+[node name="Level18" type="Node2D"]
+script = ExtResource("1_skoo5")
+level_number = 18
+slogan = "1 2 3 4 5"
+hints = PackedStringArray("Название зоны — это счёт.", "На стенах есть кирпичи чуть другого цвета: где один, где два, и так до пяти. Их можно нажать пальцем.", "Нажимай группы по порядку: один кирпич, два, три, четыре, пять. Ошибёшься — начинай с одного. Часть групп во втором зале.")
+tutorial_button = ""
+level_width = 1280.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "pyramid"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(0, 280, 1280, 280, 1280, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 280, 1280, 280, 1280, 360, 0, 360)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 60, 0, 60)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(1264, 0, 1280, 0, 1280, 360, 1264, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(1264, 0, 1280, 0, 1280, 360, 1264, 360)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(620, 60, 660, 60, 660, 244, 620, 244)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(620, 60, 660, 60, 660, 244, 620, 244)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(120, 224, 200, 224, 200, 236, 120, 236)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid6"]
+polygon = PackedVector2Array(120, 224, 200, 224, 200, 236, 120, 236)
+
+[node name="Solid7" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(250, 176, 330, 176, 330, 188, 250, 188)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid7"]
+polygon = PackedVector2Array(250, 176, 330, 176, 330, 188, 250, 188)
+
+[node name="Solid8" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(400, 128, 480, 128, 480, 140, 400, 140)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid8"]
+polygon = PackedVector2Array(400, 128, 480, 128, 480, 140, 400, 140)
+
+[node name="Solid9" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(760, 212, 840, 212, 840, 224, 760, 224)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid9"]
+polygon = PackedVector2Array(760, 212, 840, 212, 840, 224, 760, 224)
+
+[node name="Solid10" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(900, 164, 980, 164, 980, 176, 900, 176)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid10"]
+polygon = PackedVector2Array(900, 164, 980, 164, 980, 176, 900, 176)
+
+[node name="Solid11" type="StaticBody2D" parent="."]
+script = ExtResource("2_smy2n")
+polygon = PackedVector2Array(1060, 204, 1140, 204, 1140, 216, 1060, 216)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid11"]
+polygon = PackedVector2Array(1060, 204, 1140, 204, 1140, 216, 1060, 216)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(1220, 280)
+script = ExtResource("3_cxjrs")
+start_open = false
+needs_key = false
+upside_down = false
+
+[node name="Bricks" type="Node2D" parent="."]
+script = ExtResource("4_83lsd")
+targets = Array[NodePath]([NodePath("../Exit")])
+effect = &"activate"
+
+[node name="Group3" type="Node2D" parent="Bricks"]
+position = Vector2(368, 80)
+script = ExtResource("5_grtbx")
+count = 3
+
+[node name="Group5" type="Node2D" parent="Bricks"]
+position = Vector2(48, 144)
+script = ExtResource("5_grtbx")
+count = 5
+
+[node name="Group1" type="Node2D" parent="Bricks"]
+position = Vector2(1024, 224)
+script = ExtResource("5_grtbx")
+count = 1
+
+[node name="Group2" type="Node2D" parent="Bricks"]
+position = Vector2(800, 96)
+script = ExtResource("5_grtbx")
+count = 2
+
+[node name="Group4" type="Node2D" parent="Bricks"]
+position = Vector2(1104, 176)
+script = ExtResource("5_grtbx")
+count = 4
+
+[node name="Torch90_160" type="Area2D" parent="."]
+position = Vector2(90, 160)
+script = ExtResource("6_kyhr0")
+start_lit = true
+
+[node name="Torch540_200" type="Area2D" parent="."]
+position = Vector2(540, 200)
+script = ExtResource("6_kyhr0")
+start_lit = true
+
+[node name="Torch700_140" type="Area2D" parent="."]
+position = Vector2(700, 140)
+script = ExtResource("6_kyhr0")
+start_lit = true
+
+[node name="Torch1200_160" type="Area2D" parent="."]
+position = Vector2(1200, 160)
+script = ExtResource("6_kyhr0")
+start_lit = true
+
+[node name="Prop18" type="Node2D" parent="."]
+position = Vector2(16, 60)
+script = ExtResource("7_yre2u")
+kind = "web"
+length = 50.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop19" type="Node2D" parent="."]
+position = Vector2(560, 60)
+script = ExtResource("7_yre2u")
+kind = "roots"
+length = 40.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop20" type="Node2D" parent="."]
+position = Vector2(1010, 60)
+script = ExtResource("7_yre2u")
+kind = "roots"
+length = 50.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop21" type="Node2D" parent="."]
+position = Vector2(600, 280)
+script = ExtResource("7_yre2u")
+kind = "bones"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop22" type="Node2D" parent="."]
+position = Vector2(1180, 280)
+script = ExtResource("7_yre2u")
+kind = "vase"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("8_1qxrb")

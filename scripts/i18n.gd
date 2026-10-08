@@ -117,6 +117,10 @@ const EN := {
 	"Код из четырёх цифр. Где-то есть подсказка, в каком порядке их вводить.": "A four-digit code. Somewhere there is a clue to the order of the digits.",
 	"Цифры на стенах этого зала засыпаны пылью: потри их пальцем. А дверь наверху ведёт в другое место.": "The digits on the walls of this hall are covered in dust: rub them with your finger. The door up top leads somewhere else.",
 	"Поднимись по платформам к двери, там иди вправо сквозь стену. Цвета сосудов — порядок цифр: зелёная, красная, жёлтая, синяя.": "Climb the platforms to the door, then walk right through the wall. The colors of the vessels give the order: green, red, yellow, blue.",
+	# Уровень 18
+	"Название зоны — это счёт.": "The name of the zone is a count.",
+	"На стенах есть кирпичи чуть другого цвета: где один, где два, и так до пяти. Их можно нажать пальцем.": "Some bricks on the walls are a slightly different color: one here, two there, and so on up to five. You can press them with your finger.",
+	"Нажимай группы по порядку: один кирпич, два, три, четыре, пять. Ошибёшься — начинай с одного. Часть групп во втором зале.": "Press the groups in order: one brick, two, three, four, five. Make a mistake and you start again from one. Some groups are in the second hall.",
 	# Подземелье
 	"Решётка": "The Portcullis",
 	"Решётку не поднять руками.": "The portcullis can't be lifted by hand.",

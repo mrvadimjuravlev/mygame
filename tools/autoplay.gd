@@ -12,7 +12,7 @@ func _initialize() -> void:
 func _run() -> void:
 	change_scene_to_file("res://levels/level_01.tscn")
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18]
 	for i in solvers.size():
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -102,6 +102,35 @@ func _solve_17() -> void:
 	await _walk_to(395.0)
 	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 270.0)
 	await _walk_to(300.0)
+
+
+func _solve_18() -> void:
+	var seq := current_scene.get_node("Bricks")
+	# Касание по кирпичам в мировых координатах: зал может быть сдвинут камерой.
+	var tap_group := func(n: int) -> void:
+		await _frames(60)  # камера доехала
+		var g: Node2D = seq.get_node("Group%d" % n)
+		var world := g.global_position + Vector2(16 * n, 8)
+		await _tap(current_scene.get_viewport().get_canvas_transform() * world)
+		await _frames(5)
+	await tap_group.call(3)  # не с той группы: счёт сбрасывается
+	print("  начал с трёх: ждёт ", seq.next, ", нажата ", seq.get_node("Group3").pressed)
+	await _walk_to(550.0)
+	await _walk_to(1000.0)
+	await tap_group.call(1)
+	await tap_group.call(2)
+	await _walk_to(650.0)
+	await _walk_to(300.0)
+	await tap_group.call(3)
+	await _walk_to(650.0)
+	await _walk_to(1000.0)
+	await tap_group.call(4)
+	await _walk_to(650.0)
+	await _walk_to(300.0)
+	await tap_group.call(5)
+	print("  все группы по порядку: решено ", seq.solved)
+	await _walk_to(800.0)
+	await _walk_to(1220.0)
 
 
 ## Тестовые уровни других локаций: каждый запускается отдельно.
