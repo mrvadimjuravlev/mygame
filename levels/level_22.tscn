@@ -1,0 +1,142 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_nrhqw"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_pufgg"]
+[ext_resource type="Script" path="res://scripts/seesaw.gd" id="3_tqn44"]
+[ext_resource type="Script" path="res://scripts/push_stone.gd" id="4_ospt0"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="5_i6dsl"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_thsju"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_o8grf"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="8_u17v8"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="9_dgl1q"]
+
+[node name="Level22" type="Node2D"]
+script = ExtResource("1_nrhqw")
+level_number = 22
+slogan = "Перелёт"
+hints = PackedStringArray("Камень на той стороне пригодится.", "Одна плита пола у обрыва — не плита, а доска на оси. Присмотрись к швам.", "Встань на край доски у обрыва, перенеси камень пальцем повыше и отпусти над другим краем.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+view_width = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "pyramid"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_pufgg")
+polygon = PackedVector2Array(0, 280, 144, 280, 144, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 280, 144, 280, 144, 360, 0, 360)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_pufgg")
+polygon = PackedVector2Array(144, 306, 240, 306, 240, 360, 144, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(144, 306, 240, 306, 240, 360, 144, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_pufgg")
+polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_pufgg")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_pufgg")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_pufgg")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid6"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Board" type="StaticBody2D" parent="."]
+position = Vector2(192, 280)
+script = ExtResource("3_tqn44")
+size = Vector2(96, 26)
+max_throw = 520.0
+
+[node name="Stone" type="CharacterBody2D" parent="."]
+position = Vector2(520, 280)
+script = ExtResource("4_ospt0")
+size = Vector2(32, 32)
+nudge_dir = 1.0
+hand_nudge = false
+hand_carry = true
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(590, 280)
+script = ExtResource("5_i6dsl")
+start_open = true
+needs_key = false
+upside_down = false
+
+[node name="Torch90_200" type="Area2D" parent="."]
+position = Vector2(90, 200)
+script = ExtResource("6_thsju")
+start_lit = true
+
+[node name="Torch470_200" type="Area2D" parent="."]
+position = Vector2(470, 200)
+script = ExtResource("6_thsju")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="."]
+position = Vector2(300, 100)
+script = ExtResource("7_o8grf")
+columns = 3
+signs = PackedStringArray("bird", "sun", "eye", "wave", "ankh", "reed")
+
+[node name="Prop13" type="Node2D" parent="."]
+position = Vector2(16, 60)
+script = ExtResource("8_u17v8")
+kind = "web"
+length = 40.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop14" type="Node2D" parent="."]
+position = Vector2(380, 60)
+script = ExtResource("8_u17v8")
+kind = "roots"
+length = 50.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop15" type="Node2D" parent="."]
+position = Vector2(40, 280)
+script = ExtResource("8_u17v8")
+kind = "vase"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("9_dgl1q")

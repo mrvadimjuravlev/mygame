@@ -28,6 +28,10 @@ var grabbable := false
 var carried := false
 var _carry_target := Vector2.ZERO
 var _carry_offset := Vector2.ZERO
+## Герой замер, пока поворачивается зал: им двигает уровень.
+var frozen := false
+## Героя подбросило (катапульта): в полёте его несёт с этой скоростью, кнопки не мешают.
+var _launch_x := 0.0
 
 
 func _ready() -> void:
@@ -75,8 +79,16 @@ func carry_end() -> void:
 		velocity = Vector2.ZERO
 
 
+## Подбросить героя: летит с заданной скоростью до приземления.
+func launch(v: Vector2) -> void:
+	climbing = false
+	velocity = v
+	_launch_x = v.x
+	Sfx.play("jump", 0.0, 0.8)
+
+
 func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint() or _dead:
+	if Engine.is_editor_hint() or _dead or frozen:
 		return
 	if carried:
 		# Тянется за пальцем, но сквозь камень не проходит.
@@ -107,7 +119,7 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY * gravity_dir
 			Sfx.play("jump")
-		velocity.x = dir * SPEED
+		velocity.x = _launch_x if _launch_x != 0.0 else dir * SPEED
 		if Input.is_action_just_pressed("action"):
 			_try_interact()
 	if dir != 0.0 and signf(dir) != facing:
@@ -115,6 +127,8 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 	var falling := absf(velocity.y) > 200.0
 	move_and_slide()
+	if _launch_x != 0.0 and (is_on_wall() or (is_on_floor() and velocity.y >= 0.0)):
+		_launch_x = 0.0
 	# Упёрся сбоку в каменный блок — толкает его.
 	if dir != 0.0 and not climbing:
 		for i in get_slide_collision_count():

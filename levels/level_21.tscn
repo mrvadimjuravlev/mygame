@@ -1,0 +1,130 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_o0ks3"]
+[ext_resource type="Script" path="res://scripts/turning_room.gd" id="2_b31rk"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="3_cp8md"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_lauxt"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="5_iw03a"]
+[ext_resource type="Script" path="res://scripts/turn_glyph.gd" id="6_4jou1"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="7_x60up"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_su2m5"]
+
+[node name="Level21" type="Node2D"]
+script = ExtResource("1_o0ks3")
+level_number = 21
+slogan = "Поверни зал"
+hints = PackedStringArray("Обрыв не перепрыгнуть. Но зал можно повернуть.", "Руны по бокам поворачивают весь зал. Герой падает на новый пол.", "Поверни зал по часовой стрелке, потом обратно: герой окажется за обрывом.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+view_width = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "pyramid"
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Room" type="Node2D" parent="."]
+position = Vector2(320, 176)
+script = ExtResource("2_b31rk")
+inner = 128.0
+exit_path = NodePath("Exit")
+
+[node name="Back" type="Polygon2D" parent="Room"]
+polygon = PackedVector2Array(-144, -144, 144, -144, 144, 144, -144, 144)
+
+[node name="Solid2" type="StaticBody2D" parent="Room"]
+position = Vector2(-320, -176)
+script = ExtResource("3_cp8md")
+polygon = PackedVector2Array(176, 304, 264, 304, 264, 320, 176, 320)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Room/Solid2"]
+polygon = PackedVector2Array(176, 304, 264, 304, 264, 320, 176, 320)
+
+[node name="Solid3" type="StaticBody2D" parent="Room"]
+position = Vector2(-320, -176)
+script = ExtResource("3_cp8md")
+polygon = PackedVector2Array(376, 304, 464, 304, 464, 320, 376, 320)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Room/Solid3"]
+polygon = PackedVector2Array(376, 304, 464, 304, 464, 320, 376, 320)
+
+[node name="Solid4" type="StaticBody2D" parent="Room"]
+position = Vector2(-320, -176)
+script = ExtResource("3_cp8md")
+polygon = PackedVector2Array(176, 32, 464, 32, 464, 48, 176, 48)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Room/Solid4"]
+polygon = PackedVector2Array(176, 32, 464, 32, 464, 48, 176, 48)
+
+[node name="Solid5" type="StaticBody2D" parent="Room"]
+position = Vector2(-320, -176)
+script = ExtResource("3_cp8md")
+polygon = PackedVector2Array(176, 32, 192, 32, 192, 320, 176, 320)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Room/Solid5"]
+polygon = PackedVector2Array(176, 32, 192, 32, 192, 320, 176, 320)
+
+[node name="Solid6" type="StaticBody2D" parent="Room"]
+position = Vector2(-320, -176)
+script = ExtResource("3_cp8md")
+polygon = PackedVector2Array(448, 32, 464, 32, 464, 320, 448, 320)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Room/Solid6"]
+polygon = PackedVector2Array(448, 32, 464, 32, 464, 320, 448, 320)
+
+[node name="Exit" type="Area2D" parent="Room"]
+position = Vector2(84, 128)
+script = ExtResource("4_lauxt")
+start_open = true
+needs_key = false
+upside_down = false
+
+[node name="Prop8" type="Node2D" parent="Room"]
+position = Vector2(-128, -128)
+script = ExtResource("5_iw03a")
+kind = "web"
+length = 40.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="TurnRight" type="Node2D" parent="."]
+position = Vector2(560, 150)
+script = ExtResource("6_4jou1")
+room = NodePath("../Room")
+dir = 1
+
+[node name="TurnLeft" type="Node2D" parent="."]
+position = Vector2(80, 150)
+script = ExtResource("6_4jou1")
+room = NodePath("../Room")
+dir = -1
+
+[node name="Torch130_250" type="Area2D" parent="."]
+position = Vector2(130, 250)
+script = ExtResource("7_x60up")
+start_lit = true
+
+[node name="Torch510_250" type="Area2D" parent="."]
+position = Vector2(510, 250)
+script = ExtResource("7_x60up")
+start_lit = true
+
+[node name="Torch320_20" type="Area2D" parent="."]
+position = Vector2(320, 20)
+script = ExtResource("7_x60up")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(220, 304)
+script = ExtResource("8_su2m5")

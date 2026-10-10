@@ -12,7 +12,7 @@ func _initialize() -> void:
 func _run() -> void:
 	change_scene_to_file("res://levels/level_01.tscn")
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22]
 	for i in solvers.size():
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -134,6 +134,69 @@ func _solve_18() -> void:
 
 
 ## Тестовые уровни других локаций: каждый запускается отдельно.
+func _touch(p: Vector2, pressed: bool) -> void:
+	var ev := InputEventScreenTouch.new()
+	ev.position = _to_window(p)
+	ev.pressed = pressed
+	Input.parse_input_event(ev)
+	await _frames(2)
+
+
+func _move_finger(p: Vector2) -> void:
+	var ev := InputEventScreenDrag.new()
+	ev.position = _to_window(p)
+	Input.parse_input_event(ev)
+	await _frames(2)
+
+
+func _solve_19() -> void:
+	var bridge: Node2D = current_scene.get_node("Bridge")
+	var w: Vector2 = bridge.global_position + bridge.winch
+	# Крутим ворот пальцем по кругу и не отпускаем.
+	await _touch(w, true)
+	for i in 80:
+		await _move_finger(w + Vector2.RIGHT.rotated(i * 0.5) * 12.0)
+	print("  мост лёг: ", bridge.lowered)
+	await _walk_to(330.0)
+	await _walk_to(580.0)
+	await _touch(w, false)
+
+
+func _solve_20() -> void:
+	var sb: Node2D = current_scene.get_node("ShadowBridge")
+	print("  тень сначала: ", sb.shadow_span() + Vector2(240, 240))
+	var t: Vector2 = sb.global_position + Vector2(sb.torch_x, sb.rail_y + 8)
+	await _drag(t, Vector2(sb.global_position.x + 80, t.y), 30)
+	print("  тень после: ", sb.shadow_span() + Vector2(240, 240))
+	await _walk_to(330.0)
+	await _walk_to(580.0)
+
+
+func _solve_21() -> void:
+	# Прыжок через обрыв не долетает, только поворот зала.
+	await _tap(current_scene.get_node("TurnRight").global_position)
+	await _frames(100)
+	print("  после поворота по часовой: ", _hero().global_position)
+	await _tap(current_scene.get_node("TurnLeft").global_position)
+	await _frames(100)
+	print("  после поворота обратно: ", _hero().global_position)
+	await _walk_to(404.0)
+
+
+func _solve_22() -> void:
+	await _walk_to(226.0)
+	var stone: Node2D = current_scene.get_node("Stone")
+	var from := stone.global_position + Vector2(0, -16)
+	await _touch(from, true)
+	for i in range(1, 31):
+		await _move_finger(from.lerp(Vector2(165, 100), i / 30.0))
+	await _frames(40)
+	await _touch(Vector2(165, 100), false)
+	await _frames(90)
+	print("  герой после броска: ", _hero().global_position if _hero() else "вышел")
+	await _walk_to(590.0)
+
+
 func _run_worlds() -> void:
 	var cases := [
 		["res://levels/dungeon_01.tscn", _solve_dungeon_01],

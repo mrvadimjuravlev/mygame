@@ -31,6 +31,10 @@ func _initialize() -> void:
 	_level_16()
 	_level_17()
 	_level_18()
+	_level_19()
+	_level_20()
+	_level_21()
+	_level_22()
 	_dungeon_01()
 	_dungeon_02()
 	_castle_01()
@@ -529,6 +533,121 @@ func _level_18() -> void:
 	_prop("vase", Vector2(1180, 280), 0)
 	_hero(60, 280)
 	_save(18)
+
+
+func _level_19() -> void:
+	_begin(19, "Держи мост", 640, "", ["Мост поднят. Его опускает ворот на той стороне.", "Крути ворот пальцем и не отпускай: отпустишь — мост поднимется.", "Держи палец на вороте и одновременно веди героя кнопкой вправо через мост."])
+	_root.restart_on_fall = true
+	_back(640)
+	_box(0, 280, 240, 360)       # пол слева
+	_box(400, 280, 640, 360)     # пол справа; между ними бездонный обрыв
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	var bridge := _add("Bridge", Node2D.new(), "drawbridge.gd", Vector2(400, 280))
+	bridge.winch = Vector2(90, -90)
+	bridge.pulley = Vector2(30, -205)
+	_exit(580, 280, true)
+	_decor([[110, 200], [540, 150]], [[90, 100, 3, ["eye", "bird", "sun", "reed", "ankh", "wave"]]], true)
+	_prop("web", Vector2(16, 60), 50)
+	_prop("roots", Vector2(250, 60), 60)
+	_prop("bones", Vector2(200, 280), 0)
+	_prop("vase", Vector2(610, 280), 0)
+	_hero(60, 280)
+	_save(19)
+
+
+func _level_20() -> void:
+	_begin(20, "Мост из тени", 640, "", ["По свету над пропастью не пройти, а по тени можно.", "Факел под потолком ездит по рейке: перетащи его пальцем.", "Поставь факел прямо над балкой: её тень ляжет мостом через пропасть."])
+	_root.restart_on_fall = true
+	_back(640)
+	_box(0, 280, 240, 360)       # пол слева
+	_box(400, 280, 640, 360)     # пол справа
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	var shadow := _add("ShadowBridge", Node2D.new(), "shadow_bridge.gd", Vector2(240, 280))
+	shadow.rail_y = -190.0
+	shadow.rail_from = -200.0
+	shadow.rail_to = 360.0
+	shadow.torch_x = -140.0
+	shadow.beam = Rect2(30, -100, 100, 10)
+	shadow.ceiling_y = -220.0
+	_exit(580, 280, true)
+	# Факелов на стенах нет: единственный свет — факел на рейке.
+	_decor([], [[470, 120, 2, ["sun", "eye", "bird", "reed"]], [60, 120, 2, ["ankh", "sun", "wave", "eye"]]], true)
+	_prop("web", Vector2(16, 60), 46)
+	_prop("roots", Vector2(560, 60), 40)
+	_prop("bones", Vector2(440, 280), 0)
+	_hero(60, 280)
+	_save(20)
+
+
+func _level_21() -> void:
+	_begin(21, "Поверни зал", 640, "", ["Обрыв не перепрыгнуть. Но зал можно повернуть.", "Руны по бокам поворачивают весь зал. Герой падает на новый пол.", "Поверни зал по часовой стрелке, потом обратно: герой окажется за обрывом."])
+	_root.restart_on_fall = true
+	_back(640)
+	# Квадратный зал вокруг центра (320, 176): всё внутри него поворачивается вместе с ним.
+	var center := Vector2(320, 176)
+	var room := _add("Room", Node2D.new(), "turning_room.gd", center)
+	var back := Polygon2D.new()
+	back.color = Color.WHITE
+	back.polygon = PackedVector2Array([Vector2(-144, -144), Vector2(144, -144), Vector2(144, 144), Vector2(-144, 144)])
+	back.name = "Back"
+	room.add_child(back)
+	back.owner = _root
+	var parts := [
+		_box(176, 304, 264, 320),    # пол слева; дальше обрыв шире прыжка
+		_box(376, 304, 464, 320),    # пол справа
+		_box(176, 32, 464, 48),      # потолок
+		_box(176, 32, 192, 320),     # левая стена
+		_box(448, 32, 464, 320),     # правая стена
+	]
+	var exit := _exit(404, 304, true)
+	parts.append(exit)
+	_prop("web", Vector2(192, 48), 40)
+	parts.append(_root.get_child(_root.get_child_count() - 1))
+	for p in parts:
+		p.owner = null
+		p.reparent(room)
+		p.owner = _root
+		for child in p.get_children():
+			child.owner = _root
+	room.exit_path = room.get_path_to(exit)
+	var cw := _add("TurnRight", Node2D.new(), "turn_glyph.gd", Vector2(560, 150))
+	cw.dir = 1
+	cw.room = cw.get_path_to(room)
+	var ccw := _add("TurnLeft", Node2D.new(), "turn_glyph.gd", Vector2(80, 150))
+	ccw.dir = -1
+	ccw.room = ccw.get_path_to(room)
+	# Факелы снаружи зала, на стене пирамиды: они не поворачиваются.
+	_decor([[130, 250], [510, 250], [320, 20]], [], true)
+	_hero(220, 304)
+	_save(21)
+
+
+func _level_22() -> void:
+	_begin(22, "Перелёт", 640, "", ["Камень на той стороне пригодится.", "Одна плита пола у обрыва — не плита, а доска на оси. Присмотрись к швам.", "Встань на край доски у обрыва, перенеси камень пальцем повыше и отпусти над другим краем."])
+	_root.restart_on_fall = true
+	_back(640)
+	_box(0, 280, 144, 360)       # пол слева
+	_box(144, 306, 240, 360)     # под доской — яма
+	_box(400, 280, 640, 360)     # пол справа; между ними обрыв
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	var board := _add("Board", StaticBody2D.new(), "seesaw.gd", Vector2(192, 280))
+	board.size = Vector2(96, 26)  # до самого дна ямы: щели под доской не видно
+	var stone := _add("Stone", CharacterBody2D.new(), "push_stone.gd", Vector2(520, 280))
+	stone.size = Vector2(32, 32)
+	stone.hand_carry = true
+	_exit(590, 280, true)
+	_decor([[90, 200], [470, 200]], [[300, 100, 3, ["bird", "sun", "eye", "wave", "ankh", "reed"]]], true)
+	_prop("web", Vector2(16, 60), 40)
+	_prop("roots", Vector2(380, 60), 50)
+	_prop("vase", Vector2(40, 280), 0)
+	_hero(60, 280)
+	_save(22)
 
 
 # --- Тестовые уровни других локаций --------------------------------------

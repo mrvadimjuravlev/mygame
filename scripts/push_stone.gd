@@ -21,7 +21,12 @@ const NUDGE_SPEED := 120.0
 		hand_nudge = value
 		queue_redraw()
 
+## Камень можно поднять пальцем и перенести; отпустишь — падает.
+@export var hand_carry := false
+
 var hand_used := false
+var carried := false
+var _carry_target := Vector2.ZERO
 var _push := 0.0
 var _nudge_time := 0.0
 var _glow: PointLight2D
@@ -31,7 +36,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	add_to_group("pushable")
-	if hand_nudge:
+	if hand_nudge or hand_carry:
 		add_to_group("rune")
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
@@ -56,6 +61,11 @@ func contains_world_point(point: Vector2) -> bool:
 
 
 func hand_tap() -> void:
+	if hand_carry:
+		carried = true
+		_carry_target = global_position
+		Game.hand_used.emit("tap")
+		return
 	if hand_used:
 		return
 	hand_used = true
@@ -65,8 +75,14 @@ func hand_tap() -> void:
 	Game.hand_used.emit("tap")
 
 
-func hand_drag(_world_delta: Vector2) -> void:
-	pass
+func hand_drag(world_delta: Vector2) -> void:
+	if carried:
+		_carry_target += world_delta
+
+
+func hand_release() -> void:
+	carried = false
+	velocity = Vector2.ZERO
 
 
 ## Герой упёрся в камень сбоку и идёт в его сторону.
@@ -77,6 +93,11 @@ func push(dir: float) -> void:
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
+	if carried:
+		# Тянется за пальцем, но сквозь камень не проходит.
+		velocity = ((_carry_target - global_position) / delta).limit_length(420.0)
+		move_and_slide()
+		return
 	var was_on_floor := is_on_floor()
 	velocity.y += GRAVITY * delta
 	if _nudge_time > 0.0:
@@ -86,9 +107,16 @@ func _physics_process(delta: float) -> void:
 		velocity.x = _push * PUSH_SPEED
 	_push = 0.0
 	var falling := velocity.y > 250.0
+	var impact := velocity.y
 	move_and_slide()
 	if falling and is_on_floor() and not was_on_floor:
 		Sfx.play("land", 2.0, 0.6)
+		# Упал на что-то с подвохом (доска-катапульта): сообщает, как сильно ударил.
+		for i in get_slide_collision_count():
+			var body := get_slide_collision(i).get_collider()
+			if body and body.has_method("stone_landed"):
+				body.stone_landed(self, impact)
+				break
 
 
 func _process(_delta: float) -> void:
@@ -105,6 +133,8 @@ func _draw() -> void:
 	# Сколы по углам.
 	draw_rect(Rect2(r.position + Vector2(size.x - 6, 0), Vector2(6, 3)), Color("5e4630"))
 	draw_rect(Rect2(r.position + Vector2(3, size.y - 8), Vector2(4, 3)), Color("6e5236"))
+	if carried:
+		draw_rect(r.grow(3), Color(RUNE_COLOR, 0.5), false, 1.0)
 	if hand_nudge and not hand_used and not Engine.is_editor_hint():
 		var c := r.get_center()
 		var glow := 0.55 + 0.35 * sin(Time.get_ticks_msec() / 300.0)

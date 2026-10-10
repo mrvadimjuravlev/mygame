@@ -130,6 +130,10 @@ func _touch_up(index: int) -> void:
 		_finger_button.erase(index)
 	if _finger_hand.has(index) and _finger_hand[index].has("hero") and is_instance_valid(_finger_hand[index].hero):
 		_finger_hand[index].hero.carry_end()
+	# Палец отпустил предмет: ворот, камень в руке и т. п.
+	if _finger_hand.has(index) and _finger_hand[index].rune and is_instance_valid(_finger_hand[index].rune) \
+			and _finger_hand[index].rune.has_method("hand_release"):
+		_finger_hand[index].rune.hand_release()
 	_finger_hand.erase(index)
 
 
