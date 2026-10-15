@@ -1,10 +1,12 @@
 extends Control
-## Настройки: язык (русский / English) и звук. Выбор сохраняется сразу.
+## Настройки: язык (русский / English), звук и сброс прогресса всех локаций. Выбор сохраняется сразу.
 
 const Art := preload("res://scripts/art.gd")
 const Style := preload("res://ui/style.gd")
 const SELECTED := Color("8a6a3f")
 const BORDER := Color("ffe7a3")
+
+var _reset: Button
 
 
 func _ready() -> void:
@@ -24,7 +26,15 @@ func _build() -> void:
 	add_child(back)
 	add_child(Style.label(Game.t("Настройки"), Vector2(0, 22), 640, 28, Color("e2bf78")))
 	_row(Game.t("Язык"), 110, [["Русский", Game.lang == "ru", func() -> void: _set_lang("ru")], ["English", Game.lang == "en", func() -> void: _set_lang("en")]])
-	_row(Game.t("Звук"), 180, [[Game.t("Вкл"), Sfx.enabled, func() -> void: _set_sound(true)], [Game.t("Выкл"), not Sfx.enabled, func() -> void: _set_sound(false)]])
+	_row(Game.t("Звук"), 170, [[Game.t("Вкл"), Sfx.enabled, func() -> void: _set_sound(true)], [Game.t("Выкл"), not Sfx.enabled, func() -> void: _set_sound(false)]])
+	# Сброс прогресса сразу всех локаций. Защита от случайного нажатия: сбрасывает второе касание.
+	var caption := Style.label(Game.t("Прогресс"), Vector2(90, 238), 140, 18, Style.TEXT)
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_child(caption)
+	_reset = Style.button(Game.t("Сбросить"), Vector2(275, 44), 18)
+	_reset.position = Vector2(250, 230)
+	_reset.pressed.connect(_on_reset)
+	add_child(_reset)
 	var back_button := Style.button(Game.t("‹ Назад"), Vector2(110, 36), 16)
 	back_button.position = Vector2(16, 308)
 	back_button.pressed.connect(Game.go_title)
@@ -50,6 +60,17 @@ func _row(caption: String, y: float, options: Array) -> void:
 func _set_lang(value: String) -> void:
 	Game.set_lang(value)
 	_build.call_deferred()
+
+
+func _on_reset() -> void:
+	if _reset.text == Game.t("Сбросить"):
+		_reset.text = Game.t("Точно сбросить?")
+		return
+	if _reset.text != Game.t("Точно сбросить?"):
+		return
+	Game.reset_progress()
+	_reset.text = Game.t("Прогресс сброшен")
+	_reset.disabled = true
 
 
 func _set_sound(value: bool) -> void:

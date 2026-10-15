@@ -2,3 +2,7 @@
 *.import
 export/
 *.apk
+*.aab
+# Шаблон Android-сборки (Gradle) — больше гигабайта; ставится заново из шаблонов экспорта Godot
+# (Проект → Установить шаблон сборки Android или --install-android-build-template при экспорте).
+android/

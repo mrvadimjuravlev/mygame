@@ -38,6 +38,11 @@ func _physics_process(_delta: float) -> void:
 			return
 
 
+## Рычаг ещё можно дёрнуть (одноразовый после первого раза — уже нет).
+func can_use() -> bool:
+	return not (pulled and one_shot)
+
+
 func use() -> void:
 	if pulled and one_shot:
 		return

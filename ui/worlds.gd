@@ -12,6 +12,8 @@ const GAP := 16.0
 const MARGIN := 24.0
 ## Сдвиг пальца, после которого касание считается прокруткой, а не нажатием карточки.
 const DRAG_START := 8.0
+## Отступ названия от краёв карточки.
+const NAME_PAD := 10.0
 
 var _strip: Control
 var _bar: Control
@@ -61,9 +63,7 @@ func _ready() -> void:
 		face.size = CARD
 		face.draw.connect(_draw_emblem.bind(face, w.id, open))
 		card.add_child(face)
-		var name_label := Style.label(Game.t(w.name), Vector2(0, 128), CARD.x, 15, Style.TEXT if open else Color("8a7458"))
-		name_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var name_label := _name_label(Game.t(w.name), Style.TEXT if open else Color("8a7458"))
 		card.add_child(name_label)
 		var note := Game.t("%d из %d пройдено") % [Game.passed_count(w.id), w.levels.size()] if open else Game.t("Скоро")
 		var note_label := Style.label(note, Vector2(0, 166), CARD.x, 11, Style.TEXT_DIM if open else Color("6e5a44"))
@@ -87,6 +87,28 @@ func _ready() -> void:
 	back_button.position = Vector2(16, 308)
 	back_button.pressed.connect(Game.go_title)
 	add_child(back_button)
+
+
+## Название на карточке. Не влезает в строку с отступами — переносим по словам на две строки
+## (сдвинув чуть выше, чтобы не наехать на «N из M пройдено»).
+func _name_label(text: String, color: Color) -> Label:
+	var font_size := 15
+	var probe := Label.new()
+	var font := probe.get_theme_font("font")
+	probe.free()
+	var wide := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > CARD.x - NAME_PAD * 2
+	var label: Label
+	if wide and " " in text:
+		# Перенос после первого слова: «Затонувший / храм», «Ледяные / пещеры».
+		var cut := text.find(" ")
+		label = Style.label(text.substr(0, cut) + "\n" + text.substr(cut + 1), Vector2(NAME_PAD, 114), CARD.x - NAME_PAD * 2, font_size, color)
+		label.size.y = 48
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_constant_override("line_spacing", -3)
+	else:
+		label = Style.label(text, Vector2(NAME_PAD, 128), CARD.x - NAME_PAD * 2, font_size, color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return label
 
 
 func _input(event: InputEvent) -> void:

@@ -1,6 +1,6 @@
 @tool
 extends Area2D
-## Дверь-портал: герой входит в неё и оказывается в другом месте уровня (в другой локации).
+## Дверь-портал: герой встаёт в проём, жмёт «Действие» и оказывается в другом месте уровня (в другой локации).
 ## Камера переключается на границы той комнаты, куда он попал. Начало координат — у пола.
 
 ## Куда попадает герой (мировые координаты, точка у ног).
@@ -25,7 +25,8 @@ func _ready() -> void:
 	shape.shape = rect
 	shape.position = Vector2(0, -18)
 	add_child(shape)
-	body_entered.connect(_on_body_entered)
+	# Вход — как у рычага: герой стоит в проёме и нажимает кнопку действия.
+	add_to_group("interactable")
 	var glow := PointLight2D.new()
 	glow.texture = preload("res://scripts/art.gd").light_texture()
 	glow.texture_scale = 0.25
@@ -35,10 +36,12 @@ func _ready() -> void:
 	add_child(glow)
 
 
-func _on_body_entered(body: Node) -> void:
-	if not body.is_in_group("hero"):
-		return
-	_go.call_deferred(body)
+## Кнопка действия, пока герой в проёме (её разбирает hero._try_interact).
+func use() -> void:
+	for body in get_overlapping_bodies():
+		if body.is_in_group("hero"):
+			_go.call_deferred(body)
+			return
 
 
 func _go(hero: Node2D) -> void:

@@ -10,7 +10,7 @@ const BUTTONS := {
 }
 const ACTIONS := {"left": "move_left", "right": "move_right", "action": "action", "jump": "jump"}
 const HINT_BUTTON := Rect2(598, 8, 34, 34)
-const MENU_BUTTON := Rect2(558, 8, 34, 34)
+const MENU_BUTTON := Rect2(8, 8, 34, 34)
 const INVENTORY_SLOTS := 3
 
 var level: Node
@@ -18,6 +18,7 @@ var level: Node
 var _finger_button := {}  # индекс пальца -> имя кнопки
 var _finger_hand := {}    # индекс пальца -> {rune, last}
 var _hint_index := -1
+var _waiting_ad := false
 var _time := 0.0
 var _tutorial := ""
 var _pad: Node2D
@@ -33,7 +34,7 @@ func _ready() -> void:
 
 	# Название зоны: по центру сверху, всё время на экране.
 	_slogan = Label.new()
-	_slogan.text = "%d. %s" % [level.level_number, Game.t(level.slogan)]
+	_slogan.text = Game.t(level.slogan)
 	_slogan.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_slogan.size = Vector2(440, 30)
 	_slogan.position = Vector2(100, 8)
@@ -52,6 +53,10 @@ func _ready() -> void:
 	_hint_label.add_theme_font_size_override("font_size", 13)
 	_hint_label.add_theme_color_override("font_color", Color("cfefff"))
 	add_child(_hint_label)
+	# Подсказки, открытые раньше (до рестарта уровня), не нужно открывать заново.
+	var opened: int = mini(Game.hints_opened.get(level.scene_file_path, 0), level.hints.size())
+	if opened > 0:
+		_show_hint(opened - 1)
 
 
 func _process(delta: float) -> void:
@@ -141,22 +146,63 @@ func _to_world(screen_pos: Vector2) -> Vector2:
 	return level.get_viewport().get_canvas_transform().affine_inverse() * screen_pos
 
 
+## Следующая подсказка открывается за просмотр рекламы; уже открытые показываются по кругу бесплатно.
 func _show_next_hint() -> void:
-	if level.hints.is_empty():
+	if level.hints.is_empty() or _waiting_ad:
 		return
-	_hint_index = mini(_hint_index + 1, level.hints.size() - 1)
-	_hint_label.text = Game.t("Подсказка %d: %s") % [_hint_index + 1, Game.t(level.hints[_hint_index])]
+	var opened: int = Game.hints_opened.get(level.scene_file_path, 0)
+	if _hint_index + 1 < opened:
+		_show_hint(_hint_index + 1)
+	elif opened < level.hints.size():
+		_waiting_ad = true
+		Ads.show_rewarded(_on_hint_reward.bind(opened), func() -> void: _waiting_ad = false)
+	else:
+		_show_hint((_hint_index + 1) % opened)
+
+
+func _on_hint_reward(index: int) -> void:
+	_waiting_ad = false
+	if not is_inside_tree():
+		return
+	Game.hints_opened[level.scene_file_path] = index + 1
+	Game.save()
+	_show_hint(index)
+
+
+func _show_hint(index: int) -> void:
+	_hint_index = index
+	_hint_label.text = Game.t("Подсказка %d: %s") % [index + 1, Game.t(level.hints[index])]
+
+
+## Следующая подсказка будет за рекламу: на кнопке «?» значок ролика.
+func _next_hint_needs_ad() -> bool:
+	return Ads.rewarded_ready() and Game.hints_opened.get(level.scene_file_path, 0) < level.hints.size() \
+			and _hint_index + 1 >= Game.hints_opened.get(level.scene_file_path, 0)
 
 
 func _draw_pad() -> void:
 	var font := ThemeDB.fallback_font
+	var hero := level.get_node_or_null("Hero")
 	for name in BUTTONS:
 		var r: Rect2 = BUTTONS[name]
 		var held := Input.is_action_pressed(ACTIONS[name])
-		_pad.draw_rect(r, Color(1, 1, 1, 0.28 if held else 0.12))
-		_pad.draw_rect(r, Color(1, 1, 1, 0.35), false, 1.0)
-		_draw_icon(name, r.get_center(), Color(1, 1, 1, 0.8))
-		if name == _tutorial:
+		if name == "action" and not (hero and hero.can_act()):
+			# Действию сейчас не к чему примениться: кнопка бледная.
+			_pad.draw_rect(r, Color(1, 1, 1, 0.04))
+			_pad.draw_rect(r, Color(1, 1, 1, 0.12), false, 1.0)
+			_draw_icon(name, r.get_center(), Color(1, 1, 1, 0.22))
+		elif name == "action":
+			# Есть рычаг, портал или лестница: кнопка горит и мягко пульсирует.
+			var glow := 0.5 + 0.5 * sin(_time * 5.0)
+			_pad.draw_rect(r, Color(1, 0.85, 0.45, (0.4 if held else 0.22) + 0.06 * glow))
+			_pad.draw_rect(r, Color(1, 0.9, 0.55, 0.7 + 0.3 * glow), false, 2.0)
+			_draw_icon(name, r.get_center(), Color(1, 0.97, 0.85, 1.0))
+		else:
+			_pad.draw_rect(r, Color(1, 1, 1, 0.28 if held else 0.12))
+			_pad.draw_rect(r, Color(1, 1, 1, 0.35), false, 1.0)
+			_draw_icon(name, r.get_center(), Color(1, 1, 1, 0.8))
+		# Обучающая рамка у «Действия» — только когда его есть к чему применить.
+		if name == _tutorial and (name != "action" or (hero and hero.can_act())):
 			var t := fmod(_time, 1.2) / 1.2
 			_pad.draw_rect(r.grow(4 + 8 * t), Color(1, 0.9, 0.5, 1.0 - t), false, 2.0)
 	_draw_inventory()
@@ -165,6 +211,11 @@ func _draw_pad() -> void:
 		_pad.draw_rect(Rect2(MENU_BUTTON.position + Vector2(9, 10 + k * 6), Vector2(16, 2)), Color(1, 1, 1, 0.8))
 	_pad.draw_rect(HINT_BUTTON, Color(0.4, 0.8, 1.0, 0.25))
 	_pad.draw_string(font, HINT_BUTTON.position + Vector2(0, 25), "?", HORIZONTAL_ALIGNMENT_CENTER, HINT_BUTTON.size.x, 20, Color.WHITE)
+	if _next_hint_needs_ad():
+		# Значок «смотреть ролик»: треугольник в уголке кнопки.
+		var c := HINT_BUTTON.position + Vector2(HINT_BUTTON.size.x - 6, HINT_BUTTON.size.y - 6)
+		_pad.draw_circle(c, 6.0, Color(1, 0.75, 0.2))
+		_pad.draw_colored_polygon(PackedVector2Array([c + Vector2(-2, -3), c + Vector2(3, 0), c + Vector2(-2, 3)]), Color(0.15, 0.1, 0.05))
 
 
 ## Артефакты героя: ячейки внизу между кнопками ходьбы и действия.

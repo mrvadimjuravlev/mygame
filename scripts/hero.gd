@@ -189,13 +189,34 @@ func _solid_at(point: Vector2) -> bool:
 
 
 func _ladder_below() -> Node:
+	var node := _find_ladder_below()
+	if node:
+		global_position.x = node.global_position.x
+	return node
+
+
+## Лестница вниз прямо под ногами (герой стоит у её верха над пустотой). Героя не двигает.
+func _find_ladder_below() -> Node:
 	for node in get_tree().get_nodes_in_group("ladder"):
 		var top: float = node.global_position.y
 		if absf(global_position.y - top) < 6.0 and absf(global_position.x - node.global_position.x) < 22.0 \
 				and not _solid_at(Vector2(node.global_position.x, top + 3.0)):
-			global_position.x = node.global_position.x
 			return node
 	return null
+
+
+## Есть ли сейчас к чему применить кнопку действия: по этому HUD зажигает кнопку.
+func can_act() -> bool:
+	if _dead or carried or frozen:
+		return false
+	if climbing:
+		return true  # слезать вниз
+	for node in get_tree().get_nodes_in_group("interactable"):
+		if node.overlaps_body(self) and (not node.has_method("can_use") or node.can_use()):
+			return true
+	if is_on_floor():
+		return _find_ladder_below() != null
+	return _find_ladder() != null  # ухватиться за лестницу в прыжке
 
 
 func _find_ladder() -> Node:

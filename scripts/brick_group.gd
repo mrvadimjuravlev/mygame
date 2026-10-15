@@ -18,10 +18,8 @@ const BRICK := Vector2(32, 16)
 		bricks = value
 		queue_redraw()
 
-var pressed := false:
-	set(value):
-		pressed = value
-		queue_redraw()
+## Группа засчитана в последовательности. На вид не влияет: камни не утапливаются.
+var pressed := false
 
 
 func _ready() -> void:
@@ -37,8 +35,8 @@ func contains_world_point(point: Vector2) -> bool:
 	return false
 
 
+## Касание беззвучное: hand_used не шлём, иначе Sfx сыграет «тап».
 func hand_tap() -> void:
-	Game.hand_used.emit("tap")
 	tapped.emit(self)
 
 
@@ -49,10 +47,5 @@ func hand_drag(_world_delta: Vector2) -> void:
 func _draw() -> void:
 	for b in bricks:
 		var r := Rect2(b + Vector2(1, 1), BRICK - Vector2(1, 1))
-		draw_rect(r, Color("2b2017") if pressed else Color("33261a"))
-		if pressed:
-			# Кирпич утоплен: тень сверху и слева.
-			draw_rect(Rect2(r.position, Vector2(r.size.x, 2)), Color(0, 0, 0, 0.45))
-			draw_rect(Rect2(r.position, Vector2(2, r.size.y)), Color(0, 0, 0, 0.35))
-		else:
-			draw_rect(Rect2(r.position, Vector2(r.size.x, 1)), Color("33261a").lightened(0.12))
+		draw_rect(r, Color("33261a"))
+		draw_rect(Rect2(r.position, Vector2(r.size.x, 1)), Color("33261a").lightened(0.12))

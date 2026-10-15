@@ -52,6 +52,8 @@ var world := "pyramid"
 var unlock_all := false
 ## Язык интерфейса и текстов уровней: "ru" или "en".
 var lang := "ru"
+## Сколько подсказок открыто на уровне: путь сцены -> число. Открытые за рекламу не пропадают.
+var hints_opened := {}
 
 
 func _ready() -> void:
@@ -113,7 +115,8 @@ func next_level() -> void:
 	else:
 		# Пирамида заканчивается финальным экраном, тестовые локации — выбором уровня.
 		next = FINISH_SCENE if world == "pyramid" else MENU_SCENE
-	get_tree().change_scene_to_file.call_deferred(next)
+	# Между уровнями — межстраничная реклама, если пора; после неё следующий уровень.
+	Ads.between_levels(func() -> void: get_tree().change_scene_to_file.call_deferred(next))
 
 
 func start_over() -> void:
@@ -174,7 +177,10 @@ func continue_index() -> int:
 
 func reset_progress() -> void:
 	passed.clear()
+	hints_opened.clear()
 	unlock_all = false
+	# «Играть» после сброса ведёт на самый первый уровень, а не в последнюю выбранную локацию.
+	world = WORLDS[0].id
 	save()
 
 
@@ -183,6 +189,7 @@ func save() -> void:
 	cfg.set_value("progress", "passed", passed)
 	cfg.set_value("progress", "unlock_all", unlock_all)
 	cfg.set_value("progress", "world", world)
+	cfg.set_value("progress", "hints_opened", hints_opened)
 	cfg.set_value("settings", "sound", Sfx.enabled)
 	cfg.set_value("settings", "lang", lang)
 	cfg.save(SAVE_PATH)
@@ -200,6 +207,7 @@ func _load() -> void:
 			passed.append(path)
 	world = cfg.get_value("progress", "world", "pyramid")
 	unlock_all = cfg.get_value("progress", "unlock_all", false)
+	hints_opened = cfg.get_value("progress", "hints_opened", {})
 	Sfx.enabled = cfg.get_value("settings", "sound", true)
 	lang = cfg.get_value("settings", "lang", lang)
 

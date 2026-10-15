@@ -1,8 +1,9 @@
 @tool
 extends Node2D
 ## Головоломка «группы кирпичей по счёту». Дочерние группы (brick_group.gd) нажимают по порядку:
-## сначала группу из одного кирпича, потом из двух и так далее. Ошибка — все группы тихо отжимаются,
-## счёт начинается заново. Когда нажаты все, срабатывает эффект у целей.
+## сначала группу из одного кирпича, потом из двух и так далее. Камни не двигаются и не звучат —
+## игрок не видит, какие уже засчитаны. Ошибка — счёт тихо начинается заново.
+## Когда нажаты все по порядку, срабатывает эффект у целей (дверь открывается).
 
 @export var targets: Array[NodePath] = []
 @export var effect: StringName = &"activate"
@@ -25,14 +26,12 @@ func _on_tapped(group: Node) -> void:
 	if solved or group.pressed:
 		return
 	if group.count != next:
-		Sfx.play("flee", -4.0, 0.7)
 		for g in get_children():
 			if g.has_signal("tapped"):
 				g.pressed = false
 		next = 1
 		return
 	group.pressed = true
-	Sfx.play("lever", -2.0, 0.8 + next * 0.1)
 	next += 1
 	if next > _total:
 		solved = true

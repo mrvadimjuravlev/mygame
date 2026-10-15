@@ -18,6 +18,9 @@ const EN := {
 	"Точно сбросить?": "Really reset?",
 	"Язык": "Language",
 	"Звук": "Sound",
+	"Прогресс": "Progress",
+	"Сбросить": "Reset",
+	"Прогресс сброшен": "Progress reset",
 	"Вкл": "On",
 	"Выкл": "Off",
 	"Коснитесь, чтобы продолжить": "Tap to continue",
@@ -73,10 +76,10 @@ const EN := {
 	"Между камнями не пустота — попробуй прыгнуть туда, где камня не видно.": "The gap between the stones isn't empty: try jumping where you can't see a stone.",
 	"С первого камня прыгай вправо и вверх: там невидимый камень, с него — на третий и к ключу.": "From the first stone jump up and to the right: there is an invisible stone. From it, jump to the third one and on to the key.",
 	# Уровень 9
-	"Выше птиц": "Above the Birds",
+	"Выше стрел": "Above the Arrows",
 	"Лестницу можно опустить.": "The ladder can be lowered.",
-	"Птицы летают по одним и тем же линиям — пережди их, остановившись на лестнице.": "The birds always fly along the same lines: stop on the ladder and wait for them to pass.",
-	"Дёрни рычаг, лезь вверх (▲), замирай под птицей, пока она не пролетит. Ключ на платформе наверху, вниз — кнопкой действия.": "Pull the lever, climb up (▲) and freeze under each bird until it flies by. The key is on the top platform; climb down with the action button.",
+	"Стрелы вылетают из стен по одним и тем же линиям — пережди их, остановившись на лестнице.": "Arrows shoot out of the walls along the same lines: stop on the ladder and wait for them to pass.",
+	"Дёрни рычаг, лезь вверх (▲), замирай под линией стрелы, пока она не пролетит. Ключ на площадке наверху, вниз — кнопкой действия.": "Pull the lever, climb up (▲) and freeze below each arrow line until the arrow flies by. The key is on the top ledge; climb down with the action button.",
 	# Уровень 10
 	"Верх — это низ, лево — это право": "Up is down, left is right",
 	"Обрыв не перепрыгнуть. Но край экрана — не стена.": "The chasm is too wide to jump. But the edge of the screen is not a wall.",

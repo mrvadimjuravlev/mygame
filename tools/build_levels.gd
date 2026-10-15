@@ -4,10 +4,15 @@ extends SceneTree
 ## После сборки уровни правятся в редакторе Godot как обычные сцены, и правки главнее этого файла:
 ## уже существующие сцены сборка не трогает. Пересобрать всё заново (правки пропадут):
 ## godot --headless --path . -s tools/build_levels.gd -- --force
+## Уровни из списка HANDMADE не пересобираются никогда — они нарисованы вручную.
 
 const SAND := Color("c9a35b")
 const STONE := Color("8a6a43")
 const BACK := Color("2a1f17")
+## Уровни, перерисованные вручную в редакторе: сборка их не трогает даже с --force.
+const HANDMADE := [
+	"res://levels/level_12.tscn",
+]
 
 var _root: Node2D
 
@@ -202,37 +207,55 @@ func _level_08() -> void:
 
 
 func _level_09() -> void:
-	_begin(9, "Выше птиц", 640, "", ["Лестницу можно опустить.", "Птицы летают по одним и тем же линиям — пережди их, остановившись на лестнице.", "Дёрни рычаг, лезь вверх (▲), замирай под птицей, пока она не пролетит. Ключ на платформе наверху, вниз — кнопкой действия."])
-	_root.level_height = 1080.0
-	_root.fall_limit = 1200.0
+	_begin(9, "Выше стрел", 640, "", ["Лестницу можно опустить.", "Стрелы вылетают из стен по одним и тем же линиям — пережди их, остановившись на лестнице.", "Дёрни рычаг, лезь вверх (▲), замирай под линией стрелы, пока она не пролетит. Ключ на площадке наверху, вниз — кнопкой действия."])
+	# Два экрана в высоту. Пол толстый: внизу экрана он лежит под кнопками и не прячет героя.
+	_root.level_height = 720.0
+	_root.fall_limit = 800.0
 	_root.restart_on_fall = true
 	var back := Polygon2D.new()
 	back.color = BACK
-	back.polygon = PackedVector2Array([Vector2(0, 0), Vector2(640, 0), Vector2(640, 1080), Vector2(0, 1080)])
+	back.polygon = PackedVector2Array([Vector2(0, 0), Vector2(640, 0), Vector2(640, 720), Vector2(0, 720)])
 	_add("Back", back, "", Vector2.ZERO)
-	_box(0, 1040, 640, 1080)     # пол
+	_box(0, 640, 640, 720)       # пол
 	_box(0, 0, 640, 40)          # потолок
-	_box(0, 0, 16, 1080)
-	_box(624, 0, 640, 1080)
-	_box(340, 200, 500, 214)     # платформа с ключом высоко наверху
-	_add("Key", Area2D.new(), "key_item.gd", Vector2(450, 200))
-	var ladder := _add("Ladder", Area2D.new(), "ladder.gd", Vector2(326, 200))
-	ladder.length = 840.0
-	_lever("Lever", Vector2(240, 1040), [ladder])
-	# Три птицы на разных высотах, с разной скоростью.
-	var birds := [[860.0, 100.0, 1.0, 120.0], [640.0, 130.0, -1.0, 520.0], [420.0, 160.0, 1.0, 200.0]]
-	for i in birds.size():
-		var b: Array = birds[i]
-		var bird := _add("Bird%d" % (i + 1), Area2D.new(), "bird.gd", Vector2(b[3], b[0]))
-		bird.speed = b[1]
-		bird.start_dir = b[2]
-	var exit := _exit(590, 1040)
+	_box(0, 0, 16, 720)
+	_box(624, 0, 640, 720)
+	# Верхний экран: проход сужается вдвое, стены снизу скошены.
+	_poly("NarrowLeft", [Vector2(16, 40), Vector2(168, 40), Vector2(168, 310), Vector2(16, 350)])
+	_poly("NarrowRight", [Vector2(472, 40), Vector2(624, 40), Vector2(624, 350), Vector2(472, 310)])
+	_box(340, 150, 472, 164)     # площадка с ключом у правой стены прохода
+	_add("Key", Area2D.new(), "key_item.gd", Vector2(430, 150))
+	var ladder := _add("Ladder", Area2D.new(), "ladder.gd", Vector2(326, 150))
+	ladder.length = 490.0
+	_lever("Lever", Vector2(240, 640), [ladder])
+	# Три линии стрел: высота, откуда, куда, скорость, направление, пауза, задержка первого выстрела.
+	var arrows := [[560.0, 24.0, 616.0, 170.0, 1.0, 0.9, 0.0], [440.0, 24.0, 616.0, 200.0, -1.0, 0.9, 1.2], [250.0, 176.0, 464.0, 150.0, 1.0, 1.1, 0.6]]
+	for i in arrows.size():
+		var a: Array = arrows[i]
+		var arrow := _add("Arrow%d" % (i + 1), Area2D.new(), "arrow.gd", Vector2(a[1] if a[4] > 0.0 else a[2], a[0]))
+		arrow.from_x = a[1]
+		arrow.to_x = a[2]
+		arrow.speed = a[3]
+		arrow.start_dir = a[4]
+		arrow.pause = a[5]
+		arrow.first_delay = a[6]
+	var exit := _exit(590, 640)
 	exit.needs_key = true
-	_decor([[100, 1000], [560, 980], [560, 700], [100, 600], [560, 400], [100, 250], [560, 140]], [[60, 880, 3, ["bird", "bird", "eye", "wave", "reed", "ankh"]], [480, 520, 3, ["sun", "eye", "ankh", "bird", "wave", "reed"]], [60, 300, 2, ["eye", "bird", "ankh", "sun"]]], true)
-	_hero(60, 1040)
+	_decor([[100, 600], [560, 590], [100, 400], [560, 400], [190, 200], [450, 110]], [[60, 470, 3, ["sun", "eye", "wave", "reed", "ankh", "eye"]], [480, 470, 3, ["sun", "eye", "ankh", "reed", "wave", "reed"]], [190, 70, 2, ["eye", "sun", "ankh", "reed"]]], true)
+	_hero(60, 640)
 	_save(9)
 
 
+## Стена произвольной формы (многоугольник), как _box.
+func _poly(node_name: String, points: Array) -> Node:
+	var solid := _add(node_name, StaticBody2D.new(), "solid.gd", Vector2.ZERO)
+	var shape := CollisionPolygon2D.new()
+	shape.name = "Shape"
+	solid.add_child(shape)
+	shape.owner = _root
+	solid.polygon = PackedVector2Array(points)
+	solid.color = STONE
+	return solid
 func _level_10() -> void:
 	_begin(10, "Верх — это низ, лево — это право", 640, "", ["Обрыв не перепрыгнуть. Но край экрана — не стена.", "Уйди за левый край экрана — выйдешь справа.", "Иди налево за край, появишься справа. Выпей зелье: гравитация перевернётся, и по потолку дойдёшь до двери у левого края."])
 	_root.restart_on_fall = true
@@ -895,7 +918,7 @@ func _save(number: int) -> void:
 
 
 func _save_as(path: String) -> void:
-	if FileAccess.file_exists(path) and not OS.get_cmdline_user_args().has("--force"):
+	if FileAccess.file_exists(path) and (path in HANDMADE or not OS.get_cmdline_user_args().has("--force")):
 		print("Уже есть, не трогаю: " + path)
 		_root.free()
 		return

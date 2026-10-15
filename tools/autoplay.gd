@@ -85,11 +85,13 @@ func _solve_17() -> void:
 	await _hop("move_left")
 	print("  на верхней платформе: ", _hero().global_position)
 	await _walk_to(275.0)
+	await _press("action")  # в портал — кнопкой действия
 	await _frames(10)
 	print("  в другой комнате: ", _hero().global_position)
 	await _walk_to(1100.0)
 	print("  у сосудов: ", _hero().global_position)
 	await _walk_to(690.0)
+	await _press("action")
 	await _frames(10)
 	print("  вернулся: ", _hero().global_position)
 	# Код: зелёная 5, красная 7, жёлтая 9, синяя 2.
@@ -314,16 +316,16 @@ func _solve_09() -> void:
 	_press("action")  # лестница разворачивается
 	await _frames(90)
 	await _walk_to(326.0)
-	await _climb(-1.0)  # вверх, пропуская птиц
+	await _climb(-1.0)  # вверх, пропуская стрелы
 	print("  наверху: ", _hero().global_position)
-	await _walk_to(450.0)
+	await _walk_to(430.0)
 	print("  ключ у героя: ", _hero().has_key)
 	await _walk_to(344.0)  # край площадки у верха лестницы
-	await _climb(1.0)   # вниз, пропуская птиц
+	await _climb(1.0)   # вниз, пропуская стрелы
 	await _walk_to(590.0)
 
 
-## Лезть по лестнице вверх (-1) или вниз (1), замирая, если птица вот-вот пересечёт лестницу.
+## Лезть по лестнице вверх (-1) или вниз (1), замирая, если стрела вот-вот пересечёт лестницу.
 func _climb(direction: float) -> void:
 	var action := "jump" if direction < 0 else "action"
 	for i in 3000:
@@ -333,11 +335,11 @@ func _climb(direction: float) -> void:
 			return
 		var y := hero.global_position.y
 		# Долез: выбрался на площадку наверху.
-		if direction < 0 and not hero.climbing and hero.is_on_floor() and y < 210.0:
+		if direction < 0 and not hero.climbing and hero.is_on_floor() and y < 160.0:
 			break
-		if direction > 0 and hero.is_on_floor() and y > 1000.0:
+		if direction > 0 and hero.is_on_floor() and y > 600.0:
 			break
-		if _bird_danger(hero, direction):
+		if _arrow_danger(hero, direction):
 			Input.action_release(action)
 		else:
 			Input.action_press(action)
@@ -346,29 +348,21 @@ func _climb(direction: float) -> void:
 	await _frames(5)
 
 
-func _bird_danger(hero: Node2D, direction: float) -> bool:
+func _arrow_danger(hero: Node2D, direction: float) -> bool:
 	var hx := hero.global_position.x
 	var feet := hero.global_position.y
 	var head := feet - 24.0
-	for bird in current_scene.get_tree().get_nodes_in_group("bird"):
-		var by: float = bird.global_position.y
-		# Сколько лезть, чтобы целиком миновать линию полёта птицы (с запасом).
-		var to_clear := (feet - (by - 8.0)) if direction < 0 else ((by + 8.0) - head)
-		if to_clear <= 0.0 or to_clear > 24.0 + 16.0 + 40.0:
+	for arrow in current_scene.get_tree().get_nodes_in_group("arrow"):
+		var ay: float = arrow.global_position.y
+		# Сколько лезть, чтобы целиком миновать линию полёта стрелы (с запасом).
+		var to_clear := (feet - (ay - 6.0)) if direction < 0 else ((ay + 6.0) - head)
+		if to_clear <= 0.0 or to_clear > 24.0 + 12.0 + 40.0:
 			continue  # линия уже позади или ещё далеко
 		var t_clear := to_clear / 80.0 + 0.3
-		var dx: float = hx - bird.global_position.x
-		var gap := absf(dx) - 20.0
-		var t_arrive: float
-		if gap <= 0.0:
-			t_arrive = 0.0
-		elif signf(dx) == bird.dir:
-			t_arrive = gap / bird.speed
-		else:
-			# Летит прочь: долетит до стены и вернётся.
-			var wall: float = bird.to_x if bird.dir > 0 else bird.from_x
-			t_arrive = (absf(wall - bird.global_position.x) * 2.0 + gap) / bird.speed
-		if t_arrive < t_clear:
+		# Стрела уже у лестницы — ждём, пока пролетит.
+		if arrow.flying and absf(hx - arrow.global_position.x) < 22.0:
+			return true
+		if arrow.time_to_reach(hx - 22.0 * arrow.dir) < t_clear:
 			return true
 	return false
 
@@ -415,12 +409,17 @@ func _solve_12() -> void:
 	Input.action_press("jump")
 	await _until(func() -> bool: return not _hero().climbing and _hero().is_on_floor() and _hero().global_position.y < 285.0)
 	Input.action_release("jump")
-	await _walk_to(490.0)
-	# По ступенькам к двери.
-	Input.action_press("move_right")
-	await _until(func() -> bool: return _hero().global_position.x > 590.0 and _hero().is_on_floor(), true)
-	Input.action_release("move_right")
-	await _walk_to(602.0)
+	# По уступам справа налево вверх к двери: с пола — на нижний, с него — на средний, потом на верхний.
+	await _walk_to(605.0)
+	await _hop("move_left")
+	print("  на нижнем уступе: ", _hero().global_position)
+	await _walk_to(512.0)
+	await _hop("move_left")
+	print("  на среднем уступе: ", _hero().global_position)
+	await _walk_to(330.0)
+	await _hop("move_left")
+	print("  на верхнем уступе: ", _hero().global_position)
+	await _walk_to(215.0)
 
 
 func _jump_right() -> void:
