@@ -38,6 +38,7 @@ const Art := preload("res://scripts/art.gd")
 
 var _cam: Camera2D
 var _hero: Node2D
+var _view_opened := false
 
 
 func _ready() -> void:
@@ -56,8 +57,9 @@ func _ready() -> void:
 	cam.limit_bottom = int(level_height)
 	if view_left > 0.0:
 		cam.limit_left = int(view_left)
-		cam.limit_smoothed = true
 	hero.add_child(cam)
+	# На старте камера сразу на месте, без наезда.
+	cam.reset_smoothing.call_deferred()
 	_cam = cam
 	_hero = hero
 	var back := get_node_or_null("Back") as Polygon2D
@@ -90,8 +92,10 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	# Герой дошёл до левого края стартового вида — открываем скрытую часть слева.
-	if _cam and _cam.limit_left > 0 and _hero.global_position.x < view_left + 48.0:
-		_cam.limit_left = 0
+	if _cam and not _view_opened and _cam.limit_left > 0 and _hero.global_position.x < view_left + 48.0:
+		# Граница камеры уезжает влево за 0,8 с — камера плавно едет, а не прыгает.
+		_view_opened = true
+		create_tween().set_trans(Tween.TRANS_SINE).tween_property(_cam, "limit_left", 0, 0.8)
 
 
 ## Стена в глубине: в пирамиде — крупные тёмные блоки, в других локациях — прежняя кладка.
