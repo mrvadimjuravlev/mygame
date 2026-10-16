@@ -281,16 +281,16 @@ func _solve_06() -> void:
 
 
 func _solve_07() -> void:
-	await _walk_to(150.0)  # встал на плиту — она нажимается
+	await _walk_to(100.0)  # плита слева, за краем экрана: встал — она нажимается
 	print("  плита нажата: ", current_scene.get_node("Button").pulled)
 	await _frames(70)  # камень опускается
-	await _walk_to(225.0)
+	await _walk_to(545.0)
 	await _jump_right()  # на камень, ключ подбирается
-	await _walk_to(320.0)
+	await _walk_to(640.0)
 	print("  ключ у героя: ", _hero().has_key)
-	await _walk_to(340.0)
+	await _walk_to(660.0)
 	await _jump_right()  # на правый берег
-	await _walk_to(580.0)  # к двери: ключ открывает её
+	await _walk_to(900.0)  # к двери: ключ открывает её
 
 
 func _solve_08() -> void:

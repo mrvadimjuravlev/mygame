@@ -163,28 +163,29 @@ func _level_06() -> void:
 
 
 func _level_07() -> void:
-	_begin(7, "Ключ", 640, "", ["Дверь заперта, а к ней не перепрыгнуть.", "Каменная плита в полу опускает камень с ключом над пропастью.", "Встань на плиту, запрыгни на опустившийся камень, возьми ключ и прыгай к двери."])
+	_begin(7, "Ключ", 960, "", ["Дверь заперта, а к ней не перепрыгнуть.", "Каменная плита в полу опускает камень с ключом над пропастью.", "Встань на плиту, запрыгни на опустившийся камень, возьми ключ и прыгай к двери."])
 	_root.restart_on_fall = true
-	_back(640)
-	_box(0, 280, 240, 360)       # пол слева
-	_box(400, 280, 640, 360)     # пол справа
-	_box(0, 0, 640, 60)          # потолок
+	_back(960)
+	# Герой начинает у пропасти; плита — слева за краем экрана, её не видно сразу.
+	_box(0, 280, 560, 360)       # пол слева
+	_box(720, 280, 960, 360)     # пол справа
+	_box(0, 0, 960, 60)          # потолок
 	_box(0, 0, 16, 360)
-	_box(624, 0, 640, 360)
+	_box(944, 0, 960, 360)
 	# Камень с ключом висит высоко над пропастью и опускается по кнопке.
-	var platform := _door("Platform", Vector2(320, 137), Vector2(60, 14), Vector2(0, 140))
+	var platform := _door("Platform", Vector2(640, 137), Vector2(60, 14), Vector2(0, 140))
 	var key := Area2D.new()
 	key.name = "Key"
 	key.set_script(load("res://scripts/key_item.gd"))
 	key.position = Vector2(0, -7)
 	platform.add_child(key)
 	key.owner = _root
-	var button := _lever("Button", Vector2(150, 280), [platform])
+	var button := _lever("Button", Vector2(100, 280), [platform])
 	button.style = "button"
-	var exit := _exit(580, 280)
+	var exit := _exit(900, 280)
 	exit.needs_key = true
-	_decor([[90, 200], [560, 200]], [[180, 90, 3, ["eye", "wave", "bird", "ankh", "sun", "reed"]], [420, 90, 2, ["reed", "eye", "ankh", "bird"]]], true)
-	_hero(60, 280)
+	_decor([[140, 200], [410, 200], [880, 200]], [[500, 90, 3, ["eye", "wave", "bird", "ankh", "sun", "reed"]], [740, 90, 2, ["reed", "eye", "ankh", "bird"]], [200, 90, 2, ["sun", "eye", "reed", "ankh"]]], true)
+	_hero(480, 280)
 	_save(7)
 
 

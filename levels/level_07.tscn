@@ -16,7 +16,7 @@ level_number = 7
 slogan = "Ключ"
 hints = PackedStringArray("Дверь заперта, а к ней не перепрыгнуть.", "Каменная плита в полу опускает камень с ключом над пропастью.", "Встань на плиту, запрыгни на опустившийся камень, возьми ключ и прыгай к двери.")
 tutorial_button = ""
-level_width = 640.0
+level_width = 960.0
 level_height = 360.0
 fall_limit = 420.0
 restart_on_fall = true
@@ -27,31 +27,31 @@ theme = "pyramid"
 
 [node name="Back" type="Polygon2D" parent="."]
 color = Color(0.164706, 0.121569, 0.0901961, 1)
-polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
 script = ExtResource("2_n3g6k")
-polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
+polygon = PackedVector2Array(0, 280, 560, 280, 560, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
-polygon = PackedVector2Array(0, 280, 240, 280, 240, 360, 0, 360)
+polygon = PackedVector2Array(0, 280, 560, 280, 560, 360, 0, 360)
 
 [node name="Solid2" type="StaticBody2D" parent="."]
 script = ExtResource("2_n3g6k")
-polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+polygon = PackedVector2Array(720, 280, 960, 280, 960, 360, 720, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
-polygon = PackedVector2Array(400, 280, 640, 280, 640, 360, 400, 360)
+polygon = PackedVector2Array(720, 280, 960, 280, 960, 360, 720, 360)
 
 [node name="Solid3" type="StaticBody2D" parent="."]
 script = ExtResource("2_n3g6k")
-polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
-polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+polygon = PackedVector2Array(0, 0, 960, 0, 960, 60, 0, 60)
 
 [node name="Solid4" type="StaticBody2D" parent="."]
 script = ExtResource("2_n3g6k")
@@ -63,14 +63,14 @@ polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 
 [node name="Solid5" type="StaticBody2D" parent="."]
 script = ExtResource("2_n3g6k")
-polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+polygon = PackedVector2Array(944, 0, 960, 0, 960, 360, 944, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
-polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+polygon = PackedVector2Array(944, 0, 960, 0, 960, 360, 944, 360)
 
 [node name="Platform" type="AnimatableBody2D" parent="."]
-position = Vector2(320, 137)
+position = Vector2(640, 137)
 script = ExtResource("3_3fhmt")
 size = Vector2(60, 14)
 open_offset = Vector2(0, 140)
@@ -80,7 +80,7 @@ position = Vector2(0, -7)
 script = ExtResource("4_sdpx6")
 
 [node name="Button" type="Area2D" parent="."]
-position = Vector2(150, 280)
+position = Vector2(100, 280)
 script = ExtResource("5_l7406")
 targets = Array[NodePath]([NodePath("../Platform")])
 effect = &"activate"
@@ -88,34 +88,45 @@ one_shot = true
 style = "button"
 
 [node name="Exit" type="Area2D" parent="."]
-position = Vector2(580, 280)
+position = Vector2(900, 280)
 script = ExtResource("6_cu71l")
 start_open = false
 needs_key = true
 upside_down = false
 
-[node name="Torch90_200" type="Area2D" parent="."]
-position = Vector2(90, 200)
+[node name="Torch140_200" type="Area2D" parent="."]
+position = Vector2(140, 200)
 script = ExtResource("7_oa3qe")
 start_lit = true
 
-[node name="Torch560_200" type="Area2D" parent="."]
-position = Vector2(560, 200)
+[node name="Torch410_200" type="Area2D" parent="."]
+position = Vector2(410, 200)
+script = ExtResource("7_oa3qe")
+start_lit = true
+
+[node name="Torch880_200" type="Area2D" parent="."]
+position = Vector2(880, 200)
 script = ExtResource("7_oa3qe")
 start_lit = true
 
 [node name="Glyphs1" type="Node2D" parent="."]
-position = Vector2(180, 90)
+position = Vector2(500, 90)
 script = ExtResource("8_6bbtb")
 columns = 3
 signs = PackedStringArray("eye", "wave", "bird", "ankh", "sun", "reed")
 
 [node name="Glyphs2" type="Node2D" parent="."]
-position = Vector2(420, 90)
+position = Vector2(740, 90)
 script = ExtResource("8_6bbtb")
 columns = 2
 signs = PackedStringArray("reed", "eye", "ankh", "bird")
 
+[node name="Glyphs3" type="Node2D" parent="."]
+position = Vector2(200, 90)
+script = ExtResource("8_6bbtb")
+columns = 2
+signs = PackedStringArray("sun", "eye", "reed", "ankh")
+
 [node name="Hero" type="CharacterBody2D" parent="."]
-position = Vector2(60, 280)
+position = Vector2(480, 280)
 script = ExtResource("9_vvbqj")
