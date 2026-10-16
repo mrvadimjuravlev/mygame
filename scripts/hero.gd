@@ -103,10 +103,10 @@ func _physics_process(delta: float) -> void:
 	var dir := Input.get_axis("move_left", "move_right")
 	var ladder := _find_ladder()
 	# За лестницу хватается ниже её верха: стоя наверху, ▲ — обычный прыжок.
-	if not climbing and ladder and ((Input.is_action_pressed("jump") and global_position.y > ladder.global_position.y + 4.0) or (Input.is_action_pressed("action") and not is_on_floor())):
+	if not climbing and ladder and ((Input.is_action_pressed("jump") and global_position.y > ladder.global_position.y + 4.0) or (_down_pressed() and not is_on_floor())):
 		climbing = true
 		_ladder = ladder
-	elif not climbing and is_on_floor() and Input.is_action_just_pressed("action"):
+	elif not climbing and is_on_floor() and (Input.is_action_just_pressed("action") or Input.is_action_just_pressed("move_down")):
 		# Стоит у верха лестницы над пустотой: спускается на неё.
 		var below := _ladder_below()
 		if below:
@@ -156,13 +156,18 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 
 
+## Вниз по лестнице: кнопка действия на экране, на клавиатуре ещё стрелка вниз или S.
+func _down_pressed() -> bool:
+	return Input.is_action_pressed("action") or Input.is_action_pressed("move_down")
+
+
 func _climb() -> void:
 	velocity.x = 0.0
 	global_position.x = _ladder.global_position.x
 	velocity.y = 0.0
 	if Input.is_action_pressed("jump"):
 		velocity.y = -CLIMB_SPEED
-	elif Input.is_action_pressed("action"):
+	elif _down_pressed():
 		velocity.y = CLIMB_SPEED
 	# Долез до верха: выбирается на площадку рядом, а не висит над лестницей.
 	if velocity.y < 0.0 and global_position.y <= _ladder.global_position.y + 1.0:

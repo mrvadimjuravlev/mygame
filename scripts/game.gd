@@ -63,6 +63,8 @@ func _ready() -> void:
 	_add_action("move_right", [KEY_RIGHT, KEY_D])
 	_add_action("jump", [KEY_SPACE, KEY_UP, KEY_W])
 	_add_action("action", [KEY_E, KEY_ENTER])
+	# На клавиатуре вниз по лестнице — стрелкой вниз или S (на экране это та же кнопка действия).
+	_add_action("move_down", [KEY_DOWN, KEY_S])
 	# По умолчанию язык системы: русский для русской системы, иначе английский.
 	lang = "ru" if OS.get_locale_language() == "ru" else "en"
 	_load()
