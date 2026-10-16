@@ -11,7 +11,7 @@
 [node name="Level20" type="Node2D"]
 script = ExtResource("1_2y7dt")
 level_number = 20
-slogan = "Мост из тени"
+slogan = "Нужен другой мост"
 hints = PackedStringArray("По свету над пропастью не пройти, а по тени можно.", "Факел под потолком ездит по рейке: перетащи его пальцем.", "Поставь факел прямо над балкой: её тень ляжет мостом через пропасть.")
 tutorial_button = ""
 level_width = 640.0

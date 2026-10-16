@@ -122,7 +122,7 @@ const EN := {
 	"Поднимись по платформам к двери, там иди вправо сквозь стену. Цвета сосудов — порядок цифр: зелёная, красная, жёлтая, синяя.": "Climb the platforms to the door, then walk right through the wall. The colors of the vessels give the order: green, red, yellow, blue.",
 	# Уровни 19–22
 	"Держи мост": "Hold the Bridge",
-	"Мост из тени": "Bridge of Shadow",
+	"Нужен другой мост": "Another Bridge Needed",
 	"Поверни зал": "Turn the Hall",
 	"Перелёт": "Flight",
 	"Мост поднят. Его опускает ворот на той стороне.": "The bridge is raised. A winch on the other side lowers it.",
