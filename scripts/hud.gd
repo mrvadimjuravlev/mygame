@@ -12,6 +12,8 @@ const ACTIONS := {"left": "move_left", "right": "move_right", "action": "action"
 const HINT_BUTTON := Rect2(598, 8, 34, 34)
 const MENU_BUTTON := Rect2(8, 8, 34, 34)
 const INVENTORY_SLOTS := 3
+## Сколько секунд подсказка видна на экране после нажатия «?».
+const HINT_SHOW_TIME := 8.0
 
 var level: Node
 
@@ -19,6 +21,8 @@ var _finger_button := {}  # индекс пальца -> имя кнопки
 var _finger_hand := {}    # индекс пальца -> {rune, last}
 var _hint_index := -1
 var _waiting_ad := false
+## Сколько ещё секунд видна подсказка.
+var _hint_left := 0.0
 var _time := 0.0
 var _tutorial := ""
 var _pad: Node2D
@@ -53,14 +57,17 @@ func _ready() -> void:
 	_hint_label.add_theme_font_size_override("font_size", 13)
 	_hint_label.add_theme_color_override("font_color", Color("cfefff"))
 	add_child(_hint_label)
-	# Подсказки, открытые раньше (до рестарта уровня), не нужно открывать заново.
-	var opened: int = mini(Game.hints_opened.get(level.scene_file_path, 0), level.hints.size())
-	if opened > 0:
-		_show_hint(opened - 1)
+	# Открытые раньше подсказки при старте не показываем: их можно бесплатно посмотреть снова по «?».
 
 
 func _process(delta: float) -> void:
 	_time += delta
+	# Подсказка висит HINT_SHOW_TIME секунд, последнюю секунду гаснет.
+	if _hint_left > 0.0:
+		_hint_left -= delta
+		_hint_label.modulate.a = clampf(_hint_left, 0.0, 1.0)
+		if _hint_left <= 0.0:
+			_hint_label.text = ""
 	if _tutorial != "" and Input.is_action_just_pressed(ACTIONS[_tutorial]):
 		_tutorial = ""
 	_pad.queue_redraw()
@@ -172,6 +179,8 @@ func _on_hint_reward(index: int) -> void:
 func _show_hint(index: int) -> void:
 	_hint_index = index
 	_hint_label.text = Game.t("Подсказка %d: %s") % [index + 1, Game.t(level.hints[index])]
+	_hint_left = HINT_SHOW_TIME
+	_hint_label.modulate.a = 1.0
 
 
 ## Следующая подсказка будет за рекламу: на кнопке «?» значок ролика.
