@@ -7,6 +7,8 @@ const SPEED := 110.0
 const JUMP_VELOCITY := -330.0
 const GRAVITY := 900.0
 const CLIMB_SPEED := 80.0
+## С какого расстояния от верха лестницы (по горизонтали) можно спуститься по ней кнопкой действия.
+const LADDER_REACH := 40.0
 
 var fall_limit := 420.0
 ## Если true, падение в пропасть — гибель: уровень начинается заново.
@@ -201,7 +203,8 @@ func _ladder_below() -> Node:
 func _find_ladder_below() -> Node:
 	for node in get_tree().get_nodes_in_group("ladder"):
 		var top: float = node.global_position.y
-		if absf(global_position.y - top) < 6.0 and absf(global_position.x - node.global_position.x) < 22.0 \
+		# Ловим лестницу с запасом: игрок редко встаёт вплотную к краю площадки.
+		if absf(global_position.y - top) < 6.0 and absf(global_position.x - node.global_position.x) < LADDER_REACH \
 				and not _solid_at(Vector2(node.global_position.x, top + 3.0)):
 			return node
 	return null
