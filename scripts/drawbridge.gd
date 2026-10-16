@@ -31,6 +31,10 @@ var held := false
 var _crank_angle := 0.0
 var _body: StaticBody2D
 var _shape: CollisionShape2D
+## Мост и ворот перерисовываются, только когда двигаются: перерисовка цепей каждый кадр
+## заметно тормозила слабые видеокарты. Мигающее кольцо — отдельный лёгкий узел.
+var _drawn := Vector2(-1, -1)
+var _glow: Node2D
 
 
 func _ready() -> void:
@@ -46,6 +50,11 @@ func _ready() -> void:
 	_shape.disabled = true
 	_body.add_child(_shape)
 	add_child(_body)
+	_glow = Node2D.new()
+	_glow.draw.connect(func() -> void:
+		var glow := 0.45 + 0.3 * sin(Time.get_ticks_msec() / 300.0)
+		_glow.draw_arc(winch, WHEEL_RADIUS + 4.0, 0.0, TAU, 28, Color(RUNE_COLOR, 0.9 if held else glow), 1.0))
+	add_child(_glow)
 
 
 func contains_world_point(point: Vector2) -> bool:
@@ -82,7 +91,11 @@ func _physics_process(delta: float) -> void:
 		_crank_angle -= RISE_SPEED * delta * CRANK / WHEEL_RADIUS
 	# По мосту можно идти, только когда он лёг целиком.
 	_shape.disabled = lowered < 0.97
-	queue_redraw()
+	var state := Vector2(lowered, _crank_angle)
+	if state != _drawn:
+		_drawn = state
+		queue_redraw()
+	_glow.queue_redraw()
 
 
 func _tip() -> Vector2:
@@ -118,9 +131,6 @@ func _draw() -> void:
 	draw_circle(winch, 3.0, Color("3a2616"))
 	var handle := winch + Vector2.RIGHT.rotated(_crank_angle) * (WHEEL_RADIUS - 3.0)
 	draw_circle(handle, 3.0, Color("b08a57"))
-	if not Engine.is_editor_hint():
-		var glow := 0.45 + 0.3 * sin(Time.get_ticks_msec() / 300.0)
-		draw_arc(winch, WHEEL_RADIUS + 4.0, 0.0, TAU, 28, Color(RUNE_COLOR, 0.9 if held else glow), 1.0)
 
 
 func _chain(from: Vector2, to: Vector2) -> void:
@@ -129,6 +139,7 @@ func _chain(from: Vector2, to: Vector2) -> void:
 	for i in n:
 		var p := from + d * (float(i) / maxf(n, 1))
 		if i % 2 == 0:
-			draw_circle(p, 1.5, Color("5e5a55"))
+			# Звено — квадратик, а не круг: кругов в цепи сотня, и они дорого рисуются.
+			draw_rect(Rect2(p - Vector2(1.5, 1.5), Vector2(3, 3)), Color("5e5a55"))
 		else:
 			draw_line(p, p + d.normalized() * 4.0, Color("4a4642"), 1.0)

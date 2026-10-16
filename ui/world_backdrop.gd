@@ -22,6 +22,10 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	# Рельефы пирамиды неподвижны — рисуем их один раз: перерисовка каждый кадр
+	# тормозила листание уровней. В других локациях есть движение, там перерисовываем.
+	if theme_id == "pyramid":
+		return
 	_time += delta
 	queue_redraw()
 

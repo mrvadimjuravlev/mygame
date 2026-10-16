@@ -22,9 +22,18 @@ var _time := 0.0
 
 
 func _process(delta: float) -> void:
-	if (kind == "weed" or kind == "web" or kind == "roots") and not Engine.is_editor_hint():
-		_time += delta
-		queue_redraw()
+	# Водоросли, паутина и корни покачиваются поворотом всего узла, без перерисовки:
+	# перерисовка линий каждый кадр заметно тормозила слабые видеокарты.
+	if Engine.is_editor_hint():
+		return
+	_time += delta
+	match kind:
+		"weed":
+			rotation = sin(_time * 1.5) * 0.06
+		"web":
+			rotation = sin(_time * 0.8) * 0.006
+		"roots":
+			rotation = sin(_time * 1.0) * 0.025
 
 
 func _draw() -> void:
