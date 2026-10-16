@@ -480,7 +480,7 @@ func _level_17() -> void:
 		node.color = Color(d[1])
 		node.dust = 0.75
 	var up := _add("PortalUp", Area2D.new(), "portal.gd", Vector2(275, 116))
-	up.destination = Vector2(750, 280)
+	up.destination = Vector2(690, 280)  # выходит из проёма второго портала
 	up.room_left = 640
 	up.room_right = 1280
 	_decor([[240, 200], [520, 110]], [[470, 70, 3, ["eye", "ankh", "sun"]]], true)
@@ -496,7 +496,7 @@ func _level_17() -> void:
 	_box(656, 160, 1060, 220)    # над нишей и проходом
 	_box(760, 220, 1060, 250)    # потолок узкого прохода
 	var back := _add("PortalBack", Area2D.new(), "portal.gd", Vector2(690, 280))
-	back.destination = Vector2(345, 116)
+	back.destination = Vector2(275, 116)  # и обратно — из проёма первого
 	back.room_left = 0
 	back.room_right = 640
 	back.color = Color("5fd3ff")
