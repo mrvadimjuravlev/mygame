@@ -96,19 +96,19 @@ polygon = PackedVector2Array(400, 128, 480, 128, 480, 140, 400, 140)
 
 [node name="Solid9" type="StaticBody2D" parent="."]
 script = ExtResource("2_ry8or")
-polygon = PackedVector2Array(760, 212, 840, 212, 840, 224, 760, 224)
+polygon = PackedVector2Array(760, 228, 840, 228, 840, 240, 760, 240)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid9"]
-polygon = PackedVector2Array(760, 212, 840, 212, 840, 224, 760, 224)
+polygon = PackedVector2Array(760, 228, 840, 228, 840, 240, 760, 240)
 
 [node name="Solid10" type="StaticBody2D" parent="."]
 script = ExtResource("2_ry8or")
-polygon = PackedVector2Array(900, 164, 980, 164, 980, 176, 900, 176)
+polygon = PackedVector2Array(900, 180, 980, 180, 980, 192, 900, 192)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
 [node name="Shape" type="CollisionPolygon2D" parent="Solid10"]
-polygon = PackedVector2Array(900, 164, 980, 164, 980, 176, 900, 176)
+polygon = PackedVector2Array(900, 180, 980, 180, 980, 192, 900, 192)
 
 [node name="Solid11" type="StaticBody2D" parent="."]
 script = ExtResource("2_ry8or")
