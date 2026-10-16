@@ -9,6 +9,101 @@ const MORTAR := Color("5a4129")
 static var _bricks: ImageTexture
 static var _back: ImageTexture
 static var _plaster: ImageTexture
+static var _blocks: ImageTexture
+static var _back_blocks: ImageTexture
+
+## Ряды кладки из больших блоков (128x128, бесшовно): длины блоков в ряду (в сумме 128) и сдвиг ряда.
+const BLOCK_ROWS := [[[64, 64], 0], [[40, 88], 24], [[56, 72], 52], [[48, 80], 88]]
+const BLOCK_H := 32
+
+
+## Локация, к которой относится узел: по корню сцены уровня (у него есть theme). Вне уровня — пирамида.
+static func theme_of(node: Node) -> String:
+	var root: Node = node.owner
+	if root == null and node.is_inside_tree():
+		root = node.get_tree().current_scene
+	if root and root is Node2D and "theme" in root:
+		return str(root.theme)
+	return "pyramid"
+
+
+## Камень стен и пола для узла: в пирамиде — большие тёсаные блоки, в других локациях — старая штукатурка.
+static func wall_texture(node: Node) -> Texture2D:
+	return blocks() if theme_of(node) == "pyramid" else plaster()
+
+
+## Стена в глубине для узла: в пирамиде — крупные тёмные блоки, в других локациях — прежняя кладка.
+static func back_texture(node: Node) -> Texture2D:
+	return back_blocks() if theme_of(node) == "pyramid" else back_wall()
+
+
+## Большие тёсаные блоки песчаника для стен, пола и платформ пирамиды (128x128, бесшовно).
+static func blocks() -> ImageTexture:
+	if not _blocks:
+		_blocks = _make_blocks(31, [Color("c39c67"), Color("b8915f"), Color("cca46d"), Color("b38a58"), Color("c8a16a")], Color("4f3a24"), 0.13, true)
+	return _blocks
+
+
+## Те же большие блоки, но тёмные и неконтрастные — стена в глубине зала пирамиды (128x128).
+static func back_blocks() -> ImageTexture:
+	if not _back_blocks:
+		_back_blocks = _make_blocks(37, [Color("261b13"), Color("221811"), Color("2a1e15"), Color("1f160f")], Color("120c08"), 0.06, false)
+	return _back_blocks
+
+
+static func _make_blocks(seed: int, tones: Array, joint: Color, contrast: float, chips: bool) -> ImageTexture:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed
+	var noise := FastNoiseLite.new()
+	noise.seed = seed
+	noise.frequency = 0.06
+	noise.fractal_octaves = 3
+	var grain := noise.get_seamless_image(128, 128)
+	var img := Image.create(128, 128, false, Image.FORMAT_RGBA8)
+	img.fill(joint)
+	for row in BLOCK_ROWS.size():
+		var widths: Array = BLOCK_ROWS[row][0]
+		var x0: int = BLOCK_ROWS[row][1]
+		var y0 := row * BLOCK_H
+		for w: int in widths:
+			var base: Color = tones[rng.randi() % tones.size()]
+			for y in range(1, BLOCK_H):
+				for x in range(1, w):
+					var px := posmod(x0 + x, 128)
+					var py := y0 + y
+					# Зерно камня: 4 ступени яркости — пиксельная фактура, а не размытый шум.
+					var g := grain.get_pixel(px, py).r
+					var c := base.lightened(contrast * 0.6) if g > 0.62 else (base.darkened(contrast * 0.5) if g < 0.38 else base)
+					if y == 1:
+						c = base.lightened(contrast * 1.4)   # верх блока на свету
+					elif y == 2:
+						c = c.lightened(contrast * 0.5)
+					elif y == BLOCK_H - 1:
+						c = base.darkened(contrast * 2.0)    # низ в тени
+					elif x == 1:
+						c = c.lightened(contrast * 0.7)
+					elif x == w - 1:
+						c = c.darkened(contrast * 1.3)
+					var n := rng.randf()
+					if n < 0.025:
+						c = c.darkened(contrast * 2.2)       # поры
+					img.set_pixel(px, py, c)
+			if chips:
+				# Скол угла или трещина — у каждого третьего блока.
+				var roll := rng.randf()
+				if roll < 0.18:
+					var cx := 1 if rng.randf() < 0.5 else w - 4
+					var cy := 1 if rng.randf() < 0.5 else BLOCK_H - 4
+					for k in 3:
+						for m in 3 - k:
+							img.set_pixel(posmod(x0 + cx + (m if cx == 1 else 2 - m), 128), y0 + cy + (k if cy == 1 else 2 - k), joint.lightened(0.15))
+				elif roll < 0.33:
+					var tx := rng.randi_range(6, w - 8)
+					var ty := rng.randi_range(4, BLOCK_H - 12)
+					for k in rng.randi_range(5, 9):
+						img.set_pixel(posmod(x0 + tx + (k + rng.randi_range(0, 1)) / 2, 128), y0 + ty + k, base.darkened(contrast * 3.0))
+			x0 += w
+	return ImageTexture.create_from_image(img)
 
 
 ## Кладка из песчаника для стен, пола и платформ (64x32, бесшовно).

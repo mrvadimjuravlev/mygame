@@ -19,7 +19,7 @@ var _dir := 1
 func _ready() -> void:
 	var back := get_node_or_null("Back") as Polygon2D
 	if back:
-		back.texture = Art.back_wall()
+		back.texture = Art.back_texture(self)
 		back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 
 

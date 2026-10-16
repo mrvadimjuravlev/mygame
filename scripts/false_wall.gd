@@ -74,8 +74,9 @@ func _draw() -> void:
 	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	# Тот же камень, что у соседних стен, текстура совпадает — подмену не видно.
 	var poly := PackedVector2Array([Vector2.ZERO, Vector2(size.x, 0), size, Vector2(0, size.y)])
-	Art.draw_textured(self, poly, Art.plaster(), Color(1, 1, 1, _alpha))
-	Art.draw_crumbled(self, poly, 99, _alpha)
+	Art.draw_textured(self, poly, Art.wall_texture(self), Color(1, 1, 1, _alpha))
+	if Art.theme_of(self) != "pyramid":
+		Art.draw_crumbled(self, poly, 99, _alpha)
 	var crack := Color(0.25, 0.18, 0.1, 0.6 * _alpha)
 	var c := crack_at
 	draw_polyline(PackedVector2Array([c + Vector2(0, -8), c + Vector2(2, -3), c + Vector2(-1, 2), c + Vector2(1, 8)]), crack, 1.0)

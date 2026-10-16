@@ -26,6 +26,6 @@ func _ready() -> void:
 
 func _draw() -> void:
 	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
-	Art.draw_textured(self, PackedVector2Array([Vector2.ZERO, Vector2(size.x, 0), size, Vector2(0, size.y)]), Art.plaster())
+	Art.draw_textured(self, PackedVector2Array([Vector2.ZERO, Vector2(size.x, 0), size, Vector2(0, size.y)]), Art.wall_texture(self))
 	draw_line(Vector2(0, 0.5), Vector2(size.x, 0.5), Art.SAND_LIGHT, 1.0)
 	draw_line(Vector2(0, 1.5), Vector2(size.x, 1.5), Art.SAND, 1.0)

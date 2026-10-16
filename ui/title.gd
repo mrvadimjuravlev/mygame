@@ -8,15 +8,14 @@ const Style := preload("res://ui/style.gd")
 func _ready() -> void:
 	var back := Polygon2D.new()
 	back.polygon = PackedVector2Array([Vector2(0, 0), Vector2(640, 0), Vector2(640, 360), Vector2(0, 360)])
-	back.texture = Art.back_wall()
+	back.texture = Art.back_blocks()
 	back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	add_child(back)
 	var floor := Node2D.new()
 	floor.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	floor.draw.connect(func() -> void:
 		var poly := PackedVector2Array([Vector2(0, 300), Vector2(640, 300), Vector2(640, 360), Vector2(0, 360)])
-		Art.draw_textured(floor, poly, Art.plaster())
-		Art.draw_crumbled(floor, poly, 4)
+		Art.draw_textured(floor, poly, Art.blocks())
 		floor.draw_rect(Rect2(0, 300, 640, 2), Color(1, 0.9, 0.7, 0.25)))
 	add_child(floor)
 	for i in 2:

@@ -42,7 +42,7 @@ func stone_landed(stone: Node2D, speed: float) -> void:
 
 func _draw() -> void:
 	var poly := PackedVector2Array([Vector2(-size.x / 2, 0), Vector2(size.x / 2, 0), Vector2(size.x / 2, size.y), Vector2(-size.x / 2, size.y)])
-	Art.draw_textured(self, poly, Art.plaster())
+	Art.draw_textured(self, poly, Art.wall_texture(self))
 	# Кромка как у пола: песок на верхней грани.
 	draw_line(Vector2(-size.x / 2, 0.5), Vector2(size.x / 2, 0.5), Art.SAND_LIGHT, 1.0)
 	draw_line(Vector2(-size.x / 2, 1.5), Vector2(size.x / 2, 1.5), Art.SAND, 1.0)

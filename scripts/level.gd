@@ -51,13 +51,13 @@ func _ready() -> void:
 	hero.add_child(cam)
 	var back := get_node_or_null("Back") as Polygon2D
 	if back:
-		back.texture = Art.back_wall()
+		back.texture = _back_texture()
 		back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 		back.color = Color.WHITE
 	# Фон другой комнаты: та же кладка, свой оттенок (цвет задан в сцене).
 	var back2 := get_node_or_null("Back2") as Polygon2D
 	if back2:
-		back2.texture = Art.back_wall()
+		back2.texture = _back_texture()
 		back2.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	if dark:
 		var mod := CanvasModulate.new()
@@ -75,6 +75,11 @@ func _ready() -> void:
 	var hud := preload("res://scripts/hud.gd").new()
 	hud.level = self
 	add_child(hud)
+
+
+## Стена в глубине: в пирамиде — крупные тёмные блоки, в других локациях — прежняя кладка.
+func _back_texture() -> Texture2D:
+	return Art.back_blocks() if theme == "pyramid" else Art.back_wall()
 
 
 func _add_dust() -> void:

@@ -99,13 +99,16 @@ func _draw() -> void:
 	var seed: int = hash(shape.polygon) if shape else hash(polygon)
 	if base.size() < 3:
 		return
-	Art.draw_textured(self, base, Art.plaster(), Color.WHITE, -offset)
-	# Пятна не заходят под ложную стену: иначе на её краю пятно обрежется и выдаст тайник.
-	var avoid := []
-	if not Engine.is_editor_hint():
-		for wall in get_tree().get_nodes_in_group("false_wall"):
-			avoid.append(Rect2(wall.global_position, wall.size))
-	Art.draw_crumbled(self, base, seed, 1.0, avoid, -offset)
+	var pyramid := Art.theme_of(self) == "pyramid"
+	Art.draw_textured(self, base, Art.wall_texture(self), Color.WHITE, -offset)
+	# В пирамиде — цельные большие блоки. В других локациях штукатурка местами осыпалась до кладки.
+	if not pyramid:
+		# Пятна не заходят под ложную стену: иначе на её краю пятно обрежется и выдаст тайник.
+		var avoid := []
+		if not Engine.is_editor_hint():
+			for wall in get_tree().get_nodes_in_group("false_wall"):
+				avoid.append(Rect2(wall.global_position, wall.size))
+		Art.draw_crumbled(self, base, seed, 1.0, avoid, -offset)
 	var area := 0.0
 	for i in base.size():
 		var a := base[i]
