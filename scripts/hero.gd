@@ -210,6 +210,14 @@ func _find_ladder_below() -> Node:
 	return null
 
 
+## Кнопка действия сейчас означает «вниз по лестнице»: герой на лестнице или стоит у её верха.
+## HUD рисует на кнопке стрелку вниз вместо кружка.
+func action_is_down() -> bool:
+	if _dead or carried or frozen:
+		return false
+	return climbing or (is_on_floor() and _find_ladder_below() != null)
+
+
 ## Есть ли сейчас к чему применить кнопку действия: по этому HUD зажигает кнопку.
 func can_act() -> bool:
 	if _dead or carried or frozen:

@@ -205,7 +205,8 @@ func _draw_pad() -> void:
 			var glow := 0.5 + 0.5 * sin(_time * 5.0)
 			_pad.draw_rect(r, Color(1, 0.85, 0.45, (0.4 if held else 0.22) + 0.06 * glow))
 			_pad.draw_rect(r, Color(1, 0.9, 0.55, 0.7 + 0.3 * glow), false, 2.0)
-			_draw_icon(name, r.get_center(), Color(1, 0.97, 0.85, 1.0))
+			# На лестнице и у её верха кнопка значит «вниз» — так и рисуем.
+			_draw_icon("down" if hero.action_is_down() else name, r.get_center(), Color(1, 0.97, 0.85, 1.0))
 		else:
 			_pad.draw_rect(r, Color(1, 1, 1, 0.28 if held else 0.12))
 			_pad.draw_rect(r, Color(1, 1, 1, 0.35), false, 1.0)
@@ -254,6 +255,9 @@ func _draw_icon(name: String, c: Vector2, color: Color) -> void:
 			_pad.draw_colored_polygon(PackedVector2Array([c + Vector2(10, 0), c + Vector2(-8, -11), c + Vector2(-8, 11)]), color)
 		"jump":
 			_pad.draw_colored_polygon(PackedVector2Array([c + Vector2(0, -10), c + Vector2(11, 8), c + Vector2(-11, 8)]), color)
+		"down":
+			# Вниз по лестнице: перевёрнутый треугольник, как у прыжка.
+			_pad.draw_colored_polygon(PackedVector2Array([c + Vector2(0, 10), c + Vector2(11, -8), c + Vector2(-11, -8)]), color)
 		"action":
 			_pad.draw_circle(c, 9.0, color)
 			_pad.draw_circle(c, 5.0, Color(0, 0, 0, 0.4))
