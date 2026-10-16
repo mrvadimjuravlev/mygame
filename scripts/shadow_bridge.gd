@@ -4,7 +4,6 @@ extends Node2D
 ## Тень балки ложится на уровень пола; над пропастью по тени можно ходить, по свету — нет.
 ## Начало координат — левый край пропасти на уровне пола.
 
-const RUNE_COLOR := Color("5fd3ff")
 const Art := preload("res://scripts/art.gd")
 
 ## Ширина пропасти.
@@ -130,6 +129,3 @@ func _draw() -> void:
 	draw_circle(c + Vector2(0, 0), 10.0, Color(1, 0.7, 0.3, 0.15))
 	draw_rect(Rect2(c.x - 3, c.y + 5 - h * 0.6, 6, h * 0.6), Color("ff9a3c"))
 	draw_rect(Rect2(c.x - 1, c.y + 5 - h, 2, h * 0.5), Color("ffe08a"))
-	if not Engine.is_editor_hint():
-		var glow := 0.45 + 0.3 * sin(Time.get_ticks_msec() / 300.0)
-		draw_arc(c + Vector2(0, -2), 14.0, 0.0, TAU, 24, Color(RUNE_COLOR, glow), 1.0)
