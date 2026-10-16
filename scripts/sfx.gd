@@ -9,6 +9,11 @@ var enabled := true
 var _sounds := {}
 var _players: Array[AudioStreamPlayer] = []
 var _next := 0
+var _wind_player: AudioStreamPlayer
+var _wind_ms := -100000
+var _quiet_drag_ms := -100000
+var _wind_target := 0.0
+var _wind_level := 0.0
 
 
 func _ready() -> void:
@@ -31,8 +36,45 @@ func _ready() -> void:
 		"lever": _lever(),
 		"ui": _ui(),
 	}
+	_wind_player = AudioStreamPlayer.new()
+	_wind_player.stream = _wind()
+	_wind_player.volume_db = -80.0
+	add_child(_wind_player)
 	# Game загружается после Sfx, поэтому подписка — на следующем кадре.
-	(func() -> void: Game.hand_used.connect(func(_kind: String) -> void: play("tap"))).call_deferred()
+	(func() -> void: Game.hand_used.connect(func(kind: String) -> void:
+		# Камень, который тянут пальцем, звучит ветром, а не щелчками на каждое движение.
+		if kind == "drag" and Time.get_ticks_msec() - _quiet_drag_ms < 50:
+			return
+		play("tap"))).call_deferred()
+
+
+# --- Ветер при перетаскивании -----------------------------------------------
+
+## Шум ветра, пока камень тянут: вызывается на каждое движение пальца, strength 0..1.
+## Нарастает, пока тянут, и плавно стихает, когда палец остановился (или камень упёрся: strength 0).
+## Такое перетаскивание не щёлкает «тапом».
+func wind(strength := 1.0) -> void:
+	_quiet_drag_ms = Time.get_ticks_msec()
+	if strength <= 0.0:
+		return
+	_wind_ms = Time.get_ticks_msec()
+	_wind_target = maxf(_wind_target, clampf(strength, 0.25, 1.0))
+	if enabled and not _wind_player.playing:
+		_wind_player.play(randf() * 2.0)
+
+
+func _process(delta: float) -> void:
+	var active := Time.get_ticks_msec() - _wind_ms < 150
+	var target := _wind_target if active and enabled else 0.0
+	# Быстро нарастает, медленно стихает.
+	_wind_level = move_toward(_wind_level, target, delta * (4.0 if target > _wind_level else 1.6))
+	if not active:
+		_wind_target = 0.0
+	if _wind_player.playing:
+		_wind_player.volume_db = linear_to_db(maxf(_wind_level, 0.0001)) - 4.0
+		_wind_player.pitch_scale = 0.85 + 0.3 * _wind_level
+		if _wind_level <= 0.001 and not active:
+			_wind_player.stop()
 
 
 func play(sound: String, volume_db := 0.0, pitch := 1.0) -> void:
@@ -169,6 +211,40 @@ func _potion() -> AudioStreamWAV:
 
 func _lever() -> AudioStreamWAV:
 	return _wav(_mix(_noise(0.12, 0.4, 30.0, 0.5, 19), _tone(0.1, 180.0, 120.0, 1, 30.0, 0.15)))
+
+
+func _wind() -> AudioStreamWAV:
+	# Ветер: шум в полосе (глухой минус совсем низкий) с медленными порывами.
+	# Кольцо 4 секунды: порывы укладываются целым числом раз, край склеен плавным переходом.
+	var seconds := 4.0
+	var n := int(seconds * RATE)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 23
+	var raw := PackedFloat32Array()
+	raw.resize(n)
+	var lo := 0.0
+	var lo2 := 0.0
+	for i in n:
+		var w := rng.randf_range(-1.0, 1.0)
+		lo += 0.06 * (w - lo)
+		lo2 += 0.008 * (w - lo2)
+		var t := float(i) / n
+		var gust := 0.6 + 0.25 * sin(TAU * t * 2.0) + 0.15 * sin(TAU * t * 5.0 + 1.3)
+		raw[i] = (lo - lo2) * gust * 3.2
+	var fade := int(0.3 * RATE)
+	var out := PackedFloat32Array()
+	out.resize(n - fade)
+	for i in n - fade:
+		out[i] = raw[i]
+	# Конец кольца плавно перетекает в начало — без щелчка при повторе.
+	for i in fade:
+		var k := float(i) / fade
+		out[i] = raw[i] * k + raw[n - fade + i] * (1.0 - k)
+	var wav := _wav(out)
+	wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	wav.loop_begin = 0
+	wav.loop_end = out.size()
+	return wav
 
 
 func _ui() -> AudioStreamWAV:

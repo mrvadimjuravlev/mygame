@@ -61,10 +61,13 @@ func hand_drag(world_delta: Vector2) -> void:
 	if mode != Mode.DRAG:
 		return
 	var axis := drag_axis.normalized()
+	var before := _along
 	_along = clampf(_along + world_delta.dot(axis), drag_min, drag_max)
 	if not used and is_equal_approx(_along, drag_max):
 		used = true
 		Game.fire(self, targets, effect)
+	# Камень едет — шумит ветер, тем сильнее, чем быстрее тянут. Упёрся в край — тихо.
+	Sfx.wind(absf(_along - before) / 6.0)
 	Game.hand_used.emit("drag")
 
 
