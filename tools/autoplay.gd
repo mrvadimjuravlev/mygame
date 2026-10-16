@@ -263,20 +263,21 @@ func _solve_05() -> void:
 
 
 func _solve_06() -> void:
-	await _drag(Vector2(150, 260), Vector2(470, 260), 30)
+	# Камень — вплотную слева к площадке с рычагом.
+	await _drag(Vector2(150, 260), Vector2(410, 260), 30)
 	await _frames(10)
 	Input.action_press("move_right")
 	await _until(func() -> bool:
 		var p := _hero().global_position
-		return p.x >= 458 and p.y <= 241 and _hero().is_on_floor(), true)
+		return p.x >= 398 and p.y <= 241 and _hero().is_on_floor(), true)
 	Input.action_release("move_right")
-	await _walk_to(470.0)
-	Input.action_press("jump")
-	await _frames(14)  # вершина прыжка — рядом с рычагом
-	_press("action")
-	Input.action_release("jump")
-	await _frames(60)
-	Input.action_press("move_right")
+	await _walk_to(415.0)
+	await _hop("move_right")  # с камня на площадку
+	print("  на площадке: ", _hero().global_position)
+	await _walk_to(500.0)
+	await _press("action")
+	print("  рычаг: ", current_scene.get_node("Lever").pulled)
+	await _walk_to(590.0)
 
 
 func _solve_07() -> void:

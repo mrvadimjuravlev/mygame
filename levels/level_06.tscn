@@ -13,7 +13,7 @@
 script = ExtResource("1_ga6t5")
 level_number = 6
 slogan = "Вдвоём"
-hints = PackedStringArray("Одному не дотянуться.", "Рука может подготовить герою путь.", "Сдвинь камень к стене под рычагом, запрыгни на него и нажми рычаг.")
+hints = PackedStringArray("Одному не дотянуться.", "Рука может подготовить герою путь.", "Подвинь камень к площадке с рычагом, запрыгни с камня на площадку и нажми рычаг.")
 tutorial_button = ""
 level_width = 640.0
 level_height = 360.0
@@ -60,6 +60,14 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 [node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
 polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
 
+[node name="Ledge" type="StaticBody2D" parent="."]
+script = ExtResource("2_p1pk8")
+polygon = PackedVector2Array(440, 205, 530, 205, 530, 221, 440, 221)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Ledge"]
+polygon = PackedVector2Array(440, 205, 530, 205, 530, 221, 440, 221)
+
 [node name="Block" type="AnimatableBody2D" parent="."]
 position = Vector2(150, 260)
 script = ExtResource("3_n5jjk")
@@ -81,7 +89,7 @@ needs_key = false
 upside_down = false
 
 [node name="Lever" type="Area2D" parent="."]
-position = Vector2(470, 190)
+position = Vector2(500, 205)
 script = ExtResource("5_56idt")
 targets = Array[NodePath]([NodePath("../Exit")])
 effect = &"activate"

@@ -64,7 +64,7 @@ const EN := {
 	"Вдвоём": "Together",
 	"Одному не дотянуться.": "Too high to reach alone.",
 	"Рука может подготовить герою путь.": "Your hand can prepare the way for the hero.",
-	"Сдвинь камень к стене под рычагом, запрыгни на него и нажми рычаг.": "Slide the stone to the wall under the lever, jump onto it and pull the lever.",
+	"Подвинь камень к площадке с рычагом, запрыгни с камня на площадку и нажми рычаг.": "Slide the stone up to the ledge with the lever, jump from the stone onto the ledge and pull the lever.",
 	# Уровень 7
 	"Ключ": "The Key",
 	"Дверь заперта, а к ней не перепрыгнуть.": "The door is locked and too far to jump to.",
