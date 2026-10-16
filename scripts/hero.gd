@@ -70,6 +70,8 @@ func carry_start(point: Vector2) -> void:
 
 
 func carry_move(point: Vector2) -> void:
+	# Героя несут пальцем — шумит ветер, как у других перетаскиваний.
+	Sfx.wind((point + _carry_offset).distance_to(_carry_target) / 6.0)
 	_carry_target = point + _carry_offset
 
 

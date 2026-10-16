@@ -42,8 +42,11 @@ func _ready() -> void:
 	add_child(_wind_player)
 	# Game загружается после Sfx, поэтому подписка — на следующем кадре.
 	(func() -> void: Game.hand_used.connect(func(kind: String) -> void:
-		# Камень, который тянут пальцем, звучит ветром, а не щелчками на каждое движение.
-		if kind == "drag" and Time.get_ticks_msec() - _quiet_drag_ms < 50:
+		# Всё, что тянут пальцем, звучит ветром, а не щелчками на каждое движение.
+		# Если предмет уже сам позвал wind() с силой по скорости — не вмешиваемся.
+		if kind == "drag":
+			if Time.get_ticks_msec() - _quiet_drag_ms >= 50:
+				wind(0.6)
 			return
 		play("tap"))).call_deferred()
 

@@ -39,6 +39,7 @@ func hand_drag(world_delta: Vector2) -> void:
 	var before := dust
 	dust -= world_delta.length() * 0.006
 	if before > 0.0:
+		Sfx.wind(world_delta.length() / 6.0)
 		Game.hand_used.emit("drag")
 
 

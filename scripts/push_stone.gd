@@ -78,6 +78,7 @@ func hand_tap() -> void:
 func hand_drag(world_delta: Vector2) -> void:
 	if carried:
 		_carry_target += world_delta
+		Sfx.wind(world_delta.length() / 6.0)
 
 
 func hand_release() -> void:

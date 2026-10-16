@@ -63,9 +63,12 @@ func hand_tap() -> void:
 
 
 func hand_drag(world_delta: Vector2) -> void:
+	var before := torch_x
 	torch_x += world_delta.x
-	Game.hand_used.emit("drag")
 	_update()
+	# Факел едет по рейке — ветер, тем сильнее, чем быстрее; упёрся в край — тихо.
+	Sfx.wind(absf(torch_x - before) / 6.0)
+	Game.hand_used.emit("drag")
 
 
 ## Где тень балки ложится на уровень пола: [левый x, правый x].

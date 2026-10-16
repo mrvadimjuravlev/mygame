@@ -65,6 +65,8 @@ func hand_drag(world_delta: Vector2) -> void:
 	_crank_angle += world_delta.length() / WHEEL_RADIUS
 	if before < 1.0 and lowered >= 1.0:
 		Sfx.play("door", -4.0, 1.3)
+	# Мост опускается — ветер; опущен до конца — тихо.
+	Sfx.wind(world_delta.length() / 6.0 if before < 1.0 else 0.0)
 	Game.hand_used.emit("drag")
 
 
