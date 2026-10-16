@@ -35,7 +35,6 @@ const Art := preload("res://scripts/art.gd")
 
 
 func _ready() -> void:
-	Game.last_level = scene_file_path
 	var hero := get_node("Hero")
 	hero.fall_limit = fall_limit
 	hero.restart_on_fall = restart_on_fall

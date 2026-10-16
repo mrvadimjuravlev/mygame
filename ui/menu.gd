@@ -69,12 +69,8 @@ func _ready() -> void:
 	_bar.draw.connect(_draw_bar)
 	add_child(_bar)
 	_fill()
-	# Начать со страницы, где последний открытый уровень (вышли из него в меню),
-	# а если его в этой локации нет — где уровень, с которого продолжать.
-	var start := Game.levels().find(Game.last_level)
-	if start < 0:
-		start = Game.continue_index()
-	_set_scroll(int(start / PER_PAGE) * PAGE_STEP)
+	# Начать со страницы, где уровень, с которого продолжать.
+	_set_scroll(int(Game.continue_index() / PER_PAGE) * PAGE_STEP)
 	var back_button := Style.button(Game.t("‹ Назад"), Vector2(110, 36), 16)
 	back_button.position = Vector2(16, 308)
 	back_button.pressed.connect(func() -> void: get_tree().change_scene_to_file.call_deferred(Game.WORLDS_SCENE))
