@@ -12,6 +12,9 @@ extends Node2D
 @export var restart_on_fall := false
 ## Ширина части уровня, видимой камерой в начале (0 — весь уровень). Остальное — другие комнаты, куда ведут порталы.
 @export var view_width := 0.0
+## Левый край вида на старте: левее него часть уровня сначала скрыта. Когда герой подходит
+## к левому краю экрана, камера плавно открывает и эту часть. 0 — весь уровень виден как обычно.
+@export var view_left := 0.0
 ## Героя можно поднять пальцем и перенести.
 @export var hero_grab := false
 ## Уровень закольцован по горизонтали: левый и правый края экрана связаны.
@@ -33,6 +36,9 @@ const SHADE := {
 
 const Art := preload("res://scripts/art.gd")
 
+var _cam: Camera2D
+var _hero: Node2D
+
 
 func _ready() -> void:
 	Game.last_level = scene_file_path
@@ -48,7 +54,12 @@ func _ready() -> void:
 	cam.limit_right = int(view_width if view_width > 0.0 else level_width)
 	cam.position_smoothing_enabled = true
 	cam.limit_bottom = int(level_height)
+	if view_left > 0.0:
+		cam.limit_left = int(view_left)
+		cam.limit_smoothed = true
 	hero.add_child(cam)
+	_cam = cam
+	_hero = hero
 	var back := get_node_or_null("Back") as Polygon2D
 	if back:
 		back.texture = _back_texture()
@@ -75,6 +86,12 @@ func _ready() -> void:
 	var hud := preload("res://scripts/hud.gd").new()
 	hud.level = self
 	add_child(hud)
+
+
+func _process(_delta: float) -> void:
+	# Герой дошёл до левого края стартового вида — открываем скрытую часть слева.
+	if _cam and _cam.limit_left > 0 and _hero.global_position.x < view_left + 48.0:
+		_cam.limit_left = 0
 
 
 ## Стена в глубине: в пирамиде — крупные тёмные блоки, в других локациях — прежняя кладка.

@@ -17,6 +17,7 @@ slogan = "Ключ"
 hints = PackedStringArray("Дверь заперта, а к ней не перепрыгнуть.", "Каменная плита в полу опускает камень с ключом над пропастью.", "Встань на плиту, запрыгни на опустившийся камень, возьми ключ и прыгай к двери.")
 tutorial_button = ""
 level_width = 960.0
+view_left = 320.0
 level_height = 360.0
 fall_limit = 420.0
 restart_on_fall = true
