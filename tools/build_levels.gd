@@ -823,7 +823,7 @@ func _level_25() -> void:
 	# 7. Песок поднимается снизу.
 	var sand := _add("Sand", Node2D.new(), "rising_sand.gd", Vector2(100, 1470))
 	sand.width = 440.0
-	sand.speed = 10.0
+	sand.speed = 15.0
 	sand.delay = 4.0
 	sand.stop_y = 170.0
 	_decor([[160, 1330], [480, 1300], [460, 1160], [220, 1090], [470, 930], [150, 800], [420, 720], [300, 560], [470, 420], [200, 250], [420, 90]], [[380, 1250, 2, ["eye", "sun", "reed", "ankh"]], [200, 520, 2, ["bird", "wave", "eye", "sun"]]], true)
