@@ -287,7 +287,7 @@ func _solve_25() -> void:
 	await _walk_to(lift2.global_position.x + 4.0)
 	# Исчезающие плиты направо.
 	var plate: Node2D = lv.get_node("Vanish1")
-	await _until(func() -> bool: return lift2.global_position.y < 745.0 and _phase_in(plate._time, plate.cycle(), 2.8, 3.2), false, 3000)
+	await _until(func() -> bool: return lift2.global_position.y < 745.0 and _phase_in(plate._time, plate.cycle(), 2.75, 3.8), false, 3000)
 	for x in [200.0, 280.0, 360.0, 440.0]:
 		await _jump_to(x)
 	print("  за исчезающими плитами: ", _hero().global_position if _hero() else "погиб")
@@ -313,7 +313,9 @@ func _solve_25() -> void:
 ## t по кругу длиной cycle попадает в отрезок [from, to).
 func _phase_in(t: float, cycle: float, from: float, to: float) -> bool:
 	var u := fposmod(t, cycle)
-	return u >= fposmod(from, cycle) and u < fposmod(from, cycle) + (to - from)
+	var a := fposmod(from, cycle)
+	# Отрезок может переходить через конец круга.
+	return (u >= a and u < a + (to - from)) or u < a + (to - from) - cycle
 
 
 ## Прыжок с подруливанием: в полёте ведёт героя к x (или к узлу, если цель — движущаяся платформа), до приземления.
