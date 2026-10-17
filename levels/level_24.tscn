@@ -1,0 +1,205 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_lx2e3"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_uqlll"]
+[ext_resource type="Script" path="res://scripts/spikes.gd" id="3_ud4s4"]
+[ext_resource type="Script" path="res://scripts/press.gd" id="4_2g2ya"]
+[ext_resource type="Script" path="res://scripts/cart.gd" id="5_pq5av"]
+[ext_resource type="Script" path="res://scripts/spike_block.gd" id="6_ywa66"]
+[ext_resource type="Script" path="res://scripts/mover.gd" id="7_2t5ux"]
+[ext_resource type="Script" path="res://scripts/vanish_plate.gd" id="8_ca0x4"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="9_4qs04"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="10_vm6br"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="11_cf8r2"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="12_flhdo"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="13_be8qd"]
+
+[node name="Level24" type="Node2D" unique_id=1618269801]
+script = ExtResource("1_lx2e3")
+level_number = 24
+slogan = "Рудник"
+hints = PackedStringArray("Вагонетка довезёт, но не везде безопасно.", "Вагонетка трогается, когда на неё встанешь. Над рельсами висит шипастый камень.", "Перед шипастым камнем прыгай прямо вверх, не нажимая стрелок, — приземлишься обратно в вагонетку. Дальше лифт и исчезающие плиты: прыгай, пока плита видна.")
+level_width = 1920.0
+restart_on_fall = true
+dark = true
+dust = true
+
+[node name="Back" type="Polygon2D" parent="." unique_id=598227410]
+color = Color(0.16470589, 0.12156863, 0.09019608, 1)
+polygon = PackedVector2Array(0, 0, 1920, 0, 1920, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="." unique_id=1753608270]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(0, 0, 1920, 0, 1920, 40, 0, 40)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1" unique_id=1008526001]
+polygon = PackedVector2Array(0, 0, 1920, 0, 1920, 40, 0, 40)
+
+[node name="Solid2" type="StaticBody2D" parent="." unique_id=741848813]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2" unique_id=898004329]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="." unique_id=479100351]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(1904, 0, 1920, 0, 1920, 360, 1904, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3" unique_id=138255334]
+polygon = PackedVector2Array(1904, 0, 1920, 0, 1920, 360, 1904, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="." unique_id=1931850272]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(0, 280, 180, 280, 180, 360, 0, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4" unique_id=653992248]
+polygon = PackedVector2Array(0, 280, 180, 280, 180, 360, 0, 360)
+
+[node name="Solid5" type="StaticBody2D" parent="." unique_id=2025897084]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(180, 345, 1000, 345, 1000, 360, 180, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5" unique_id=612876500]
+polygon = PackedVector2Array(180, 345, 1000, 345, 1000, 360, 180, 360)
+
+[node name="Spikes6" type="Area2D" parent="." unique_id=602346516]
+position = Vector2(180, 345)
+script = ExtResource("3_ud4s4")
+width = 820.0
+
+[node name="Press" type="Node2D" parent="." unique_id=725585424]
+position = Vector2(760, 40)
+script = ExtResource("4_2g2ya")
+size = Vector2(40, 56)
+travel = 160.0
+phase = -5.3
+wait_trigger = true
+
+[node name="Cart" type="AnimatableBody2D" parent="." unique_id=809926905]
+position = Vector2(208, 280)
+script = ExtResource("5_pq5av")
+stop_x = 976.0
+rail_from = 180.0
+post_bottom = 345.0
+targets = Array[NodePath]([NodePath("../Press")])
+
+[node name="SpikeBlock" type="Area2D" parent="." unique_id=804831359]
+position = Vector2(500, 270)
+script = ExtResource("6_ywa66")
+chain = 224.0
+
+[node name="Solid10" type="StaticBody2D" parent="." unique_id=693926893]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(1000, 280, 1080, 280, 1080, 360, 1000, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid10" unique_id=1854621847]
+polygon = PackedVector2Array(1000, 280, 1080, 280, 1080, 360, 1000, 360)
+
+[node name="Solid11" type="StaticBody2D" parent="." unique_id=546845882]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(1080, 345, 1400, 345, 1400, 360, 1080, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid11" unique_id=1563822329]
+polygon = PackedVector2Array(1080, 345, 1400, 345, 1400, 360, 1080, 360)
+
+[node name="Spikes12" type="Area2D" parent="." unique_id=1802279342]
+position = Vector2(1080, 345)
+script = ExtResource("3_ud4s4")
+width = 320.0
+
+[node name="Lift" type="AnimatableBody2D" parent="." unique_id=919316837]
+position = Vector2(1120, 280)
+script = ExtResource("7_2t5ux")
+travel = Vector2(0, -90)
+speed = 45.0
+wait = 0.8
+
+[node name="Vanish1" type="StaticBody2D" parent="." unique_id=197217309]
+position = Vector2(1190, 200)
+script = ExtResource("8_ca0x4")
+
+[node name="Vanish2" type="StaticBody2D" parent="." unique_id=24910881]
+position = Vector2(1270, 200)
+script = ExtResource("8_ca0x4")
+phase = -0.6
+
+[node name="Vanish3" type="StaticBody2D" parent="." unique_id=765274262]
+position = Vector2(1350, 200)
+script = ExtResource("8_ca0x4")
+phase = -1.2
+
+[node name="Solid17" type="StaticBody2D" parent="." unique_id=431887791]
+script = ExtResource("2_uqlll")
+polygon = PackedVector2Array(1400, 200, 1920, 200, 1920, 360, 1400, 360)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid17" unique_id=957661882]
+polygon = PackedVector2Array(1400, 200, 1920, 200, 1920, 360, 1400, 360)
+
+[node name="Exit" type="Area2D" parent="." unique_id=485547511]
+position = Vector2(1860, 200)
+script = ExtResource("9_4qs04")
+start_open = true
+
+[node name="Torch90_200" type="Area2D" parent="." unique_id=5625933]
+position = Vector2(90, 200)
+script = ExtResource("10_vm6br")
+start_lit = true
+
+[node name="Torch420_120" type="Area2D" parent="." unique_id=1310885476]
+position = Vector2(420, 120)
+script = ExtResource("10_vm6br")
+start_lit = true
+
+[node name="Torch700_200" type="Area2D" parent="." unique_id=1663707359]
+position = Vector2(700, 200)
+script = ExtResource("10_vm6br")
+start_lit = true
+
+[node name="Torch1040_200" type="Area2D" parent="." unique_id=1848711379]
+position = Vector2(1040, 200)
+script = ExtResource("10_vm6br")
+start_lit = true
+
+[node name="Torch1300_110" type="Area2D" parent="." unique_id=172391890]
+position = Vector2(1300, 110)
+script = ExtResource("10_vm6br")
+start_lit = true
+
+[node name="Torch1600_140" type="Area2D" parent="." unique_id=1099197463]
+position = Vector2(1600, 140)
+script = ExtResource("10_vm6br")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="." unique_id=2103482121]
+position = Vector2(1700, 90)
+script = ExtResource("11_cf8r2")
+signs = PackedStringArray("sun", "eye", "reed", "bird", "ankh", "wave")
+
+[node name="Prop26" type="Node2D" parent="." unique_id=1043570045]
+position = Vector2(300, 40)
+script = ExtResource("12_flhdo")
+kind = "roots"
+length = 50.0
+
+[node name="Prop27" type="Node2D" parent="." unique_id=1734143959]
+position = Vector2(16, 40)
+script = ExtResource("12_flhdo")
+kind = "web"
+length = 46.0
+
+[node name="Prop28" type="Node2D" parent="." unique_id=1104064142]
+position = Vector2(1480, 200)
+script = ExtResource("12_flhdo")
+kind = "bones"
+length = 0.0
+
+[node name="Prop29" type="Node2D" parent="." unique_id=537714329]
+position = Vector2(1800, 200)
+script = ExtResource("12_flhdo")
+kind = "vase"
+length = 0.0
+
+[node name="Hero" type="CharacterBody2D" parent="." unique_id=427586500]
+position = Vector2(60, 280)
+script = ExtResource("13_be8qd")

@@ -10,10 +10,15 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	change_scene_to_file("res://levels/level_01.tscn")
+	# С какого уровня начать: godot ... -s tools/autoplay.gd -- --from=23
+	var first := 1
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--from="):
+			first = int(arg.trim_prefix("--from="))
+	change_scene_to_file("res://levels/level_%02d.tscn" % first)
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22]
-	for i in solvers.size():
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22, _solve_23, _solve_24, _solve_25]
+	for i in range(first - 1, solvers.size()):
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
 		for f in 120:
@@ -197,6 +202,143 @@ func _solve_22() -> void:
 	await _frames(90)
 	print("  герой после броска: ", _hero().global_position if _hero() else "вышел")
 	await _walk_to(590.0)
+
+
+func _solve_23() -> void:
+	var lv := current_scene
+	# 1. Рушащиеся плиты: с плиты на плиту без остановки.
+	await _walk_to(194.0)
+	for x in [244.0, 324.0, 404.0, 490.0]:
+		await _jump_to(x)
+	print("  плиты пройдены: ", _hero().global_position if _hero() else "погиб")
+	# 2. Платформа: прыгаем, когда она у левого края, сходим у правого.
+	var mover: Node2D = lv.get_node("Mover")
+	await _walk_to(574.0)
+	await _until(func() -> bool: return _phase_in(mover._time, mover.cycle(), mover.cycle() - 0.15, mover.cycle()))
+	await _jump_to(mover)
+	await _until(func() -> bool: return _phase_in(mover._time, mover.cycle(), mover.wait + mover.move_time(), mover.wait + mover.move_time() + 0.2))
+	await _jump_to(925.0)
+	print("  за платформой: ", _hero().global_position if _hero() else "погиб")
+	# 3. Под прессами — сразу, как поднялся.
+	for p in [["Press1", 1035.0, 1110.0], ["Press2", 1225.0, -1.0]]:
+		var press: Node2D = lv.get_node(p[0])
+		await _until(func() -> bool: return _phase_in(press._time, press.cycle(), 0.0, 0.15))
+		await _walk_to(p[1])
+		if p[2] > 0.0:
+			await _jump_to(p[2])  # через ямку с шипами
+	print("  за прессами: ", _hero().global_position if _hero() else "погиб")
+	# 4. Маятник: прыжок, когда он подлетает к левому краю, сход у правого.
+	var pend: Node2D = lv.get_node("Pendulum")
+	await _until(func() -> bool: return _phase_in(pend._time, pend.period, pend.period * 0.75 - 0.32, pend.period * 0.75 - 0.28))
+	await _jump_to(pend)
+	print("  на маятнике: ", _hero().global_position if _hero() else "погиб")
+	await _until(func() -> bool: return _phase_in(pend._time, pend.period, pend.period * 0.25 - 0.05, pend.period * 0.25))
+	await _jump_to(1625.0)
+	await _walk_to(1860.0)
+
+
+func _solve_24() -> void:
+	var lv := current_scene
+	var cart: Node2D = lv.get_node("Cart")
+	await _walk_to(208.0)  # на вагонетку — она трогается
+	print("  вагонетка тронулась: ", cart.started)
+	# Перед шипастым камнем — прыжок прямо вверх, без стрелок.
+	await _until(func() -> bool: return _hero().global_position.x >= 471.0)
+	await _press("jump")
+	await _until(func() -> bool: return cart.stopped or not _hero() or _hero()._dead, false, 1200)
+	print("  вагонетка доехала, герой: ", _hero().global_position if _hero() else "погиб")
+	await _walk_to(1070.0)
+	# Лифт: встаём, когда он внизу, сходим наверху на исчезающие плиты, пока первая видна.
+	var lift: Node2D = lv.get_node("Lift")
+	await _until(func() -> bool: return _phase_in(lift._time, lift.cycle(), 0.0, 0.3), false, 1200)
+	await _walk_to(1120.0)
+	var plate: Node2D = lv.get_node("Vanish1")
+	await _until(func() -> bool: return lift.global_position.y < 200.0 and _phase_in(plate._time, plate.cycle(), 2.85, 3.3), false, 3000)
+	for x in [1190.0, 1270.0, 1350.0, 1440.0]:
+		await _jump_to(x)
+	print("  за плитами: ", _hero().global_position if _hero() else "погиб")
+	await _walk_to(1860.0)
+
+
+func _solve_25() -> void:
+	var lv := current_scene
+	var lift1: Node2D = lv.get_node("Lift1")
+	await _walk_to(240.0)  # к краю проёма, лифт спускается
+	await _until(func() -> bool: return _phase_in(lift1._time, lift1.cycle(), 0.0, 0.5))
+	await _walk_to(290.0)
+	await _until(func() -> bool: return _hero().global_position.y < 1162.0 and _hero().is_on_floor())
+	for x in [369.0, 439.0, 500.0]:
+		await _jump_to(x)
+	await _walk_to(514.0)
+	print("  на уступе у шипов: ", _hero().global_position if _hero() else "погиб")
+	# Маятник: с правого края на левый.
+	var pend: Node2D = lv.get_node("Pendulum")
+	await _until(func() -> bool: return _phase_in(pend._time, pend.period, pend.period * 0.25 - 0.3, pend.period * 0.25 - 0.26))
+	await _jump_to(pend)
+	print("  на маятнике: ", _hero().global_position if _hero() else "погиб")
+	await _until(func() -> bool: return _phase_in(pend._time, pend.period, pend.period * 0.75 - 0.05, pend.period * 0.75))
+	await _jump_to(180.0)
+	await _walk_to(185.0)
+	print("  на уступе слева: ", _hero().global_position if _hero() else "погиб")
+	# Лифт вдоль левой стены.
+	var lift2: Node2D = lv.get_node("Lift2")
+	await _until(func() -> bool: return _phase_in(lift2._time, lift2.cycle(), lift2.cycle() - 0.45, lift2.cycle()), false, 1200)
+	await _jump_to(lift2)
+	await _walk_to(lift2.global_position.x + 4.0)
+	# Исчезающие плиты направо.
+	var plate: Node2D = lv.get_node("Vanish1")
+	await _until(func() -> bool: return lift2.global_position.y < 745.0 and _phase_in(plate._time, plate.cycle(), 2.8, 3.2), false, 3000)
+	for x in [200.0, 280.0, 360.0, 440.0]:
+		await _jump_to(x)
+	print("  за исчезающими плитами: ", _hero().global_position if _hero() else "погиб")
+	# Лифт вдоль правой стены, плиты с трещинами налево.
+	var lift3: Node2D = lv.get_node("Lift3")
+	await _until(func() -> bool: return _phase_in(lift3._time, lift3.cycle(), 0.0, 0.4), false, 1200)
+	await _walk_to(505.0)
+	await _until(func() -> bool: return _hero().global_position.y < 412.0 and _hero().is_on_floor())
+	for x in [425.0, 345.0, 275.0]:
+		await _jump_to(x)
+	print("  на уступе под последним лифтом: ", _hero().global_position if _hero() else "погиб")
+	var lift4: Node2D = lv.get_node("Lift4")
+	await _until(func() -> bool: return _phase_in(lift4._time, lift4.cycle(), lift4.cycle() - 0.3, lift4.cycle()), false, 1200)
+	await _jump_to(lift4)
+	await _until(func() -> bool: return _hero().global_position.y < 142.0 and _hero().is_on_floor())
+	await _jump_to(270.0)
+	# Под прессом к двери.
+	var press: Node2D = lv.get_node("Press")
+	await _until(func() -> bool: return _phase_in(press._time, press.cycle(), 0.0, 0.15))
+	await _walk_to(500.0)
+
+
+## t по кругу длиной cycle попадает в отрезок [from, to).
+func _phase_in(t: float, cycle: float, from: float, to: float) -> bool:
+	var u := fposmod(t, cycle)
+	return u >= fposmod(from, cycle) and u < fposmod(from, cycle) + (to - from)
+
+
+## Прыжок с подруливанием: в полёте ведёт героя к x (или к узлу, если цель — движущаяся платформа), до приземления.
+func _jump_to(target) -> void:
+	Input.action_press("jump")
+	var left_floor := false
+	for i in 300:
+		var h := _hero()
+		if not h or h._dead:
+			break
+		if i == 3:
+			Input.action_release("jump")
+		var tx: float = target.global_position.x if target is Node2D else target
+		var dx := tx - h.global_position.x
+		Input.action_release("move_left")
+		Input.action_release("move_right")
+		if absf(dx) > 2.0:
+			Input.action_press("move_right" if dx > 0.0 else "move_left")
+		await physics_frame
+		if not h.is_on_floor():
+			left_floor = true
+		elif left_floor:
+			break
+	_release_all()
+	await _frames(1)
 
 
 func _run_worlds() -> void:
@@ -558,9 +700,10 @@ func _hop(action: String) -> void:
 # --- Помощники ------------------------------------------------------------
 
 func _walk_to(x: float) -> void:
+	var scene := current_scene
 	for i in 300:
-		if not current_scene or not current_scene.has_node("Hero"):
-			return  # уровень уже пройден
+		if not current_scene or current_scene != scene or not current_scene.has_node("Hero"):
+			return  # уровень уже пройден: героя следующего уровня не трогаем
 		var dx := x - _hero().global_position.x
 		if absf(dx) < 3.0:
 			break

@@ -34,6 +34,8 @@ var _carry_offset := Vector2.ZERO
 var frozen := false
 ## Героя подбросило (катапульта): в полёте его несёт с этой скоростью, кнопки не мешают.
 var _launch_x := 0.0
+## Скорость платформы, с которой герой спрыгнул: в полёте его несёт с ней (прыжок с вагонетки).
+var _air_vx := 0.0
 
 
 func _ready() -> void:
@@ -123,7 +125,7 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY * gravity_dir
 			Sfx.play("jump")
-		velocity.x = _launch_x if _launch_x != 0.0 else dir * SPEED
+		velocity.x = _launch_x if _launch_x != 0.0 else dir * SPEED + (0.0 if is_on_floor() else _air_vx)
 		if Input.is_action_just_pressed("action"):
 			_try_interact()
 	if dir != 0.0 and signf(dir) != facing:
@@ -133,6 +135,10 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if _launch_x != 0.0 and (is_on_wall() or (is_on_floor() and velocity.y >= 0.0)):
 		_launch_x = 0.0
+	if is_on_floor():
+		_air_vx = get_platform_velocity().x
+	elif is_on_wall() or climbing:
+		_air_vx = 0.0
 	# Упёрся сбоку в каменный блок — толкает его.
 	if dir != 0.0 and not climbing:
 		for i in get_slide_collision_count():
@@ -154,6 +160,13 @@ func _physics_process(delta: float) -> void:
 			# На обучающих уровнях смерти нет: упал — вернулся к началу.
 			global_position = spawn_point
 			velocity = Vector2.ZERO
+
+
+## Стоит ли герой на верхней грани top_y между x1 и x2 (в мировых координатах): так рушащиеся плиты
+## и вагонетка узнают, что на них встали.
+func stands_on(x1: float, x2: float, top_y: float) -> bool:
+	return not _dead and is_on_floor() and gravity_dir > 0.0 and absf(global_position.y - top_y) < 3.0 \
+			and global_position.x > x1 - SIZE.x / 2 and global_position.x < x2 + SIZE.x / 2
 
 
 ## Вниз по лестнице: кнопка действия на экране, на клавиатуре ещё стрелка вниз или S.

@@ -239,6 +239,35 @@ static func draw_textured(canvas: CanvasItem, polygon: PackedVector2Array, tex: 
 	canvas.draw_colored_polygon(polygon, modulate, uvs, tex)
 
 
+## Каменная плита платформы (рушащейся, исчезающей, движущейся): камень локации, песок на верхней
+## кромке, тень снизу. Текстура в координатах плиты — едет вместе с ней.
+static func draw_slab(canvas: CanvasItem, rect: Rect2, modulate := Color.WHITE) -> void:
+	var poly := PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
+	draw_textured(canvas, poly, wall_texture(canvas), modulate, Vector2(37, 11))
+	var a := modulate.a
+	var top := rect.position.y
+	canvas.draw_line(Vector2(rect.position.x, top + 0.5), Vector2(rect.end.x, top + 0.5), Color(SAND_LIGHT, a), 1.0)
+	canvas.draw_line(Vector2(rect.position.x, top + 1.5), Vector2(rect.end.x, top + 1.5), Color(SAND, a), 1.0)
+	canvas.draw_line(Vector2(rect.position.x, rect.end.y - 0.5), Vector2(rect.end.x, rect.end.y - 0.5), Color(0, 0, 0, 0.4 * a), 1.0)
+	for x in [rect.position.x + 0.5, rect.end.x - 0.5]:
+		canvas.draw_line(Vector2(x, top + 2), Vector2(x, rect.end.y), Color(0, 0, 0, 0.3 * a), 1.0)
+
+
+## Ряд шипов остриями в сторону dir (вниз — Vector2.DOWN) вдоль отрезка from–to.
+static func draw_spike_row(canvas: CanvasItem, from: Vector2, to: Vector2, dir: Vector2, height := 12.0) -> void:
+	var along := (to - from).normalized()
+	var length := from.distance_to(to)
+	var x := 0.0
+	while x + 10.0 <= length + 0.5:
+		var a := from + along * x
+		var b := from + along * (x + 10.0)
+		var tip := (a + b) / 2.0 + dir * height
+		canvas.draw_colored_polygon(PackedVector2Array([a, tip, b]), Color("8d8679"))
+		canvas.draw_colored_polygon(PackedVector2Array([(a + b) / 2.0, tip, b]), Color("5f594f"))
+		canvas.draw_line(tip - dir * 1.0, tip - dir * 4.0, Color("7a2a20"), 2.0)
+		x += 10.0
+
+
 ## Старина: местами штукатурка осыпалась неровными пятнами, под ней видна кладка.
 ## Пятна целиком внутри камня (inner — многоугольник, в котором им можно быть).
 ## Расположение случайное, но одинаковое при каждом запуске (seed).

@@ -40,6 +40,9 @@ func _initialize() -> void:
 	_level_20()
 	_level_21()
 	_level_22()
+	_level_23()
+	_level_24()
+	_level_25()
 	_dungeon_01()
 	_dungeon_02()
 	_castle_01()
@@ -675,6 +678,196 @@ func _level_22() -> void:
 	_prop("vase", Vector2(40, 280), 0)
 	_hero(60, 280)
 	_save(22)
+
+
+# --- Аркадные зоны: без загадок, только пройти ------------------------------
+
+func _level_23() -> void:
+	_begin(23, "Обрушенный зал", 1920, "", ["Здесь ничего не надо решать — только пройти.", "Плиты с трещинами рушатся, если на них постоять. Прессы падают в своём ритме.", "По плитам с трещинами беги без остановки. Под пресс заходи, как только он поднялся. На маятник прыгай, когда он подлетает к краю."])
+	_root.restart_on_fall = true
+	_back(1920)
+	_box(0, 0, 1920, 40)         # потолок
+	_box(0, 0, 16, 360)
+	_box(1904, 0, 1920, 360)
+	_box(0, 280, 200, 360)       # стартовый уступ
+	# 1. Три рушащиеся плиты над шипами.
+	_pit(200, 460)
+	for x in [244, 324, 404]:
+		_crumble(x, 280)
+	_box(460, 280, 580, 360)
+	# 2. Платформа ездит туда-сюда над шипами.
+	_pit(580, 900)
+	var mover := _add("Mover", AnimatableBody2D.new(), "mover.gd", Vector2(630, 280))
+	mover.travel = Vector2(220, 0)
+	mover.speed = 70.0
+	mover.wait = 0.6
+	# 3. Два пресса с потолка в разном ритме, между ними ямка с шипами.
+	_box(900, 280, 1050, 360)
+	_box(1090, 280, 1240, 360)
+	_box(1050, 305, 1090, 360)
+	_spikes(1050, 305, 40)
+	_press("Press1", 990, 40, 164, 0.0)
+	_press("Press2", 1165, 40, 164, 1.25)
+	# 4. Маятник над шипами.
+	_pit(1240, 1580)
+	var pend := _add("Pendulum", AnimatableBody2D.new(), "pendulum.gd", Vector2(1410, 290))
+	pend.pivot = Vector2(0, -250)
+	pend.amplitude = 0.6
+	pend.period = 3.6
+	_box(1580, 280, 1920, 360)
+	_exit(1860, 280, true)
+	_decor([[100, 200], [520, 200], [760, 150], [1140, 230], [1330, 130], [1700, 200]], [[300, 110, 3, ["eye", "bird", "sun", "reed", "ankh", "wave"]], [1760, 110, 2, ["ankh", "eye", "sun", "reed"]]], true)
+	_prop("web", Vector2(16, 40), 50)
+	_prop("roots", Vector2(700, 40), 46)
+	_prop("bones", Vector2(520, 280), 0)
+	_prop("vase", Vector2(1640, 280), 0)
+	_hero(60, 280)
+	_save(23)
+
+
+func _level_24() -> void:
+	_begin(24, "Рудник", 1920, "", ["Вагонетка довезёт, но не везде безопасно.", "Вагонетка трогается, когда на неё встанешь. Над рельсами висит шипастый камень.", "Перед шипастым камнем прыгай прямо вверх, не нажимая стрелок, — приземлишься обратно в вагонетку. Дальше лифт и исчезающие плиты: прыгай, пока плита видна."])
+	_root.restart_on_fall = true
+	_back(1920)
+	_box(0, 0, 1920, 40)         # потолок
+	_box(0, 0, 16, 360)
+	_box(1904, 0, 1920, 360)
+	_box(0, 280, 180, 360)       # стартовый уступ
+	# 1. Вагонетка на рельсах над пропастью с шипами.
+	_pit(180, 1000)
+	# 3. Пресс над путём: начинает ритм, когда тронулась вагонетка, и бьёт сразу за ней.
+	var press := _press("Press", 760, 40, 160, -5.3)
+	press.size = Vector2(40, 56)
+	press.wait_trigger = true
+	var cart := _add("Cart", AnimatableBody2D.new(), "cart.gd", Vector2(208, 280))
+	cart.stop_x = 976.0
+	cart.rail_from = 180.0
+	cart.rail_to = 1000.0
+	cart.post_bottom = 345.0
+	_link(cart, [press])
+	# 2. Шипастый камень на цепи над рельсами: через него перепрыгивают.
+	var block := _add("SpikeBlock", Area2D.new(), "spike_block.gd", Vector2(500, 270))
+	block.chain = 224.0
+	_box(1000, 280, 1080, 360)
+	# 4. Лифт вверх-вниз над шипами.
+	_pit(1080, 1400)
+	var lift := _add("Lift", AnimatableBody2D.new(), "mover.gd", Vector2(1120, 280))
+	lift.travel = Vector2(0, -90)
+	lift.speed = 45.0
+	lift.wait = 0.8
+	# 5. Три исчезающие плиты: пропадают по очереди слева направо.
+	for i in 3:
+		var plate := _add("Vanish%d" % (i + 1), StaticBody2D.new(), "vanish_plate.gd", Vector2(1190 + i * 80, 200))
+		plate.phase = -0.6 * i
+	_box(1400, 200, 1920, 360)
+	_exit(1860, 200, true)
+	_decor([[90, 200], [420, 120], [700, 200], [1040, 200], [1300, 110], [1600, 140]], [[1700, 90, 3, ["sun", "eye", "reed", "bird", "ankh", "wave"]]], true)
+	_prop("roots", Vector2(300, 40), 50)
+	_prop("web", Vector2(16, 40), 46)
+	_prop("bones", Vector2(1480, 200), 0)
+	_prop("vase", Vector2(1800, 200), 0)
+	_hero(60, 280)
+	_save(24)
+
+
+func _level_25() -> void:
+	_begin(25, "Колодец", 640, "", ["Песок поднимается. Не задерживайся.", "Наверх ведут лифты, маятник и плиты. На стенах шипы — держись от них подальше.", "Лифт вверх, плиты с трещинами, маятник налево, лифт, исчезающие плиты направо, лифт, плиты налево, последний лифт и под прессом к двери."])
+	# Колодец в четыре экрана высотой, камера идёт за героем вверх.
+	_root.level_height = 1440.0
+	_root.fall_limit = 1500.0
+	_root.restart_on_fall = true
+	var back := Polygon2D.new()
+	back.color = BACK
+	back.polygon = PackedVector2Array([Vector2(0, 0), Vector2(640, 0), Vector2(640, 1440), Vector2(0, 1440)])
+	_add("Back", back, "", Vector2.ZERO)
+	_box(0, 0, 100, 1440)        # стены колодца
+	_box(540, 0, 640, 1440)
+	_box(100, 0, 540, 40)        # верх
+	_box(100, 1400, 250, 1440)   # дно, в нём проём под лифт
+	_box(330, 1400, 540, 1440)
+	# 1. Лифт со дна.
+	_lift("Lift1", Vector2(290, 1400), 240.0, 80.0, 1.0, 6.0)
+	# 3. Рушащиеся плиты, уступ у правой стены, над ним 2. шипы в стене.
+	_crumble(369, 1130)
+	_crumble(439, 1095)
+	_box(490, 1055, 540, 1071)
+	_spikes(540, 1025, 50, -PI / 2)
+	# 4. Маятник налево, к уступу у левой стены.
+	_box(330, 770, 370, 790)     # камень, на котором висит маятник
+	var pend := _add("Pendulum", AnimatableBody2D.new(), "pendulum.gd", Vector2(350, 1040))
+	pend.pivot = Vector2(0, -250)
+	pend.amplitude = 0.5
+	pend.period = 3.6
+	_box(100, 975, 195, 991)
+	# Лифт вдоль левой стены (в ней шипы), с него 5. исчезающие плиты направо.
+	var lift2 := _lift("Lift2", Vector2(129, 935), 200.0, 60.0, 0.8, 0.0)
+	lift2.size = Vector2(48, 12)
+	_spikes(100, 820, 60, PI / 2)
+	for i in 3:
+		var plate := _add("Vanish%d" % (i + 1), StaticBody2D.new(), "vanish_plate.gd", Vector2(200 + i * 80, 715 - i * 30))
+		plate.phase = -0.6 * i
+	_box(420, 625, 470, 641)
+	# Лифт вдоль правой стены (и в ней шипы), плиты с трещинами налево.
+	_lift("Lift3", Vector2(505, 625), 215.0, 60.0, 0.8, 0.0)
+	_spikes(540, 560, 90, -PI / 2)
+	_crumble(420, 380)
+	_crumble(340, 350)
+	_box(230, 320, 290, 336)
+	# Последний лифт и уступ с дверью; 6. пресс над уступом.
+	_lift("Lift4", Vector2(190, 305), 165.0, 60.0, 0.8, 0.0)
+	_box(240, 140, 540, 156)
+	var press := _press("Press", 330, 40, 48, 0.0)
+	press.size = Vector2(40, 40)
+	press.up_time = 1.0
+	_exit(500, 140, true)
+	# 7. Песок поднимается снизу.
+	var sand := _add("Sand", Node2D.new(), "rising_sand.gd", Vector2(100, 1470))
+	sand.width = 440.0
+	sand.speed = 10.0
+	sand.delay = 4.0
+	sand.stop_y = 170.0
+	_decor([[160, 1330], [480, 1300], [460, 1160], [220, 1090], [470, 930], [150, 800], [420, 720], [300, 560], [470, 420], [200, 250], [420, 90]], [[380, 1250, 2, ["eye", "sun", "reed", "ankh"]], [200, 520, 2, ["bird", "wave", "eye", "sun"]]], true)
+	_prop("roots", Vector2(400, 40), 40)
+	_prop("bones", Vector2(150, 1400), 0)
+	_hero(140, 1400)
+	_save(25)
+
+
+## Яма с шипами на дне между x1 и x2.
+func _pit(x1: float, x2: float) -> void:
+	_box(x1, 345, x2, 360)
+	_spikes(x1, 345, x2 - x1)
+
+
+## Шипы: основание от (x, y) длиной width; rotation поворачивает их (PI/2 — остриями вправо из левой стены,
+## основание идёт вниз; -PI/2 — остриями влево из правой стены, основание идёт вверх).
+func _spikes(x: float, y: float, width: float, angle := 0.0) -> Node:
+	var spikes := _add("Spikes%d" % _root.get_child_count(), Area2D.new(), "spikes.gd", Vector2(x, y))
+	spikes.width = width
+	spikes.rotation = angle
+	return spikes
+
+
+func _crumble(x: float, y: float) -> Node:
+	return _add("Crumble%d" % _root.get_child_count(), StaticBody2D.new(), "crumble_plate.gd", Vector2(x, y))
+
+
+func _press(node_name: String, x: float, y: float, travel: float, phase: float) -> Node:
+	var press := _add(node_name, Node2D.new(), "press.gd", Vector2(x, y))
+	press.travel = travel
+	press.phase = phase
+	return press
+
+
+## Лифт: нижнее положение pos (середина верхней грани), поднимается на height.
+func _lift(node_name: String, pos: Vector2, height: float, speed: float, wait: float, phase: float) -> Node:
+	var lift := _add(node_name, AnimatableBody2D.new(), "mover.gd", pos)
+	lift.size = Vector2(60, 12)
+	lift.travel = Vector2(0, -height)
+	lift.speed = speed
+	lift.wait = wait
+	lift.phase = phase
+	return lift
 
 
 # --- Тестовые уровни других локаций --------------------------------------
