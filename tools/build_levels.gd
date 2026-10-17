@@ -43,6 +43,9 @@ func _initialize() -> void:
 	_level_23()
 	_level_24()
 	_level_25()
+	_level_26()
+	_level_27()
+	_level_28()
 	_dungeon_01()
 	_dungeon_02()
 	_castle_01()
@@ -832,6 +835,134 @@ func _level_25() -> void:
 	_prop("bones", Vector2(150, 1360), 0)
 	_hero(200, 1360)
 	_save(25)
+
+
+func _level_26() -> void:
+	_begin(26, "Кладовая тени", 1920, "", ["Тень спросит, сколько кувшинов в её кладовой. Порталы ведут в другие залы — считай везде.", "Не все кувшины на виду: один цвета стены, другой выглядывает из-за камня, третий в тёмном углу, ещё один под корнями.", "Всего восемь: два в первом зале, три во втором, три в третьем."])
+	_root.view_width = 640
+	_back(1920)
+	_box(0, 280, 1920, 360)      # пол всех залов
+	_box(0, 0, 1920, 60)         # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 656, 360)       # стены между залами
+	_box(1264, 0, 1296, 360)
+	_box(1904, 0, 1920, 360)
+	# Первый зал: тень стоит перед выходом, портал ведёт в кладовую.
+	_prop("jar", Vector2(120, 280), 0, Color("9a5a34"))
+	_box(180, 200, 270, 212)     # полка
+	_prop("jar", Vector2(240, 200), 0, Color("a8683a"))
+	var p1 := _add("Portal1", Area2D.new(), "portal.gd", Vector2(340, 280))
+	p1.destination = Vector2(700, 280)
+	p1.room_left = 640
+	p1.room_right = 1280
+	var shadow := _add("Shadow", Area2D.new(), "guardian.gd", Vector2(520, 280))
+	shadow.kind = "shadow"
+	shadow.speaker = "Тень"
+	shadow.question = "Я стерегу эту кладовую. Скажи, сколько в ней кувшинов, — и пройдёшь. Ошибёшься — отправлю назад."
+	shadow.options = PackedStringArray(["6", "7", "8", "9"])
+	shadow.answer = 2
+	shadow.reply_right = "Ты считал внимательно. Проходи."
+	shadow.reply_wrong = "Не так. Считай снова."
+	shadow.reset_point = Vector2(60, 280)
+	shadow.block = Vector2(24, 220)
+	_exit(585, 280, true)
+	_decor([[90, 200], [420, 190]], [[440, 90, 3, ["eye", "reed", "sun"]]], true)
+	_prop("web", Vector2(16, 60), 40)
+	# Второй зал: кувшин у стены цвета камня и кувшин за камнем.
+	var back2 := Polygon2D.new()
+	back2.color = Color(0.95, 0.82, 0.62)
+	back2.polygon = PackedVector2Array([Vector2(656, 60), Vector2(1264, 60), Vector2(1264, 280), Vector2(656, 280)])
+	_add("Back2", back2, "", Vector2.ZERO)
+	var pa1 := _add("PortalA1", Area2D.new(), "portal.gd", Vector2(700, 280))
+	pa1.destination = Vector2(340, 280)
+	pa1.room_left = 0
+	pa1.room_right = 640
+	pa1.color = Color("5fd3ff")
+	var pa2 := _add("PortalA2", Area2D.new(), "portal.gd", Vector2(1220, 280))
+	pa2.destination = Vector2(1340, 280)
+	pa2.room_left = 1280
+	pa2.room_right = 1920
+	_prop("jar", Vector2(820, 280), 0, Color("9a5a34"))
+	_prop("jar", Vector2(1010, 280), 0, Color("4e4032"))   # цвета стены
+	_prop("jar", Vector2(1121, 280), 0, Color("a8683a"))   # за камнем видно только горлышко
+	_box(1100, 262, 1142, 280)
+	_box(900, 170, 980, 182)
+	_prop("bones", Vector2(940, 170), 0)
+	_decor([[760, 200], [1170, 170]], [[860, 100, 2, ["bird", "wave", "ankh", "eye"]]], true)
+	# Третий зал: кувшин на высоком уступе, под корнями и в тёмном углу.
+	var back3 := Polygon2D.new()
+	back3.color = Color(0.72, 0.78, 0.95)
+	back3.polygon = PackedVector2Array([Vector2(1296, 60), Vector2(1904, 60), Vector2(1904, 280), Vector2(1296, 280)])
+	_add("Back3", back3, "", Vector2.ZERO)
+	var pb1 := _add("PortalB1", Area2D.new(), "portal.gd", Vector2(1340, 280))
+	pb1.destination = Vector2(1220, 280)
+	pb1.room_left = 640
+	pb1.room_right = 1280
+	pb1.color = Color("5fd3ff")
+	_box(1640, 150, 1720, 162)
+	_prop("jar", Vector2(1690, 150), 0, Color("9a5a34"))
+	_box(1490, 110, 1550, 122)
+	_prop("jar", Vector2(1520, 110), 0, Color("8a5030"))
+	_prop("roots", Vector2(1520, 60), 46)
+	_prop("jar", Vector2(1878, 280), 0, Color("6a4a30"))   # в тёмном углу
+	_prop("web", Vector2(1904, 60), 48)
+	for t in [[1420, 200], [1600, 220]]:
+		var torch := _add("Torch%d_%d" % [t[0], t[1]], Area2D.new(), "torch.gd", Vector2(t[0], t[1]))
+		torch.start_lit = true
+	_hero(60, 280)
+	_save(26)
+
+
+func _level_27() -> void:
+	_begin(27, "Зал знаков", 640, "", ["Маска покажет знаки по одному. Запомни, в каком порядке.", "Проговаривай знаки про себя: глаз, птица, солнце… Так легче удержать порядок.", "Ошибся — не беда: подойди к маске снова, она покажет новые знаки."])
+	_back(640)
+	_box(0, 280, 640, 360)
+	_box(0, 0, 640, 60)
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	_box(490, 60, 550, 160)      # стена над проходом, в ней маска
+	_box(130, 220, 210, 232)
+	_box(260, 175, 340, 187)
+	var mask := _add("Mask", Area2D.new(), "guardian.gd", Vector2(520, 280))
+	mask.kind = "mask"
+	mask.speaker = "Каменная маска"
+	mask.question = "Смотри и запоминай. Потом коснись знаков в том же порядке."
+	mask.sequence_length = 5
+	mask.reply_right = "Твоя память крепка. Проходи."
+	mask.reply_wrong = "Ты забыл. Начни с начала."
+	mask.reset_point = Vector2(60, 280)
+	mask.block = Vector2(40, 120)
+	_exit(590, 280, true)
+	_decor([[110, 160], [300, 120], [440, 200]], [[40, 80, 3, ["eye", "ankh", "bird", "wave", "sun", "reed"]], [150, 100, 2, ["sun", "eye", "reed", "bird"]], [230, 230, 4, ["wave", "ankh", "eye", "sun", "bird", "reed", "ankh", "wave"]], [380, 80, 3, ["reed", "bird", "eye", "ankh", "sun", "wave"]], [380, 210, 2, ["eye", "wave", "sun", "ankh"]]], true)
+	_root.shade = Color(0.33, 0.43, 0.56)
+	_prop("roots", Vector2(250, 60), 34)
+	_hero(60, 280)
+	_save(27)
+
+
+func _level_28() -> void:
+	_begin(28, "Два стража", 640, "", ["Один страж всегда лжёт, другой всегда говорит правду, и ты не знаешь, кто есть кто.", "Задай такой вопрос, чтобы оба стража ответили одинаково.", "Спроси, какую дверь назвал бы другой страж, и иди в противоположную."])
+	_back(640)
+	_box(0, 280, 640, 360)
+	_box(0, 0, 640, 60)
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	var exit := _exit(60, 280, true)
+	var trap := _add("Trap", Area2D.new(), "exit_door.gd", Vector2(580, 280))
+	trap.start_open = true
+	trap.trap = true
+	var guards := _add("Guards", Node2D.new(), "twin_guards.gd", Vector2.ZERO)
+	var paths: Array[NodePath] = [guards.get_path_to(exit), guards.get_path_to(trap)]
+	guards.doors = paths
+	for g in [[180, 280], [215, 280], [420, 280], [460, 280], [300, 160]]:
+		_prop("gold", Vector2(g[0], g[1]), 0)
+	_box(250, 160, 350, 172)
+	_prop("urn", Vector2(150, 280), 0, Color("d9a93a"))
+	_prop("urn", Vector2(490, 280), 0, Color("d9a93a"))
+	_decor([[200, 150], [440, 150]], [[280, 80, 4, ["ankh", "eye", "sun", "ankh", "bird", "reed", "wave", "eye"]]], true)
+	_root.shade = Color(0.62, 0.5, 0.32)
+	_hero(320, 280)
+	_save(28)
 
 
 ## Яма с шипами на дне между x1 и x2.

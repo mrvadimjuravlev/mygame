@@ -25,6 +25,8 @@ extends Node2D
 @export var dust := false
 ## Локация: от неё зависит оттенок полумрака — камень пирамиды тёплый, подземелья холодный и т. д.
 @export_enum("pyramid", "dungeon", "castle", "temple") var theme := "pyramid"
+## Свой оттенок полумрака для зала (прозрачный — оттенок локации): у каждого зала стража свой антураж.
+@export var shade := Color(0, 0, 0, 0)
 
 ## Цвет полумрака по локациям: он перекрашивает песчаник в нужный камень.
 const SHADE := {
@@ -67,14 +69,14 @@ func _ready() -> void:
 		back.texture = _back_texture()
 		back.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 		back.color = Color.WHITE
-	# Фон другой комнаты: та же кладка, свой оттенок (цвет задан в сцене).
-	var back2 := get_node_or_null("Back2") as Polygon2D
-	if back2:
-		back2.texture = _back_texture()
-		back2.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	# Фон других комнат (Back2, Back3…): та же кладка, свой оттенок (цвет задан в сцене).
+	for child in get_children():
+		if child is Polygon2D and child.name.begins_with("Back") and child.name != "Back":
+			child.texture = _back_texture()
+			child.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	if dark:
 		var mod := CanvasModulate.new()
-		mod.color = SHADE[theme]
+		mod.color = shade if shade.a > 0.0 else SHADE[theme]
 		add_child(mod)
 		var lamp := PointLight2D.new()
 		lamp.texture = Art.light_texture()

@@ -22,6 +22,9 @@ extends Area2D
 		upside_down = value
 		queue_redraw()
 
+## Ложная дверь: выглядит как выход, но за ней ловушка — герой гибнет и уровень начинается заново.
+@export var trap := false
+
 var is_open := false
 var _open_amount := 0.0
 
@@ -30,7 +33,8 @@ func _ready() -> void:
 	_open_amount = 1.0 if start_open else 0.0
 	if Engine.is_editor_hint():
 		return
-	add_to_group("exit")
+	if not trap:
+		add_to_group("exit")
 	is_open = start_open
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
@@ -65,6 +69,9 @@ func _on_body_entered(body: Node) -> void:
 	if not is_open and needs_key and body.is_in_group("hero") and body.has_key:
 		body.has_key = false
 		activate()
+		return
+	if is_open and _open_amount >= 1.0 and body.is_in_group("hero") and trap:
+		body.die()
 		return
 	if is_open and _open_amount >= 1.0 and body.is_in_group("hero"):
 		set_deferred("monitoring", false)

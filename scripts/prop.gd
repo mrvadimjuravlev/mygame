@@ -1,11 +1,12 @@
 @tool
 extends Node2D
 ## Украшения локаций: цепь (подземелье), знамя (замок), водоросли (храм), паутина, корни,
-## кости, разбитый кувшин, цветной сосуд на подставке (urn, цвет — color). Чистая красота.
+## кости, разбитый кувшин, цветной сосуд на подставке (urn, цвет — color), целый кувшин (jar, цвет — color:
+## цветом камня он прячется у стены), горка золота (gold). Чистая красота.
 ## Начало координат — точка крепления сверху (у водорослей, костей и кувшина — на полу).
 ## Паутина висит в углу: length — размер, color.a не важен; scale.x = -1 зеркалит её в правый угол.
 
-@export_enum("chain", "banner", "weed", "web", "roots", "bones", "vase", "urn") var kind := "chain":
+@export_enum("chain", "banner", "weed", "web", "roots", "bones", "vase", "urn", "jar", "gold") var kind := "chain":
 	set(value):
 		kind = value
 		queue_redraw()
@@ -123,6 +124,26 @@ func _draw() -> void:
 			draw_rect(Rect2(-6, -22, 12, 2), clay.lightened(0.15))
 			draw_colored_polygon(PackedVector2Array([Vector2(13, 0), Vector2(19, -4), Vector2(21, 0)]), clay.darkened(0.15))
 			draw_colored_polygon(PackedVector2Array([Vector2(23, 0), Vector2(26, -2), Vector2(29, 0)]), clay)
+		"jar":
+			# Целый кувшин с ручкой. Цвета камня — почти не виден у стены.
+			var neck := color.lightened(0.12)
+			draw_colored_polygon(PackedVector2Array([Vector2(-4, -22), Vector2(4, -22), Vector2(3, -18), Vector2(8, -13), Vector2(8, -4), Vector2(4, 0), Vector2(-4, 0), Vector2(-8, -4), Vector2(-8, -13), Vector2(-3, -18)]), color)
+			draw_rect(Rect2(-5, -23, 10, 2), neck)
+			draw_rect(Rect2(-7, -12, 14, 1), color.darkened(0.25))
+			draw_rect(Rect2(5, -12, 1, 7), color.darkened(0.2))
+			draw_arc(Vector2(8, -14), 3.0, -PI / 2, PI / 2, 6, color.darkened(0.1), 1.5)
+			draw_rect(Rect2(-6, -9, 2, 4), color.lightened(0.2))
+		"gold":
+			# Горка монет и слиток.
+			var gold := Color("e2b43c")
+			var lit := Color("ffe08a")
+			var dim := Color("a77b1f")
+			draw_colored_polygon(PackedVector2Array([Vector2(-18, 0), Vector2(-10, -7), Vector2(-2, -11), Vector2(6, -9), Vector2(14, -4), Vector2(19, 0)]), dim)
+			for c in [Vector2(-11, -3), Vector2(-5, -7), Vector2(2, -8), Vector2(8, -5), Vector2(13, -2), Vector2(-1, -3), Vector2(5, -2)]:
+				draw_circle(c, 2.6, gold)
+				draw_circle(c + Vector2(-0.8, -0.8), 1.0, lit)
+			draw_rect(Rect2(-24, -5, 9, 5), gold)
+			draw_rect(Rect2(-24, -5, 9, 1), lit)
 		"urn":
 			# Расписной сосуд на каменной подставке; цвет — подсказка.
 			draw_rect(Rect2(-12, -8, 24, 8), Color("6e5236"))

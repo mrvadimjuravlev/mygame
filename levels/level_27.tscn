@@ -1,0 +1,169 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_u56tb"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_awy84"]
+[ext_resource type="Script" path="res://scripts/guardian.gd" id="3_1006y"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_bjbim"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="5_dw8ny"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="6_vle1f"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="7_2gjvu"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_dng4y"]
+
+[node name="Level27" type="Node2D"]
+script = ExtResource("1_u56tb")
+level_number = 27
+slogan = "Зал знаков"
+hints = PackedStringArray("Маска покажет знаки по одному. Запомни, в каком порядке.", "Проговаривай знаки про себя: глаз, птица, солнце… Так легче удержать порядок.", "Ошибся — не беда: подойди к маске снова, она покажет новые знаки.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "pyramid"
+shade = Color(0.33, 0.43, 0.56, 1)
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(490, 60, 550, 60, 550, 160, 490, 160)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(490, 60, 550, 60, 550, 160, 490, 160)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(130, 220, 210, 220, 210, 232, 130, 232)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid6"]
+polygon = PackedVector2Array(130, 220, 210, 220, 210, 232, 130, 232)
+
+[node name="Solid7" type="StaticBody2D" parent="."]
+script = ExtResource("2_awy84")
+polygon = PackedVector2Array(260, 175, 340, 175, 340, 187, 260, 187)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid7"]
+polygon = PackedVector2Array(260, 175, 340, 175, 340, 187, 260, 187)
+
+[node name="Mask" type="Area2D" parent="."]
+position = Vector2(520, 280)
+script = ExtResource("3_1006y")
+kind = "mask"
+speaker = "Каменная маска"
+question = "Смотри и запоминай. Потом коснись знаков в том же порядке."
+options = PackedStringArray()
+answer = 0
+sequence_length = 5
+reply_right = "Твоя память крепка. Проходи."
+reply_wrong = "Ты забыл. Начни с начала."
+reset_point = Vector2(60, 280)
+block = Vector2(40, 120)
+targets = Array[NodePath]([])
+effect = &"activate"
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(590, 280)
+script = ExtResource("4_bjbim")
+start_open = true
+needs_key = false
+upside_down = false
+trap = false
+
+[node name="Torch110_160" type="Area2D" parent="."]
+position = Vector2(110, 160)
+script = ExtResource("5_dw8ny")
+start_lit = true
+
+[node name="Torch300_120" type="Area2D" parent="."]
+position = Vector2(300, 120)
+script = ExtResource("5_dw8ny")
+start_lit = true
+
+[node name="Torch440_200" type="Area2D" parent="."]
+position = Vector2(440, 200)
+script = ExtResource("5_dw8ny")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="."]
+position = Vector2(40, 80)
+script = ExtResource("6_vle1f")
+columns = 3
+signs = PackedStringArray("eye", "ankh", "bird", "wave", "sun", "reed")
+
+[node name="Glyphs2" type="Node2D" parent="."]
+position = Vector2(150, 100)
+script = ExtResource("6_vle1f")
+columns = 2
+signs = PackedStringArray("sun", "eye", "reed", "bird")
+
+[node name="Glyphs3" type="Node2D" parent="."]
+position = Vector2(230, 230)
+script = ExtResource("6_vle1f")
+columns = 4
+signs = PackedStringArray("wave", "ankh", "eye", "sun", "bird", "reed", "ankh", "wave")
+
+[node name="Glyphs4" type="Node2D" parent="."]
+position = Vector2(380, 80)
+script = ExtResource("6_vle1f")
+columns = 3
+signs = PackedStringArray("reed", "bird", "eye", "ankh", "sun", "wave")
+
+[node name="Glyphs5" type="Node2D" parent="."]
+position = Vector2(380, 210)
+script = ExtResource("6_vle1f")
+columns = 2
+signs = PackedStringArray("eye", "wave", "sun", "ankh")
+
+[node name="Prop18" type="Node2D" parent="."]
+position = Vector2(250, 60)
+script = ExtResource("7_2gjvu")
+kind = "roots"
+length = 34.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("8_dng4y")

@@ -1,0 +1,163 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_iror2"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_u3ol2"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="3_721pk"]
+[ext_resource type="Script" path="res://scripts/twin_guards.gd" id="4_o76ne"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="5_sipvl"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_e5n16"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_52a45"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_vxoav"]
+
+[node name="Level28" type="Node2D"]
+script = ExtResource("1_iror2")
+level_number = 28
+slogan = "Два стража"
+hints = PackedStringArray("Один страж всегда лжёт, другой всегда говорит правду, и ты не знаешь, кто есть кто.", "Задай такой вопрос, чтобы оба стража ответили одинаково.", "Спроси, какую дверь назвал бы другой страж, и иди в противоположную.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "pyramid"
+shade = Color(0.62, 0.5, 0.32, 1)
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_u3ol2")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_u3ol2")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_u3ol2")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_u3ol2")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(60, 280)
+script = ExtResource("3_721pk")
+start_open = true
+needs_key = false
+upside_down = false
+trap = false
+
+[node name="Trap" type="Area2D" parent="."]
+position = Vector2(580, 280)
+script = ExtResource("3_721pk")
+start_open = true
+needs_key = false
+upside_down = false
+trap = true
+
+[node name="Guards" type="Node2D" parent="."]
+script = ExtResource("4_o76ne")
+doors = Array[NodePath]([NodePath("../Exit"), NodePath("../Trap")])
+offset = 44.0
+
+[node name="Prop8" type="Node2D" parent="."]
+position = Vector2(180, 280)
+script = ExtResource("5_sipvl")
+kind = "gold"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop9" type="Node2D" parent="."]
+position = Vector2(215, 280)
+script = ExtResource("5_sipvl")
+kind = "gold"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop10" type="Node2D" parent="."]
+position = Vector2(420, 280)
+script = ExtResource("5_sipvl")
+kind = "gold"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop11" type="Node2D" parent="."]
+position = Vector2(460, 280)
+script = ExtResource("5_sipvl")
+kind = "gold"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop12" type="Node2D" parent="."]
+position = Vector2(300, 160)
+script = ExtResource("5_sipvl")
+kind = "gold"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Solid13" type="StaticBody2D" parent="."]
+script = ExtResource("2_u3ol2")
+polygon = PackedVector2Array(250, 160, 350, 160, 350, 172, 250, 172)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid13"]
+polygon = PackedVector2Array(250, 160, 350, 160, 350, 172, 250, 172)
+
+[node name="Prop14" type="Node2D" parent="."]
+position = Vector2(150, 280)
+script = ExtResource("5_sipvl")
+kind = "urn"
+length = 0.0
+color = Color(0.85098, 0.662745, 0.227451, 1)
+
+[node name="Prop15" type="Node2D" parent="."]
+position = Vector2(490, 280)
+script = ExtResource("5_sipvl")
+kind = "urn"
+length = 0.0
+color = Color(0.85098, 0.662745, 0.227451, 1)
+
+[node name="Torch200_150" type="Area2D" parent="."]
+position = Vector2(200, 150)
+script = ExtResource("6_e5n16")
+start_lit = true
+
+[node name="Torch440_150" type="Area2D" parent="."]
+position = Vector2(440, 150)
+script = ExtResource("6_e5n16")
+start_lit = true
+
+[node name="Glyphs1" type="Node2D" parent="."]
+position = Vector2(280, 80)
+script = ExtResource("7_52a45")
+columns = 4
+signs = PackedStringArray("ankh", "eye", "sun", "ankh", "bird", "reed", "wave", "eye")
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(320, 280)
+script = ExtResource("8_vxoav")

@@ -29,6 +29,9 @@ const LEVELS := [
 	"res://levels/level_23.tscn",
 	"res://levels/level_24.tscn",
 	"res://levels/level_25.tscn",
+	"res://levels/level_26.tscn",
+	"res://levels/level_27.tscn",
+	"res://levels/level_28.tscn",
 ]
 ## Локации по порядку: id, название (ключ перевода), уровни. Пустой список — «Скоро».
 const WORLDS := [

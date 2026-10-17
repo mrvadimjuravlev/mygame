@@ -17,7 +17,7 @@ func _run() -> void:
 			first = int(arg.trim_prefix("--from="))
 	change_scene_to_file("res://levels/level_%02d.tscn" % first)
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22, _solve_23, _solve_24, _solve_25]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22, _solve_23, _solve_24, _solve_25, _solve_26, _solve_27, _solve_28]
 	for i in range(first - 1, solvers.size()):
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -341,6 +341,104 @@ func _jump_to(target) -> void:
 			break
 	_release_all()
 	await _frames(1)
+
+## Окно разговора со стражем: варианты ответа в столбик (центр кнопки i) и кнопка «Дальше».
+func _option_at(i: int, count: int) -> Vector2:
+	return Vector2(320, 326 - 12 - count * 36 + i * 36 + 15)
+
+
+func _glyph_at(i: int) -> Vector2:
+	return Vector2(129 + 66 * i + 26, 278)
+
+
+func _solve_26() -> void:
+	var lv := current_scene
+	var shadow: Node = lv.get_node("Shadow")
+	var popup: CanvasLayer = shadow._popup
+	# Сначала к тени, не считая: ответ наугад — и тень отбрасывает назад.
+	await _walk_to(500.0)
+	await _until(func() -> bool: return popup.visible, false, 60)
+	print("  тень заговорила: ", popup.visible)
+	await _tap(_option_at(1, 4))  # «7»
+	await _frames(5)
+	await _tap(_option_at(0, 1))  # «Дальше»
+	await _frames(5)
+	print("  неверно — отброшен к ", _hero().global_position)
+	# Обходим кладовую через порталы.
+	await _walk_to(340.0)
+	await _press("action")
+	await _frames(10)
+	print("  второй зал: ", _hero().global_position)
+	await _walk_to(1085.0)
+	await _hop("move_right")
+	await _walk_to(1220.0)
+	await _press("action")
+	await _frames(10)
+	print("  третий зал: ", _hero().global_position)
+	await _walk_to(1860.0)
+	await _walk_to(1340.0)
+	await _press("action")
+	await _frames(10)
+	await _walk_to(1150.0)
+	await _hop("move_left")
+	await _walk_to(700.0)
+	await _press("action")
+	await _frames(10)
+	print("  снова в первом зале: ", _hero().global_position)
+	await _walk_to(500.0)
+	await _until(func() -> bool: return popup.visible, false, 60)
+	if not popup.visible:
+		await _press("action")
+		await _frames(5)
+	await _tap(_option_at(2, 4))  # «8»
+	await _frames(5)
+	await _tap(_option_at(0, 1))
+	await _frames(80)
+	print("  тень ушла: ", shadow.solved)
+	await _walk_to(585.0)
+
+
+func _solve_27() -> void:
+	var mask: Node = current_scene.get_node("Mask")
+	var popup: CanvasLayer = mask._popup
+	var signs: Array = mask.SIGNS
+	await _walk_to(490.0)
+	await _until(func() -> bool: return popup.visible and not popup.flashing(), false, 600)
+	# Ошибка: нажимаем не тот знак.
+	var wrong := (signs.find(mask.sequence[0]) + 1) % signs.size()
+	await _tap(_glyph_at(wrong))
+	await _frames(5)
+	await _tap(_option_at(0, 1))
+	await _frames(5)
+	print("  ошибся — отброшен к ", _hero().global_position)
+	await _walk_to(490.0)
+	await _until(func() -> bool: return popup.visible and not popup.flashing(), false, 600)
+	print("  маска загадала: ", mask.sequence)
+	for s in mask.sequence:
+		await _tap(_glyph_at(signs.find(s)))
+		await _frames(4)
+	await _tap(_option_at(0, 1))
+	await _frames(80)
+	print("  решётка поднята: ", mask.solved)
+	await _walk_to(590.0)
+
+
+func _solve_28() -> void:
+	var guards: Node = current_scene.get_node("Guards")
+	var popup: CanvasLayer = guards._popup
+	print("  выход: ", "левая" if guards.real_door == 0 else "правая", ", лжёт ", "левый" if guards.liar == 0 else "правый")
+	await _walk_to(112.0)
+	await _until(func() -> bool: return popup.visible, false, 60)
+	await _tap(_option_at(2, 4))  # какую дверь назвал бы другой страж
+	await _frames(5)
+	print("  ответ: ", guards.answer_text)
+	await _tap(_option_at(0, 1))
+	await _frames(5)
+	if guards.answer_door == 0:
+		# Назвали левую — идём в правую, мимо правого стража: он молчит, ответ уже дан.
+		await _walk_to(580.0)
+	else:
+		await _walk_to(60.0)
 
 
 func _run_worlds() -> void:
