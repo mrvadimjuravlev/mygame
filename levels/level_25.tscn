@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://scripts/prop.gd" id="13_fwq4e"]
 [ext_resource type="Script" path="res://scripts/hero.gd" id="14_txeu0"]
 
-[node name="Level25" type="Node2D" unique_id=1688911629]
+[node name="Level25" type="Node2D" unique_id=441941481]
 script = ExtResource("1_ibs0n")
 level_number = 25
 slogan = "Колодец"
@@ -26,97 +26,97 @@ restart_on_fall = true
 dark = true
 dust = true
 
-[node name="Back" type="Polygon2D" parent="." unique_id=850850641]
+[node name="Back" type="Polygon2D" parent="." unique_id=679317597]
 color = Color(0.16470589, 0.12156863, 0.09019608, 1)
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 1440, 0, 1440)
 
-[node name="Solid1" type="StaticBody2D" parent="." unique_id=1985820233]
+[node name="Solid1" type="StaticBody2D" parent="." unique_id=1146075735]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(0, 0, 100, 0, 100, 1440, 0, 1440)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid1" unique_id=1977733830]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1" unique_id=95932081]
 polygon = PackedVector2Array(0, 0, 100, 0, 100, 1440, 0, 1440)
 
-[node name="Solid2" type="StaticBody2D" parent="." unique_id=278944315]
+[node name="Solid2" type="StaticBody2D" parent="." unique_id=2013432536]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(540, 0, 640, 0, 640, 1440, 540, 1440)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid2" unique_id=1067390285]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2" unique_id=1114058090]
 polygon = PackedVector2Array(540, 0, 640, 0, 640, 1440, 540, 1440)
 
-[node name="Solid3" type="StaticBody2D" parent="." unique_id=202549064]
+[node name="Solid3" type="StaticBody2D" parent="." unique_id=425375172]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(100, 0, 540, 0, 540, 40, 100, 40)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid3" unique_id=1408330697]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3" unique_id=195834998]
 polygon = PackedVector2Array(100, 0, 540, 0, 540, 40, 100, 40)
 
-[node name="Solid4" type="StaticBody2D" parent="." unique_id=717604579]
+[node name="Solid4" type="StaticBody2D" parent="." unique_id=2033358911]
 script = ExtResource("2_qu5al")
-polygon = PackedVector2Array(100, 1400, 250, 1400, 250, 1440, 100, 1440)
+polygon = PackedVector2Array(100, 1360, 250, 1360, 250, 1376, 100, 1376)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid4" unique_id=1689132369]
-polygon = PackedVector2Array(100, 1400, 250, 1400, 250, 1440, 100, 1440)
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4" unique_id=576769899]
+polygon = PackedVector2Array(100, 1360, 250, 1360, 250, 1376, 100, 1376)
 
-[node name="Solid5" type="StaticBody2D" parent="." unique_id=817136676]
+[node name="Solid5" type="StaticBody2D" parent="." unique_id=923071492]
 script = ExtResource("2_qu5al")
-polygon = PackedVector2Array(330, 1400, 540, 1400, 540, 1440, 330, 1440)
+polygon = PackedVector2Array(330, 1360, 540, 1360, 540, 1376, 330, 1376)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid5" unique_id=1650637009]
-polygon = PackedVector2Array(330, 1400, 540, 1400, 540, 1440, 330, 1440)
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5" unique_id=650221437]
+polygon = PackedVector2Array(330, 1360, 540, 1360, 540, 1376, 330, 1376)
 
-[node name="Lift1" type="AnimatableBody2D" parent="." unique_id=1230935819]
-position = Vector2(290, 1400)
+[node name="Lift1" type="AnimatableBody2D" parent="." unique_id=1881220668]
+position = Vector2(290, 1360)
 script = ExtResource("3_b46x4")
 size = Vector2(60, 12)
-travel = Vector2(0, -240)
+travel = Vector2(0, -200)
 speed = 80.0
 wait = 1.0
-phase = 6.0
+phase = 5.0
 
-[node name="Crumble7" type="StaticBody2D" parent="." unique_id=377146442]
+[node name="Crumble7" type="StaticBody2D" parent="." unique_id=100878361]
 position = Vector2(369, 1130)
 script = ExtResource("4_naj3g")
 
-[node name="Crumble8" type="StaticBody2D" parent="." unique_id=1412755795]
+[node name="Crumble8" type="StaticBody2D" parent="." unique_id=332292749]
 position = Vector2(439, 1095)
 script = ExtResource("4_naj3g")
 
-[node name="Solid9" type="StaticBody2D" parent="." unique_id=262282819]
+[node name="Solid9" type="StaticBody2D" parent="." unique_id=2102013358]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(490, 1055, 540, 1055, 540, 1071, 490, 1071)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid9" unique_id=762219909]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid9" unique_id=910102731]
 polygon = PackedVector2Array(490, 1055, 540, 1055, 540, 1071, 490, 1071)
 
-[node name="Spikes10" type="Area2D" parent="." unique_id=893821933]
+[node name="Spikes10" type="Area2D" parent="." unique_id=881713121]
 position = Vector2(540, 1025)
 rotation = -1.5707964
 script = ExtResource("5_d4wrl")
 width = 50.0
 
-[node name="Solid11" type="StaticBody2D" parent="." unique_id=199065979]
+[node name="Solid11" type="StaticBody2D" parent="." unique_id=2000747199]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(330, 770, 370, 770, 370, 790, 330, 790)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid11" unique_id=313553586]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid11" unique_id=465699668]
 polygon = PackedVector2Array(330, 770, 370, 770, 370, 790, 330, 790)
 
-[node name="Pendulum" type="AnimatableBody2D" parent="." unique_id=517236487]
+[node name="Pendulum" type="AnimatableBody2D" parent="." unique_id=1180283601]
 position = Vector2(350, 1040)
 script = ExtResource("6_tyttg")
 pivot = Vector2(0, -250)
 amplitude = 0.5
 period = 3.6
 
-[node name="Solid13" type="StaticBody2D" parent="." unique_id=737063375]
+[node name="Solid13" type="StaticBody2D" parent="." unique_id=874954409]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(100, 975, 195, 975, 195, 991, 100, 991)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid13" unique_id=1846049487]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid13" unique_id=1500249015]
 polygon = PackedVector2Array(100, 975, 195, 975, 195, 991, 100, 991)
 
-[node name="Lift2" type="AnimatableBody2D" parent="." unique_id=562007186]
+[node name="Lift2" type="AnimatableBody2D" parent="." unique_id=1346990045]
 position = Vector2(129, 935)
 script = ExtResource("3_b46x4")
 size = Vector2(48, 12)
@@ -124,33 +124,33 @@ travel = Vector2(0, -200)
 speed = 60.0
 wait = 0.8
 
-[node name="Spikes15" type="Area2D" parent="." unique_id=973618399]
+[node name="Spikes15" type="Area2D" parent="." unique_id=284621210]
 position = Vector2(100, 820)
 rotation = 1.5707964
 script = ExtResource("5_d4wrl")
 
-[node name="Vanish1" type="StaticBody2D" parent="." unique_id=1764510126]
+[node name="Vanish1" type="StaticBody2D" parent="." unique_id=143099237]
 position = Vector2(200, 715)
 script = ExtResource("7_1e0xr")
 
-[node name="Vanish2" type="StaticBody2D" parent="." unique_id=1025508484]
+[node name="Vanish2" type="StaticBody2D" parent="." unique_id=1956725816]
 position = Vector2(280, 685)
 script = ExtResource("7_1e0xr")
 phase = -0.6
 
-[node name="Vanish3" type="StaticBody2D" parent="." unique_id=666879366]
+[node name="Vanish3" type="StaticBody2D" parent="." unique_id=1996213808]
 position = Vector2(360, 655)
 script = ExtResource("7_1e0xr")
 phase = -1.2
 
-[node name="Solid19" type="StaticBody2D" parent="." unique_id=1339771510]
+[node name="Solid19" type="StaticBody2D" parent="." unique_id=246388831]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(420, 625, 470, 625, 470, 641, 420, 641)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid19" unique_id=1240355403]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid19" unique_id=239183096]
 polygon = PackedVector2Array(420, 625, 470, 625, 470, 641, 420, 641)
 
-[node name="Lift3" type="AnimatableBody2D" parent="." unique_id=1989289710]
+[node name="Lift3" type="AnimatableBody2D" parent="." unique_id=1224838025]
 position = Vector2(505, 625)
 script = ExtResource("3_b46x4")
 size = Vector2(60, 12)
@@ -158,28 +158,28 @@ travel = Vector2(0, -215)
 speed = 60.0
 wait = 0.8
 
-[node name="Spikes21" type="Area2D" parent="." unique_id=371985685]
+[node name="Spikes21" type="Area2D" parent="." unique_id=2093154838]
 position = Vector2(540, 560)
 rotation = -1.5707964
 script = ExtResource("5_d4wrl")
 width = 90.0
 
-[node name="Crumble22" type="StaticBody2D" parent="." unique_id=208571363]
+[node name="Crumble22" type="StaticBody2D" parent="." unique_id=1552871324]
 position = Vector2(420, 380)
 script = ExtResource("4_naj3g")
 
-[node name="Crumble23" type="StaticBody2D" parent="." unique_id=1448741512]
+[node name="Crumble23" type="StaticBody2D" parent="." unique_id=829588906]
 position = Vector2(340, 350)
 script = ExtResource("4_naj3g")
 
-[node name="Solid24" type="StaticBody2D" parent="." unique_id=1016030029]
+[node name="Solid24" type="StaticBody2D" parent="." unique_id=495838808]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(230, 320, 290, 320, 290, 336, 230, 336)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid24" unique_id=843805466]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid24" unique_id=245975854]
 polygon = PackedVector2Array(230, 320, 290, 320, 290, 336, 230, 336)
 
-[node name="Lift4" type="AnimatableBody2D" parent="." unique_id=1597392335]
+[node name="Lift4" type="AnimatableBody2D" parent="." unique_id=513191019]
 position = Vector2(190, 305)
 script = ExtResource("3_b46x4")
 size = Vector2(60, 12)
@@ -187,112 +187,112 @@ travel = Vector2(0, -165)
 speed = 60.0
 wait = 0.8
 
-[node name="Solid26" type="StaticBody2D" parent="." unique_id=1732679868]
+[node name="Solid26" type="StaticBody2D" parent="." unique_id=1744853321]
 script = ExtResource("2_qu5al")
 polygon = PackedVector2Array(240, 140, 540, 140, 540, 156, 240, 156)
 
-[node name="Shape" type="CollisionPolygon2D" parent="Solid26" unique_id=599069166]
+[node name="Shape" type="CollisionPolygon2D" parent="Solid26" unique_id=1198540345]
 polygon = PackedVector2Array(240, 140, 540, 140, 540, 156, 240, 156)
 
-[node name="Press" type="Node2D" parent="." unique_id=1642884146]
+[node name="Press" type="Node2D" parent="." unique_id=788331430]
 position = Vector2(330, 40)
 script = ExtResource("8_j212t")
 size = Vector2(40, 40)
 travel = 48.0
 up_time = 1.0
 
-[node name="Exit" type="Area2D" parent="." unique_id=1737577778]
+[node name="Exit" type="Area2D" parent="." unique_id=1482451769]
 position = Vector2(500, 140)
 script = ExtResource("9_1rkgh")
 start_open = true
 
-[node name="Sand" type="Node2D" parent="." unique_id=1973144240]
-position = Vector2(100, 1470)
+[node name="Sand" type="Node2D" parent="." unique_id=1438572177]
+position = Vector2(100, 1420)
 script = ExtResource("10_yhn4i")
 width = 440.0
-speed = 15.0
+speed = 22.0
 delay = 4.0
 stop_y = 170.0
 
-[node name="Torch160_1330" type="Area2D" parent="." unique_id=572464910]
+[node name="Torch160_1330" type="Area2D" parent="." unique_id=1097462201]
 position = Vector2(160, 1330)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch480_1300" type="Area2D" parent="." unique_id=1312842772]
+[node name="Torch480_1300" type="Area2D" parent="." unique_id=1491179135]
 position = Vector2(480, 1300)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch460_1160" type="Area2D" parent="." unique_id=1821031699]
+[node name="Torch460_1160" type="Area2D" parent="." unique_id=2144389143]
 position = Vector2(460, 1160)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch220_1090" type="Area2D" parent="." unique_id=228007657]
+[node name="Torch220_1090" type="Area2D" parent="." unique_id=1892999087]
 position = Vector2(220, 1090)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch470_930" type="Area2D" parent="." unique_id=1016048486]
+[node name="Torch470_930" type="Area2D" parent="." unique_id=1562076039]
 position = Vector2(470, 930)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch150_800" type="Area2D" parent="." unique_id=927521565]
+[node name="Torch150_800" type="Area2D" parent="." unique_id=1239074014]
 position = Vector2(150, 800)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch420_720" type="Area2D" parent="." unique_id=528491870]
+[node name="Torch420_720" type="Area2D" parent="." unique_id=1639480610]
 position = Vector2(420, 720)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch300_560" type="Area2D" parent="." unique_id=1921705359]
+[node name="Torch300_560" type="Area2D" parent="." unique_id=1286609981]
 position = Vector2(300, 560)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch470_420" type="Area2D" parent="." unique_id=1540395450]
+[node name="Torch470_420" type="Area2D" parent="." unique_id=221055813]
 position = Vector2(470, 420)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch200_250" type="Area2D" parent="." unique_id=9799139]
+[node name="Torch200_250" type="Area2D" parent="." unique_id=776383860]
 position = Vector2(200, 250)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Torch420_90" type="Area2D" parent="." unique_id=526686894]
+[node name="Torch420_90" type="Area2D" parent="." unique_id=671222709]
 position = Vector2(420, 90)
 script = ExtResource("11_1cjvc")
 start_lit = true
 
-[node name="Glyphs1" type="Node2D" parent="." unique_id=649754611]
+[node name="Glyphs1" type="Node2D" parent="." unique_id=1543881426]
 position = Vector2(380, 1250)
 script = ExtResource("12_tthoh")
 columns = 2
 signs = PackedStringArray("eye", "sun", "reed", "ankh")
 
-[node name="Glyphs2" type="Node2D" parent="." unique_id=1998887101]
+[node name="Glyphs2" type="Node2D" parent="." unique_id=755367442]
 position = Vector2(200, 520)
 script = ExtResource("12_tthoh")
 columns = 2
 signs = PackedStringArray("bird", "wave", "eye", "sun")
 
-[node name="Prop43" type="Node2D" parent="." unique_id=1797462959]
+[node name="Prop43" type="Node2D" parent="." unique_id=17328747]
 position = Vector2(400, 40)
 script = ExtResource("13_fwq4e")
 kind = "roots"
 length = 40.0
 
-[node name="Prop44" type="Node2D" parent="." unique_id=259718077]
-position = Vector2(150, 1400)
+[node name="Prop44" type="Node2D" parent="." unique_id=334173254]
+position = Vector2(150, 1360)
 script = ExtResource("13_fwq4e")
 kind = "bones"
 length = 0.0
 
-[node name="Hero" type="CharacterBody2D" parent="." unique_id=677682886]
-position = Vector2(140, 1400)
+[node name="Hero" type="CharacterBody2D" parent="." unique_id=95850094]
+position = Vector2(140, 1360)
 script = ExtResource("14_txeu0")
