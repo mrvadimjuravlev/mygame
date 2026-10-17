@@ -712,7 +712,7 @@ func _level_23() -> void:
 	_pit(1240, 1580)
 	var pend := _add("Pendulum", AnimatableBody2D.new(), "pendulum.gd", Vector2(1410, 290))
 	pend.pivot = Vector2(0, -250)
-	pend.amplitude = 0.6
+	pend.amplitude = 0.5  # на краях качания платформа не нависает над уступами
 	pend.period = 3.6
 	_box(1580, 280, 1920, 360)
 	_exit(1860, 280, true)
@@ -794,10 +794,10 @@ func _level_25() -> void:
 	_box(490, 1055, 540, 1071)
 	_spikes(540, 1025, 50, -PI / 2)
 	# 4. Маятник налево, к уступу у левой стены.
-	_box(330, 770, 370, 790)     # камень, на котором висит маятник
-	var pend := _add("Pendulum", AnimatableBody2D.new(), "pendulum.gd", Vector2(350, 1040))
+	_box(320, 770, 360, 790)     # камень, на котором висит маятник
+	var pend := _add("Pendulum", AnimatableBody2D.new(), "pendulum.gd", Vector2(340, 1040))
 	pend.pivot = Vector2(0, -250)
-	pend.amplitude = 0.5
+	pend.amplitude = 0.45  # на краях качания платформа не нависает над уступами
 	pend.period = 3.6
 	_box(100, 975, 195, 991)
 	# Лифт вдоль левой стены (в ней шипы), с него 5. исчезающие плиты направо.

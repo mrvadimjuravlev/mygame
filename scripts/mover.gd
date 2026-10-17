@@ -30,13 +30,6 @@ func _ready() -> void:
 	shape.shape = rect
 	shape.position = Vector2(0, size.y / 2)
 	add_child(shape)
-	# Желобок пути за платформой: видно, куда она поедет. Рисуется отдельным узлом, чтобы не перерисовывать платформу.
-	var track := Node2D.new()
-	track.top_level = true
-	track.show_behind_parent = true
-	track.position = global_position
-	track.draw.connect(_draw_track.bind(track))
-	add_child(track)
 	_time = phase
 	position = place_at(_time)
 
@@ -70,14 +63,6 @@ func _physics_process(delta: float) -> void:
 		return
 	_time += delta
 	position = place_at(_time)
-
-
-func _draw_track(track: Node2D) -> void:
-	var c := Color(0.05, 0.03, 0.02, 0.35)
-	var mid := Vector2(0, size.y / 2)
-	track.draw_line(mid, mid + travel, c, 3.0)
-	for p in [mid, mid + travel]:
-		track.draw_circle(p, 3.0, c)
 
 
 func _draw() -> void:
