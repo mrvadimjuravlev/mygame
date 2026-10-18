@@ -184,6 +184,10 @@ const EN := {
 	"Он.": "Him.",
 	"Мы уже ответили: «%s» Больше ни слова.": "We have already answered: \"%s\" Not another word.",
 	"Дальше": "Next",
+	"Уголь": "Charcoal",
+	"Ключ под самым потолком, не допрыгнуть. Загляни в соседний зал через низкий проход.": "The key is right under the ceiling, too high to jump. Look into the next hall through the low passage.",
+	"Сосуд в дальнем зале даёт уголь. Пока уголь у тебя, палец рисует платформы.": "The vessel in the far hall gives you charcoal. While you carry it, your finger draws platforms.",
+	"Нарисуй пальцем три ступеньки одна над другой справа от полки с ключом и запрыгивай по ним снизу.": "Draw three steps one above another to the right of the key's shelf and jump up through them.",
 	# Уровень 18
 	"Название зоны — это счёт.": "The name of the zone is a count.",
 	"На стенах есть кирпичи чуть другого цвета: где один, где два, и так до пяти. Их можно нажать пальцем.": "Some bricks on the walls are a slightly different color: one here, two there, and so on up to five. You can press them with your finger.",

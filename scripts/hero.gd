@@ -14,6 +14,8 @@ var fall_limit := 420.0
 ## Если true, падение в пропасть — гибель: уровень начинается заново.
 var restart_on_fall := false
 var has_key := false
+## Уголь из сосуда: пока он у героя, пальцем можно рисовать платформы.
+var has_coal := false
 var spawn_point := Vector2.ZERO
 var facing := 1.0
 var _dead := false

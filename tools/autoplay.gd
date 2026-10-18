@@ -17,7 +17,7 @@ func _run() -> void:
 			first = int(arg.trim_prefix("--from="))
 	change_scene_to_file("res://levels/level_%02d.tscn" % first)
 	await _frames(5)
-	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22, _solve_23, _solve_24, _solve_25, _solve_26, _solve_27, _solve_28]
+	var solvers := [_solve_01, _solve_02, _solve_03, _solve_04, _solve_05, _solve_06, _solve_07, _solve_08, _solve_09, _solve_10, _solve_11, _solve_12, _solve_13, _solve_14, _solve_15, _solve_16, _solve_17, _solve_18, _solve_19, _solve_20, _solve_21, _solve_22, _solve_23, _solve_24, _solve_25, _solve_26, _solve_27, _solve_28, _solve_29]
 	for i in range(first - 1, solvers.size()):
 		# Ждём, пока нужный уровень действительно загрузится.
 		var expected: String = "res://levels/level_%02d.tscn" % (i + 1)
@@ -439,6 +439,37 @@ func _solve_28() -> void:
 		await _walk_to(580.0)
 	else:
 		await _walk_to(60.0)
+
+
+func _solve_29() -> void:
+	var lv := current_scene
+	var coal: Node = lv.get_node("Coal")
+	# За углём — в дальний зал через низкий проход.
+	await _walk_to(500.0)
+	await _walk_to(1000.0)
+	await _press("action")
+	await _frames(5)
+	print("  уголь у героя: ", _hero().has_coal)
+	await _walk_to(600.0)
+	await _walk_to(190.0)
+	# Три ступеньки справа от полки с ключом.
+	for y in [235.0, 185.0, 135.0]:
+		var t := lv.get_viewport().get_canvas_transform()
+		await _drag(t * Vector2(150, y), t * Vector2(235, y), 10)
+	print("  нарисовано линий: ", coal.strokes.size())
+	for i in 3:
+		Input.action_press("jump")
+		await _frames(3)
+		Input.action_release("jump")
+		await _frames(10)
+		await _until(func() -> bool: return _hero().is_on_floor())
+		print("  на ступеньке: ", _hero().global_position)
+	await _hop("move_left")
+	await _walk_to(60.0)
+	print("  ключ у героя: ", _hero().has_key)
+	await _walk_to(330.0)
+	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 270.0)
+	await _walk_to(360.0)
 
 
 func _run_worlds() -> void:

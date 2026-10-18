@@ -234,6 +234,8 @@ func _draw_inventory() -> void:
 	var items: Array[String] = []
 	if hero and hero.has_key:
 		items.append("key")
+	if hero and hero.has_coal:
+		items.append("coal")
 	var slot := Vector2(40, 40)
 	var x0 := 320.0 - (INVENTORY_SLOTS * slot.x + (INVENTORY_SLOTS - 1) * 6.0) / 2.0
 	for i in INVENTORY_SLOTS:
@@ -243,7 +245,10 @@ func _draw_inventory() -> void:
 		if i < items.size():
 			_pad.draw_set_transform(r.get_center(), 0.0, Vector2(2, 2))
 			_pad.draw_circle(Vector2.ZERO, 8.0, Color(1, 0.85, 0.3, 0.15))
-			preload("res://scripts/key_item.gd").draw_key(_pad, Vector2(-1, 0))
+			if items[i] == "coal":
+				preload("res://scripts/coal_vessel.gd").draw_coal(_pad, Vector2.ZERO)
+			else:
+				preload("res://scripts/key_item.gd").draw_key(_pad, Vector2(-1, 0))
 			_pad.draw_set_transform(Vector2.ZERO)
 
 
