@@ -1,21 +1,21 @@
 [gd_scene load_steps=11 format=3]
 
-[ext_resource type="Script" path="res://scripts/level.gd" id="1_y4cqc"]
-[ext_resource type="Script" path="res://scripts/solid.gd" id="2_fqnrt"]
-[ext_resource type="Script" path="res://scripts/key_item.gd" id="3_b7og4"]
-[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_85084"]
-[ext_resource type="Script" path="res://scripts/prop.gd" id="5_2okll"]
-[ext_resource type="Script" path="res://scripts/coal_vessel.gd" id="6_lvgnu"]
-[ext_resource type="Script" path="res://scripts/coal_drawing.gd" id="7_ge1nb"]
-[ext_resource type="Script" path="res://scripts/torch.gd" id="8_gufch"]
-[ext_resource type="Script" path="res://scripts/glyphs.gd" id="9_snx82"]
-[ext_resource type="Script" path="res://scripts/hero.gd" id="10_pxcvh"]
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_a24d0"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_yr0qd"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="3_0ebhf"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_4mq8a"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="5_wevu7"]
+[ext_resource type="Script" path="res://scripts/chalk_vessel.gd" id="6_bkuw4"]
+[ext_resource type="Script" path="res://scripts/chalk_drawing.gd" id="7_4nonp"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="8_1m2v7"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="9_wlqhp"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="10_f1bss"]
 
 [node name="Level29" type="Node2D"]
-script = ExtResource("1_y4cqc")
+script = ExtResource("1_a24d0")
 level_number = 29
-slogan = "Уголь"
-hints = PackedStringArray("Ключ под самым потолком, не допрыгнуть. Загляни в соседний зал через низкий проход.", "Уголь даёт только сосуд, над которым бурлят пузыри. Пока уголь у тебя, палец рисует платформы.", "Нарисуй пальцем три ступеньки одна над другой справа от полки с ключом и запрыгивай по ним снизу.")
+slogan = "Мел"
+hints = PackedStringArray("Ключ под самым потолком, не допрыгнуть. Загляни в соседний зал через низкий проход.", "Мел даёт только сосуд, над которым бурлят пузыри. Пока мел у тебя, палец рисует платформы.", "Нарисуй пальцем три ступеньки одна над другой справа от полки с ключом и запрыгивай по ним снизу.")
 tutorial_button = ""
 level_width = 1280.0
 level_height = 360.0
@@ -35,7 +35,7 @@ color = Color(0.164706, 0.121569, 0.0901961, 1)
 polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 360, 0, 360)
 
 [node name="Solid1" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(0, 280, 1280, 280, 1280, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -43,7 +43,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(0, 280, 1280, 280, 1280, 360, 0, 360)
 
 [node name="Solid2" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 60, 0, 60)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -51,7 +51,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 60, 0, 60)
 
 [node name="Solid3" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -59,7 +59,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
 
 [node name="Solid4" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(1264, 0, 1280, 0, 1280, 360, 1264, 360)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -67,7 +67,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(1264, 0, 1280, 0, 1280, 360, 1264, 360)
 
 [node name="Solid5" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(16, 110, 140, 110, 140, 122, 16, 122)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -76,18 +76,18 @@ polygon = PackedVector2Array(16, 110, 140, 110, 140, 122, 16, 122)
 
 [node name="Key" type="Area2D" parent="."]
 position = Vector2(70, 110)
-script = ExtResource("3_b7og4")
+script = ExtResource("3_0ebhf")
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(360, 280)
-script = ExtResource("4_85084")
+script = ExtResource("4_4mq8a")
 start_open = false
 needs_key = true
 upside_down = false
 trap = false
 
 [node name="Solid8" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(600, 60, 690, 60, 690, 250, 600, 250)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -95,7 +95,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(600, 60, 690, 60, 690, 250, 600, 250)
 
 [node name="Solid9" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(720, 235, 800, 235, 800, 247, 720, 247)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -103,7 +103,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(720, 235, 800, 235, 800, 247, 720, 247)
 
 [node name="Solid10" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(830, 190, 910, 190, 910, 202, 830, 202)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -111,7 +111,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(830, 190, 910, 190, 910, 202, 830, 202)
 
 [node name="Solid11" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(940, 145, 1020, 145, 1020, 157, 940, 157)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -119,7 +119,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(940, 145, 1020, 145, 1020, 157, 940, 157)
 
 [node name="Solid12" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(1080, 210, 1160, 210, 1160, 222, 1080, 222)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -127,7 +127,7 @@ color = Color(0.541176, 0.415686, 0.262745, 1)
 polygon = PackedVector2Array(1080, 210, 1160, 210, 1160, 222, 1080, 222)
 
 [node name="Solid13" type="StaticBody2D" parent="."]
-script = ExtResource("2_fqnrt")
+script = ExtResource("2_yr0qd")
 polygon = PackedVector2Array(1190, 160, 1264, 160, 1264, 172, 1190, 172)
 color = Color(0.541176, 0.415686, 0.262745, 1)
 
@@ -136,101 +136,101 @@ polygon = PackedVector2Array(1190, 160, 1264, 160, 1264, 172, 1190, 172)
 
 [node name="Prop14" type="Node2D" parent="."]
 position = Vector2(745, 235)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "vase"
 length = 0.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop15" type="Node2D" parent="."]
 position = Vector2(870, 190)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "urn"
 length = 0.0
 color = Color(0.290196, 0.560784, 0.905882, 1)
 
 [node name="Vessel" type="Area2D" parent="."]
 position = Vector2(980, 145)
-script = ExtResource("6_lvgnu")
+script = ExtResource("6_bkuw4")
 
 [node name="Prop17" type="Node2D" parent="."]
 position = Vector2(1120, 210)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "urn"
 length = 0.0
 color = Color(0.545098, 0.890196, 0.419608, 1)
 
 [node name="Prop18" type="Node2D" parent="."]
 position = Vector2(1230, 160)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "jar"
 length = 0.0
 color = Color(0.603922, 0.352941, 0.203922, 1)
 
 [node name="Prop19" type="Node2D" parent="."]
 position = Vector2(1040, 280)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "urn"
 length = 0.0
 color = Color(0.85098, 0.32549, 0.309804, 1)
 
 [node name="Prop20" type="Node2D" parent="."]
 position = Vector2(1150, 280)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "bones"
 length = 0.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
-[node name="Coal" type="Node2D" parent="."]
-script = ExtResource("7_ge1nb")
+[node name="Chalk" type="Node2D" parent="."]
+script = ExtResource("7_4nonp")
 max_strokes = 4
 max_length = 140.0
 
 [node name="Torch200_170" type="Area2D" parent="."]
 position = Vector2(200, 170)
-script = ExtResource("8_gufch")
+script = ExtResource("8_1m2v7")
 start_lit = true
 
 [node name="Torch480_180" type="Area2D" parent="."]
 position = Vector2(480, 180)
-script = ExtResource("8_gufch")
+script = ExtResource("8_1m2v7")
 start_lit = true
 
 [node name="Torch820_160" type="Area2D" parent="."]
 position = Vector2(820, 160)
-script = ExtResource("8_gufch")
+script = ExtResource("8_1m2v7")
 start_lit = true
 
 [node name="Torch1200_150" type="Area2D" parent="."]
 position = Vector2(1200, 150)
-script = ExtResource("8_gufch")
+script = ExtResource("8_1m2v7")
 start_lit = true
 
 [node name="Glyphs1" type="Node2D" parent="."]
 position = Vector2(420, 90)
-script = ExtResource("9_snx82")
+script = ExtResource("9_wlqhp")
 columns = 3
 signs = PackedStringArray("eye", "ankh", "sun", "reed", "bird", "wave")
 
 [node name="Glyphs2" type="Node2D" parent="."]
 position = Vector2(930, 100)
-script = ExtResource("9_snx82")
+script = ExtResource("9_wlqhp")
 columns = 2
 signs = PackedStringArray("wave", "eye", "sun", "ankh")
 
 [node name="Prop28" type="Node2D" parent="."]
 position = Vector2(16, 60)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "web"
 length = 40.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Prop29" type="Node2D" parent="."]
 position = Vector2(760, 60)
-script = ExtResource("5_2okll")
+script = ExtResource("5_wevu7")
 kind = "roots"
 length = 40.0
 color = Color(0.541176, 0.168627, 0.168627, 1)
 
 [node name="Hero" type="CharacterBody2D" parent="."]
 position = Vector2(60, 280)
-script = ExtResource("10_pxcvh")
+script = ExtResource("10_f1bss")

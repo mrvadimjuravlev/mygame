@@ -184,9 +184,9 @@ const EN := {
 	"Он.": "Him.",
 	"Мы уже ответили: «%s» Больше ни слова.": "We have already answered: \"%s\" Not another word.",
 	"Дальше": "Next",
-	"Уголь": "Charcoal",
+	"Мел": "Chalk",
 	"Ключ под самым потолком, не допрыгнуть. Загляни в соседний зал через низкий проход.": "The key is right under the ceiling, too high to jump. Look into the next hall through the low passage.",
-	"Уголь даёт только сосуд, над которым бурлят пузыри. Пока уголь у тебя, палец рисует платформы.": "Only the vessel with bubbles above it gives charcoal. While you carry it, your finger draws platforms.",
+	"Мел даёт только сосуд, над которым бурлят пузыри. Пока мел у тебя, палец рисует платформы.": "Only the vessel with bubbles above it gives chalk. While you carry it, your finger draws platforms.",
 	"Нарисуй пальцем три ступеньки одна над другой справа от полки с ключом и запрыгивай по ним снизу.": "Draw three steps one above another to the right of the key's shelf and jump up through them.",
 	# Уровень 18
 	"Название зоны — это счёт.": "The name of the zone is a count.",

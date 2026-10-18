@@ -234,8 +234,8 @@ func _draw_inventory() -> void:
 	var items: Array[String] = []
 	if hero and hero.has_key:
 		items.append("key")
-	if hero and hero.has_coal:
-		items.append("coal")
+	if hero and hero.has_chalk:
+		items.append("chalk")
 	var slot := Vector2(40, 40)
 	var x0 := 320.0 - (INVENTORY_SLOTS * slot.x + (INVENTORY_SLOTS - 1) * 6.0) / 2.0
 	for i in INVENTORY_SLOTS:
@@ -245,11 +245,14 @@ func _draw_inventory() -> void:
 		if i < items.size():
 			_pad.draw_set_transform(r.get_center(), 0.0, Vector2(2, 2))
 			_pad.draw_circle(Vector2.ZERO, 8.0, Color(1, 0.85, 0.3, 0.15))
-			if items[i] == "coal":
-				preload("res://scripts/coal_vessel.gd").draw_coal(_pad, Vector2.ZERO)
+			if items[i] == "chalk":
+				preload("res://scripts/chalk_vessel.gd").draw_chalk(_pad, Vector2(0, -4))
 			else:
 				preload("res://scripts/key_item.gd").draw_key(_pad, Vector2(-1, 0))
 			_pad.draw_set_transform(Vector2.ZERO)
+			if items[i] == "chalk":
+				# Подпись: что это мел, а не просто белый камешек.
+				_pad.draw_string(ThemeDB.fallback_font, Vector2(r.position.x, r.end.y - 3), Game.t("Мел"), HORIZONTAL_ALIGNMENT_CENTER, r.size.x, 10, Color(1, 1, 1, 0.9))
 
 
 func _draw_icon(name: String, c: Vector2, color: Color) -> void:

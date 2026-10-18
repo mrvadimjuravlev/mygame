@@ -443,8 +443,8 @@ func _solve_28() -> void:
 
 func _solve_29() -> void:
 	var lv := current_scene
-	var coal: Node = lv.get_node("Coal")
-	# За углём — в дальний зал через низкий проход.
+	var chalk: Node = lv.get_node("Chalk")
+	# За мелом — в дальний зал через низкий проход.
 	await _walk_to(500.0)
 	await _walk_to(700.0)
 	# Лесенкой по платформам к сосуду с пузырями.
@@ -457,7 +457,7 @@ func _solve_29() -> void:
 	print("  у сосуда: ", _hero().global_position)
 	await _press("action")
 	await _frames(5)
-	print("  уголь у героя: ", _hero().has_coal)
+	print("  мел у героя: ", _hero().has_chalk)
 	await _walk_to(900.0)
 	await _walk_to(600.0)
 	await _walk_to(190.0)
@@ -465,7 +465,7 @@ func _solve_29() -> void:
 	for y in [235.0, 185.0, 135.0]:
 		var t := lv.get_viewport().get_canvas_transform()
 		await _drag(t * Vector2(150, y), t * Vector2(235, y), 10)
-	print("  нарисовано линий: ", coal.strokes.size())
+	print("  нарисовано линий: ", chalk.strokes.size())
 	for i in 3:
 		Input.action_press("jump")
 		await _frames(3)

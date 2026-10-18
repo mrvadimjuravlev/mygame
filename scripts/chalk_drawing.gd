@@ -1,5 +1,5 @@
 extends Node2D
-## Рисование углём: когда у героя есть уголь, палец рисует на экране чёрные линии,
+## Рисование мелом: когда у героя есть мел, палец рисует на экране белые линии,
 ## и каждая линия становится платформой (на неё можно запрыгнуть снизу сквозь неё).
 ## Линий не больше max_strokes: новая стирает самую старую. Длина линии ограничена max_length.
 
@@ -23,10 +23,10 @@ func _hero() -> Node:
 	return get_tree().get_first_node_in_group("hero")
 
 
-## Палец ловит рисование, только когда уголь у героя.
+## Палец ловит рисование, только когда мел у героя.
 func contains_world_point(point: Vector2) -> bool:
 	var hero := _hero()
-	if not hero or not hero.has_coal:
+	if not hero or not hero.has_chalk:
 		return false
 	_point = point
 	return true
@@ -90,14 +90,13 @@ func _draw() -> void:
 		_draw_stroke(_current, 0.6)
 
 
-## Угольная линия: толстая чёрная с рваным серым краем — её видно и на тёмной стене.
+## Меловая линия: белая, с неровным краем и крошками мела.
 func _draw_stroke(points: PackedVector2Array, alpha: float) -> void:
-	draw_polyline(points, Color(0.62, 0.6, 0.56, 0.8 * alpha), 8.0, true)
-	draw_polyline(points, Color(0.06, 0.05, 0.05, alpha), 5.0, true)
+	draw_polyline(points, Color(0.85, 0.83, 0.78, 0.35 * alpha), 8.0, true)
+	draw_polyline(points, Color(0.97, 0.96, 0.92, alpha), 4.0, true)
 	for i in points.size():
 		var p := points[i]
-		draw_rect(Rect2(p + Vector2(-1, -3 - (i % 3)), Vector2(2, 1)), Color(0.35, 0.33, 0.3, 0.7 * alpha))
-	draw_circle(points[0], 4.0, Color(0.62, 0.6, 0.56, 0.8 * alpha))
-	draw_circle(points[points.size() - 1], 4.0, Color(0.62, 0.6, 0.56, 0.8 * alpha))
-	draw_circle(points[0], 2.5, Color(0.06, 0.05, 0.05, alpha))
-	draw_circle(points[points.size() - 1], 2.5, Color(0.06, 0.05, 0.05, alpha))
+		draw_rect(Rect2(p + Vector2(-1, -4 - (i % 3)), Vector2(2, 1)), Color(1, 1, 1, 0.5 * alpha))
+		draw_rect(Rect2(p + Vector2(1, 3 + (i % 2)), Vector2(1, 1)), Color(1, 1, 1, 0.4 * alpha))
+	draw_circle(points[0], 2.2, Color(0.97, 0.96, 0.92, alpha))
+	draw_circle(points[points.size() - 1], 2.2, Color(0.97, 0.96, 0.92, alpha))
