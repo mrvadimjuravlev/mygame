@@ -1,0 +1,123 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_tacr3"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_7mbd3"]
+[ext_resource type="Script" path="res://scripts/eye_lantern.gd" id="3_3yjpp"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_7dcke"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="5_qip87"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_lbk3c"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="7_xb4rm"]
+
+[node name="Dungeon03" type="Node2D"]
+script = ExtResource("1_tacr3")
+level_number = 3
+slogan = "Глаз"
+hints = PackedStringArray("Свет фонаря сжигает: глаз на стене видит каждого, кто в него войдёт.", "Глаз не видит то, что спрятано под рукой.", "Держи палец на герое и веди его под фонарём, не отпуская.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+shade = Color(0, 0, 0, 0)
+hero_lamp = 0.55
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_7mbd3")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_7mbd3")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_7mbd3")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_7mbd3")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
+[node name="Lantern" type="Node2D" parent="."]
+position = Vector2(320, 60)
+script = ExtResource("3_3yjpp")
+chain = 40.0
+floor_y = 280.0
+half_width = 95.0
+eye = Vector2(0, 112)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(590, 280)
+script = ExtResource("4_7dcke")
+start_open = true
+needs_key = false
+upside_down = false
+trap = false
+
+[node name="Prop7" type="Node2D" parent="."]
+position = Vector2(110, 60)
+script = ExtResource("5_qip87")
+kind = "chain"
+length = 60.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop8" type="Node2D" parent="."]
+position = Vector2(520, 60)
+script = ExtResource("5_qip87")
+kind = "chain"
+length = 60.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop9" type="Node2D" parent="."]
+position = Vector2(280, 280)
+script = ExtResource("5_qip87")
+kind = "bones"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop10" type="Node2D" parent="."]
+position = Vector2(372, 280)
+script = ExtResource("5_qip87")
+kind = "bones"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Torch70_200" type="Area2D" parent="."]
+position = Vector2(70, 200)
+script = ExtResource("6_lbk3c")
+start_lit = true
+
+[node name="Torch580_200" type="Area2D" parent="."]
+position = Vector2(580, 200)
+script = ExtResource("6_lbk3c")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(50, 280)
+script = ExtResource("7_xb4rm")

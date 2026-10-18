@@ -485,6 +485,10 @@ func _run_worlds() -> void:
 	var cases := [
 		["res://levels/dungeon_01.tscn", _solve_dungeon_01],
 		["res://levels/dungeon_02.tscn", _solve_dungeon_02],
+		["res://levels/dungeon_03.tscn", _solve_dungeon_03],
+		["res://levels/dungeon_04.tscn", _solve_dungeon_04],
+		["res://levels/dungeon_05.tscn", _solve_dungeon_05],
+		["res://levels/dungeon_06.tscn", _solve_dungeon_06],
 		["res://levels/castle_01.tscn", _solve_castle_01],
 		["res://levels/castle_02.tscn", _solve_castle_02],
 		["res://levels/temple_01.tscn", _solve_temple_01],
@@ -777,6 +781,71 @@ func _solve_dungeon_02() -> void:
 		await _hop("move_right")  # по невидимым камням над шипами
 		print("  прыжок ", k + 1, ": ", _hero().global_position if _hero() else "погиб")
 	await _walk_to(580.0)
+
+
+func _solve_dungeon_03() -> void:
+	# Палец на герое, и так под фонарём до самого выхода.
+	var t := current_scene.get_viewport().get_canvas_transform()
+	await _touch(t * (_hero().global_position + Vector2(0, -12)), true)
+	for i in 400:
+		if not _hero() or _hero().global_position.x > 585.0:
+			break
+		Input.action_press("move_right")
+		await physics_frame
+		if _hero():
+			await _move_finger(t * (_hero().global_position + Vector2(0, -12)))
+	Input.action_release("move_right")
+	await _touch(Vector2(600, 200), false)
+
+
+func _solve_dungeon_04() -> void:
+	var mummy: Node2D = current_scene.get_node("Mummy")
+	# Палец светит на мумию с самого начала: она замирает.
+	await _touch(mummy.global_position + Vector2(0, -20), true)
+	await _walk_to(194.0)
+	for k in 3:
+		await _hop("move_right")
+		print("  прыжок ", k + 1, ": ", _hero().global_position if _hero() else "погиб")
+	print("  мумия стоит: ", mummy.frozen, " ", mummy.global_position)
+	await _walk_to(mummy.global_position.x - 40.0)
+	# Высокий прыжок: кнопку прыжка держим.
+	Input.action_press("move_right")
+	Input.action_press("jump")
+	await _frames(20)
+	Input.action_release("jump")
+	# Приземляется прямо у выхода: уровень может закончиться ещё в прыжке.
+	var path := current_scene.scene_file_path
+	await _until(func() -> bool: return current_scene.scene_file_path != path or _hero().is_on_floor())
+	Input.action_release("move_right")
+	await _walk_to(605.0)
+	await _touch(Vector2(560, 260), false)
+
+
+func _solve_dungeon_05() -> void:
+	var glass: Node2D = current_scene.get_node("Glass")
+	await _walk_to(255.0)
+	print("  у ямы, время ", snappedf(glass.t, 0.1))
+	# Перемотка к началу: мост снова цел.
+	await _touch(glass.global_position, true)
+	await _until(func() -> bool: return glass.t <= 0.0)
+	await _touch(glass.global_position, false)
+	await _walk_to(495.0)
+	print("  у решётки: ", _hero().global_position if _hero() else "погиб", ", время ", snappedf(glass.t, 0.1))
+	await _touch(glass.global_position, true)
+	await _until(func() -> bool: return glass.t <= 0.0)
+	await _touch(glass.global_position, false)
+	await _walk_to(585.0)
+
+
+func _solve_dungeon_06() -> void:
+	var rules: Node2D = current_scene.get_node("Rules")
+	var o := rules.global_position
+	# «ДЕРЖИТ» из ниши — к воде, «ОТКРЫТА» — к двери.
+	await _drag(o + Vector2(42, 87), o + Vector2(152, 11), 12)
+	await _drag(o + Vector2(230, 87), o + Vector2(152, 41), 12)
+	print("  правила: вода ", rules.rule_of("ВОДА"), ", дверь ", rules.rule_of("ДВЕРЬ"))
+	await _frames(60)
+	await _walk_to(590.0)
 
 
 func _solve_castle_01() -> void:

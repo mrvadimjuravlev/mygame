@@ -1,0 +1,127 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_jto1o"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_hhxtv"]
+[ext_resource type="Script" path="res://scripts/spikes.gd" id="3_gt56t"]
+[ext_resource type="Script" path="res://scripts/time_bridge.gd" id="4_5m1hh"]
+[ext_resource type="Script" path="res://scripts/time_gate.gd" id="5_u7u01"]
+[ext_resource type="Script" path="res://scripts/time_glass.gd" id="6_ww44r"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="7_psx5u"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="8_jvawl"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="9_rlbax"]
+
+[node name="Dungeon05" type="Node2D"]
+script = ExtResource("1_jto1o")
+level_number = 5
+slogan = "Перемотка"
+hints = PackedStringArray("Мост рухнул, решётка закрылась… Время можно вернуть.", "Держи пальцем песочные часы — время в зале пойдёт назад. Герой перемотке не подчиняется.", "Встань у края ямы и перемотай время к началу, потом беги. У решётки перемотай ещё раз.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = true
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+shade = Color(0, 0, 0, 0)
+hero_lamp = 0.55
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_hhxtv")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_hhxtv")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_hhxtv")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_hhxtv")
+polygon = PackedVector2Array(0, 280, 260, 280, 260, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 280, 260, 280, 260, 360, 0, 360)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_hhxtv")
+polygon = PackedVector2Array(420, 280, 640, 280, 640, 360, 420, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(420, 280, 640, 280, 640, 360, 420, 360)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_hhxtv")
+polygon = PackedVector2Array(260, 345, 420, 345, 420, 360, 260, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid6"]
+polygon = PackedVector2Array(260, 345, 420, 345, 420, 360, 260, 360)
+
+[node name="Spikes7" type="Area2D" parent="."]
+position = Vector2(260, 345)
+script = ExtResource("3_gt56t")
+width = 160.0
+
+[node name="Bridge" type="StaticBody2D" parent="."]
+position = Vector2(260, 280)
+script = ExtResource("4_5m1hh")
+width = 160.0
+collapse_at = 1.8
+
+[node name="Gate" type="StaticBody2D" parent="."]
+position = Vector2(510, 280)
+script = ExtResource("5_u7u01")
+size = Vector2(14, 220)
+close_from = 0.9
+close_at = 2.0
+
+[node name="Glass" type="Node2D" parent="."]
+position = Vector2(140, 150)
+script = ExtResource("6_ww44r")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(585, 280)
+script = ExtResource("7_psx5u")
+start_open = true
+needs_key = false
+upside_down = false
+trap = false
+
+[node name="Torch60_190" type="Area2D" parent="."]
+position = Vector2(60, 190)
+script = ExtResource("8_jvawl")
+start_lit = true
+
+[node name="Torch470_190" type="Area2D" parent="."]
+position = Vector2(470, 190)
+script = ExtResource("8_jvawl")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(40, 280)
+script = ExtResource("9_rlbax")

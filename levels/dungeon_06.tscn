@@ -1,0 +1,116 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_35i85"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_raqlm"]
+[ext_resource type="Script" path="res://scripts/rule_water.gd" id="3_0ojon"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="4_7vojb"]
+[ext_resource type="Script" path="res://scripts/word_rules.gd" id="5_5nhww"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="6_loy6x"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="7_88qw3"]
+
+[node name="Dungeon06" type="Node2D"]
+script = ExtResource("1_35i85")
+level_number = 6
+slogan = "Слово — закон"
+hints = PackedStringArray("Как написано на стене, так и работает зал.", "Слова в правилах — плитки. Их можно перетащить пальцем.", "Поставь «ДЕРЖИТ» к воде, а «ОТКРЫТА» к двери.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+shade = Color(0, 0, 0, 0)
+hero_lamp = 0.55
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_raqlm")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_raqlm")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_raqlm")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_raqlm")
+polygon = PackedVector2Array(0, 280, 200, 280, 200, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 280, 200, 280, 200, 360, 0, 360)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_raqlm")
+polygon = PackedVector2Array(440, 280, 640, 280, 640, 360, 440, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(440, 280, 640, 280, 640, 360, 440, 360)
+
+[node name="Solid6" type="StaticBody2D" parent="."]
+script = ExtResource("2_raqlm")
+polygon = PackedVector2Array(200, 350, 440, 350, 440, 360, 200, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid6"]
+polygon = PackedVector2Array(200, 350, 440, 350, 440, 360, 200, 360)
+
+[node name="Water" type="Node2D" parent="."]
+position = Vector2(200, 280)
+script = ExtResource("3_0ojon")
+size = Vector2(240, 70)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(590, 280)
+script = ExtResource("4_7vojb")
+start_open = false
+needs_key = false
+upside_down = false
+trap = false
+
+[node name="Rules" type="Node2D" parent="."]
+position = Vector2(180, 92)
+script = ExtResource("5_5nhww")
+subjects = PackedStringArray("ВОДА", "ДВЕРЬ")
+words = PackedStringArray("ТОПИТ", "ЗАПЕРТА")
+spare = PackedStringArray("ДЕРЖИТ", "ГОРИТ", "ОТКРЫТА")
+targets = Array[NodePath]([NodePath("../Water"), NodePath("../Exit")])
+
+[node name="Torch90_190" type="Area2D" parent="."]
+position = Vector2(90, 190)
+script = ExtResource("6_loy6x")
+start_lit = true
+
+[node name="Torch540_190" type="Area2D" parent="."]
+position = Vector2(540, 190)
+script = ExtResource("6_loy6x")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(50, 280)
+script = ExtResource("7_88qw3")

@@ -19,6 +19,7 @@ var level: Node
 
 var _finger_button := {}  # индекс пальца -> имя кнопки
 var _finger_hand := {}    # индекс пальца -> {rune, last}
+var _finger_screen := {}  # индекс пальца руки -> где он на экране
 var _hint_index := -1
 var _waiting_ad := false
 ## Сколько ещё секунд видна подсказка.
@@ -105,6 +106,7 @@ func _touch_down(index: int, pos: Vector2) -> void:
 		Input.action_press(ACTIONS[button])
 		return
 	var world := _to_world(pos)
+	_finger_screen[index] = pos
 	for rune in get_tree().get_nodes_in_group("rune"):
 		if rune.contains_world_point(world):
 			rune.hand_tap()
@@ -127,6 +129,7 @@ func _touch_move(index: int, pos: Vector2) -> void:
 			_finger_button[index] = button
 			Input.action_press(ACTIONS[button])
 	elif _finger_hand.has(index):
+		_finger_screen[index] = pos
 		var world := _to_world(pos)
 		var data: Dictionary = _finger_hand[index]
 		if data.rune and is_instance_valid(data.rune):
@@ -147,6 +150,15 @@ func _touch_up(index: int) -> void:
 			and _finger_hand[index].rune.has_method("hand_release"):
 		_finger_hand[index].rune.hand_release()
 	_finger_hand.erase(index)
+	_finger_screen.erase(index)
+
+
+## Где сейчас пальцы руки (не на кнопках), в координатах уровня.
+func hand_points() -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	for index in _finger_screen:
+		points.append(_to_world(_finger_screen[index]))
+	return points
 
 
 func _to_world(screen_pos: Vector2) -> Vector2:

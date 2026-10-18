@@ -27,6 +27,8 @@ extends Node2D
 @export_enum("pyramid", "dungeon", "castle", "temple") var theme := "pyramid"
 ## Свой оттенок полумрака для зала (прозрачный — оттенок локации): у каждого зала стража свой антураж.
 @export var shade := Color(0, 0, 0, 0)
+## Размер фонаря героя в полумраке: в совсем тёмном зале он светит только себе под ноги.
+@export var hero_lamp := 0.55
 
 ## Цвет полумрака по локациям: он перекрашивает песчаник в нужный камень.
 const SHADE := {
@@ -41,6 +43,7 @@ const Art := preload("res://scripts/art.gd")
 var _cam: Camera2D
 var _hero: Node2D
 var _view_opened := false
+var _hud: CanvasLayer
 
 
 func _ready() -> void:
@@ -80,7 +83,7 @@ func _ready() -> void:
 		add_child(mod)
 		var lamp := PointLight2D.new()
 		lamp.texture = Art.light_texture()
-		lamp.texture_scale = 0.55
+		lamp.texture_scale = hero_lamp
 		lamp.energy = 0.45
 		lamp.color = Color(1.0, 0.85, 0.65)
 		lamp.position = Vector2(0, -14)
@@ -90,6 +93,12 @@ func _ready() -> void:
 	var hud := preload("res://scripts/hud.gd").new()
 	hud.level = self
 	add_child(hud)
+	_hud = hud
+
+
+## Где сейчас пальцы игрока (рука, не кнопки), в координатах уровня.
+func hand_points() -> Array[Vector2]:
+	return _hud.hand_points() if _hud else ([] as Array[Vector2])
 
 
 func _process(_delta: float) -> void:

@@ -27,6 +27,9 @@ extends Area2D
 
 var is_open := false
 var _open_amount := 0.0
+## Дверь сгорела по правилу «ДВЕРЬ ГОРИТ» (word_rules): прохода больше ничто не закроет.
+var burned := false
+var _fire := 0.0
 
 
 func _ready() -> void:
@@ -56,7 +59,33 @@ func activate() -> void:
 	tween.tween_callback(_check_hero_inside)
 
 
-func _process(_delta: float) -> void:
+## Правило со скрижали (word_rules): «ОТКРЫТА» открывает, «ГОРИТ» сжигает плиту, остальное запирает.
+func set_rule(word: String, silent := false) -> void:
+	if burned:
+		return
+	match word:
+		"ОТКРЫТА":
+			activate()
+		"ГОРИТ":
+			burned = true
+			activate()
+		_:
+			close(silent)
+
+
+## Закрыть открытую дверь: плита опускается.
+func close(silent := false) -> void:
+	if not is_open:
+		return
+	is_open = false
+	if not silent:
+		Sfx.play("door")
+	create_tween().tween_property(self, "_open_amount", 0.0, 0.5)
+
+
+func _process(delta: float) -> void:
+	if burned:
+		_fire = minf(_fire + delta, 3.0)
 	queue_redraw()
 
 
@@ -103,6 +132,13 @@ func _draw() -> void:
 				draw_rect(Rect2(-5, -28, 10, 12), Color("f2c14e"), false, 1.0)
 			draw_circle(Vector2(0, -23), 2.5, dark)
 			draw_rect(Rect2(-1, -23, 2, 6), dark)
+	if burned and _fire < 3.0:
+		# Плита сгорает: языки пламени гаснут за три секунды.
+		var a := 1.0 - _fire / 3.0
+		for k in 4:
+			var x := -9.0 + k * 6.0
+			var fh := (14.0 + 6.0 * absf(sin(_fire * 12.0 + k))) * a
+			draw_colored_polygon(PackedVector2Array([Vector2(x - 4, 0), Vector2(x + 4, 0), Vector2(x, -fh - 20 * a)]), Color(1.0, 0.55, 0.15, 0.9 * a))
 	# Колонны и притолока с глазом.
 	draw_rect(Rect2(-17, -46, 5, 46), stone)
 	draw_rect(Rect2(12, -46, 5, 46), stone)

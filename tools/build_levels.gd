@@ -49,6 +49,10 @@ func _initialize() -> void:
 	_level_29()
 	_dungeon_01()
 	_dungeon_02()
+	_dungeon_03()
+	_dungeon_04()
+	_dungeon_05()
+	_dungeon_06()
 	_castle_01()
 	_castle_02()
 	_temple_01()
@@ -1098,6 +1102,90 @@ func _dungeon_02() -> void:
 	_decor([[120, 200], [520, 200]], [], true)
 	_hero(60, 280)
 	_save_as("res://levels/dungeon_02.tscn")
+
+
+func _dungeon_03() -> void:
+	_begin_world("dungeon", 3, "Глаз", ["Свет фонаря сжигает: глаз на стене видит каждого, кто в него войдёт.", "Глаз не видит то, что спрятано под рукой.", "Держи палец на герое и веди его под фонарём, не отпуская."])
+	_room()
+	_box(0, 280, 640, 360)       # пол
+	var lantern := _add("Lantern", Node2D.new(), "eye_lantern.gd", Vector2(320, 60))
+	lantern.chain = 40.0
+	lantern.floor_y = 280.0
+	lantern.half_width = 95.0
+	lantern.eye = Vector2(0, 112)
+	_exit(590, 280, true)
+	for x in [110, 520]:
+		_prop("chain", Vector2(x, 60), 60.0)
+	_prop("bones", Vector2(280, 280), 0)
+	_prop("bones", Vector2(372, 280), 0)
+	_decor([[70, 200], [580, 200]], [], true)
+	_hero(50, 280)
+	_save_as("res://levels/dungeon_03.tscn")
+
+
+func _dungeon_04() -> void:
+	_begin_world("dungeon", 4, "Палец-фонарь", ["В темноте светит только твой палец.", "Посвети на яму: над шипами есть камни. Мумия на свету замирает.", "Свети пальцем на мумию и перепрыгни через неё, пока она стоит."])
+	_root.restart_on_fall = true
+	_root.shade = Color(0.02, 0.02, 0.035)
+	_root.hero_lamp = 0.22
+	_room()
+	_box(0, 280, 200, 360)       # пол слева
+	_box(440, 280, 640, 360)     # пол справа
+	_box(200, 330, 440, 360)     # дно ямы
+	var spikes := _add("Spikes", Area2D.new(), "spikes.gd", Vector2(200, 330))
+	spikes.width = 240.0
+	_box(240, 255, 290, 269)     # камни над ямой
+	_box(350, 255, 400, 269)
+	var mummy := _add("Mummy", Node2D.new(), "mummy.gd", Vector2(560, 280))
+	mummy.left = 460.0
+	mummy.right = 600.0
+	_add("FingerLight", Node2D.new(), "finger_light.gd", Vector2.ZERO)
+	_exit(605, 280, true)
+	_prop("bones", Vector2(120, 280), 0)
+	_prop("web", Vector2(16, 60), 40)
+	_decor([], [], false)
+	_hero(50, 280)
+	_save_as("res://levels/dungeon_04.tscn")
+
+
+func _dungeon_05() -> void:
+	_begin_world("dungeon", 5, "Перемотка", ["Мост рухнул, решётка закрылась… Время можно вернуть.", "Держи пальцем песочные часы — время в зале пойдёт назад. Герой перемотке не подчиняется.", "Встань у края ямы и перемотай время к началу, потом беги. У решётки перемотай ещё раз."])
+	_root.restart_on_fall = true
+	_room()
+	_box(0, 280, 260, 360)       # пол слева
+	_box(420, 280, 640, 360)     # пол справа
+	_pit(260, 420)
+	var bridge := _add("Bridge", StaticBody2D.new(), "time_bridge.gd", Vector2(260, 280))
+	bridge.width = 160.0
+	bridge.collapse_at = 1.8
+	var gate := _add("Gate", StaticBody2D.new(), "time_gate.gd", Vector2(510, 280))
+	gate.size = Vector2(14, 220)
+	gate.close_from = 0.9
+	gate.close_at = 2.0
+	_add("Glass", Node2D.new(), "time_glass.gd", Vector2(140, 150))
+	_exit(585, 280, true)
+	_decor([[60, 190], [470, 190]], [], true)
+	_hero(40, 280)
+	_save_as("res://levels/dungeon_05.tscn")
+
+
+func _dungeon_06() -> void:
+	_begin_world("dungeon", 6, "Слово — закон", ["Как написано на стене, так и работает зал.", "Слова в правилах — плитки. Их можно перетащить пальцем.", "Поставь «ДЕРЖИТ» к воде, а «ОТКРЫТА» к двери."])
+	_room()
+	_box(0, 280, 200, 360)       # пол слева
+	_box(440, 280, 640, 360)     # пол справа
+	_box(200, 350, 440, 360)     # дно бассейна
+	var water := _add("Water", Node2D.new(), "rule_water.gd", Vector2(200, 280))
+	water.size = Vector2(240, 70)
+	var exit := _exit(590, 280)
+	var rules := _add("Rules", Node2D.new(), "word_rules.gd", Vector2(180, 92))
+	rules.subjects = PackedStringArray(["ВОДА", "ДВЕРЬ"])
+	rules.words = PackedStringArray(["ТОПИТ", "ЗАПЕРТА"])
+	rules.spare = PackedStringArray(["ДЕРЖИТ", "ГОРИТ", "ОТКРЫТА"])
+	_link(rules, [water, exit])
+	_decor([[90, 190], [540, 190]], [], true)
+	_hero(50, 280)
+	_save_as("res://levels/dungeon_06.tscn")
 
 
 func _castle_01() -> void:
