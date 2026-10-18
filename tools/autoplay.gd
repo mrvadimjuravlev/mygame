@@ -446,10 +446,19 @@ func _solve_29() -> void:
 	var coal: Node = lv.get_node("Coal")
 	# За углём — в дальний зал через низкий проход.
 	await _walk_to(500.0)
-	await _walk_to(1000.0)
+	await _walk_to(700.0)
+	# Лесенкой по платформам к сосуду с пузырями.
+	await _hop("move_right")
+	await _walk_to(790.0)
+	await _hop("move_right")
+	await _walk_to(900.0)
+	await _hop("move_right")
+	await _walk_to(980.0)
+	print("  у сосуда: ", _hero().global_position)
 	await _press("action")
 	await _frames(5)
 	print("  уголь у героя: ", _hero().has_coal)
+	await _walk_to(900.0)
 	await _walk_to(600.0)
 	await _walk_to(190.0)
 	# Три ступеньки справа от полки с ключом.
