@@ -153,6 +153,29 @@ func _touch_up(index: int) -> void:
 	_finger_screen.erase(index)
 
 
+## Где на экране слово word в названии зоны (пустой прямоугольник — слова там нет).
+func slogan_word_rect(word: String) -> Rect2:
+	var text := _slogan.text
+	var at := text.find(word)
+	if at < 0:
+		return Rect2()
+	var font := _slogan.get_theme_font("font")
+	var size := _slogan.get_theme_font_size("font_size")
+	var full := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+	var before := font.get_string_size(text.substr(0, at), HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+	var w := font.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+	var left := _slogan.position.x + (_slogan.size.x - full) / 2.0 + before
+	return Rect2(left, _slogan.position.y, w, 28)
+
+
+## Заменить название зоны на экране (уровень «Дверь закрыта»: слово в названии меняется пальцем).
+func set_slogan(text: String) -> void:
+	_slogan.text = text
+	var tween := create_tween()
+	_slogan.modulate = Color(2.0, 2.0, 1.4)
+	tween.tween_property(_slogan, "modulate", Color.WHITE, 0.8)
+
+
 ## Где сейчас пальцы руки (не на кнопках), в координатах уровня.
 func hand_points() -> Array[Vector2]:
 	var points: Array[Vector2] = []

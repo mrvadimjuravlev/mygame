@@ -96,6 +96,11 @@ func _ready() -> void:
 	_hud = hud
 
 
+## Интерфейс уровня: кнопки, название зоны, подсказки.
+func hud() -> CanvasLayer:
+	return _hud
+
+
 ## Где сейчас пальцы игрока (рука, не кнопки), в координатах уровня.
 func hand_points() -> Array[Vector2]:
 	return _hud.hand_points() if _hud else ([] as Array[Vector2])

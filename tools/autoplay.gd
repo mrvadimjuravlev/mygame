@@ -838,12 +838,11 @@ func _solve_dungeon_05() -> void:
 
 
 func _solve_dungeon_06() -> void:
-	var rules: Node2D = current_scene.get_node("Rules")
-	var o := rules.global_position
-	# «ДЕРЖИТ» из ниши — к воде, «ОТКРЫТА» — к двери.
-	await _drag(o + Vector2(42, 87), o + Vector2(152, 11), 12)
-	await _drag(o + Vector2(230, 87), o + Vector2(152, 41), 12)
-	print("  правила: вода ", rules.rule_of("ВОДА"), ", дверь ", rules.rule_of("ДВЕРЬ"))
+	var lv := current_scene
+	# Нажимаем на слово «закрыта» в названии уровня.
+	var r: Rect2 = lv.hud().slogan_word_rect(root.get_node("/root/Game").t("закрыта"))
+	await _tap(r.get_center())
+	print("  название: ", lv.hud()._slogan.text)
 	await _frames(60)
 	await _walk_to(590.0)
 

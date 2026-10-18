@@ -1170,20 +1170,30 @@ func _dungeon_05() -> void:
 
 
 func _dungeon_06() -> void:
-	_begin_world("dungeon", 6, "Слово — закон", ["Как написано на стене, так и работает зал.", "Слова в правилах — плитки. Их можно перетащить пальцем.", "Поставь «ДЕРЖИТ» к воде, а «ОТКРЫТА» к двери."])
+	_begin_world("dungeon", 6, "Дверь закрыта", ["Рычаги, полки и ступени здесь ни при чём.", "Ответ не в зале, а на экране.", "Нажми пальцем на слово «закрыта» в названии уровня."])
 	_room()
-	_box(0, 280, 200, 360)       # пол слева
-	_box(440, 280, 640, 360)     # пол справа
-	_box(200, 350, 440, 360)     # дно бассейна
-	var water := _add("Water", Node2D.new(), "rule_water.gd", Vector2(200, 280))
-	water.size = Vector2(240, 70)
+	_box(0, 280, 640, 360)       # пол
+	# Для отвода глаз: ступени к полкам, рычаги, ниша с черепом — дверь от них не откроется.
+	_box(130, 235, 190, 247)
+	_box(220, 190, 280, 202)
+	_box(310, 145, 400, 157)
+	_box(450, 200, 520, 212)
+	_box(16, 150, 80, 162)
+	_lever("Lever1", Vector2(250, 190), [])
+	_lever("Lever2", Vector2(400, 280), [])
+	_lever("Lever3", Vector2(485, 200), [])
+	_prop("bones", Vector2(350, 145), 0)
+	_prop("urn", Vector2(40, 150), 0, Color("4a8fe7"))
+	_prop("vase", Vector2(160, 235), 0)
+	_prop("jar", Vector2(500, 200), 0, Color("9a5a34"))
+	for x in [110, 300, 560]:
+		_prop("chain", Vector2(x, 60), 40.0 + (x % 7) * 6.0)
+	_prop("web", Vector2(16, 60), 40)
+	_prop("roots", Vector2(420, 60), 40)
 	var exit := _exit(590, 280)
-	var rules := _add("Rules", Node2D.new(), "word_rules.gd", Vector2(180, 92))
-	rules.subjects = PackedStringArray(["ВОДА", "ДВЕРЬ"])
-	rules.words = PackedStringArray(["ТОПИТ", "ЗАПЕРТА"])
-	rules.spare = PackedStringArray(["ДЕРЖИТ", "ГОРИТ", "ОТКРЫТА"])
-	_link(rules, [water, exit])
-	_decor([[90, 190], [540, 190]], [], true)
+	var word := _add("TitleWord", Node.new(), "title_word.gd", Vector2.ZERO)
+	_link(word, [exit])
+	_decor([[70, 220], [380, 100], [600, 190]], [[200, 80, 3, ["eye", "ankh", "sun", "reed", "bird", "wave"]], [540, 100, 2, ["wave", "eye", "sun", "ankh"]]], true)
 	_hero(50, 280)
 	_save_as("res://levels/dungeon_06.tscn")
 
