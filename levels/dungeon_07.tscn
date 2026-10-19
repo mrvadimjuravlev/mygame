@@ -1,0 +1,165 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_g2gnd"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_nmb5o"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="3_7mt65"]
+[ext_resource type="Script" path="res://scripts/loop_room.gd" id="4_85h63"]
+[ext_resource type="Script" path="res://scripts/loop_door.gd" id="5_5o71f"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="6_b0vmh"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="7_bglqm"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="8_3glpi"]
+
+[node name="Dungeon07" type="Node2D"]
+script = ExtResource("1_g2gnd")
+level_number = 7
+slogan = "Та же комната"
+hints = PackedStringArray("Обе двери ведут в эту же комнату. Запомни, какая она.", "Заметил что-то странное — иди назад, в левую дверь. Всё как было — вперёд, в правую.", "Четыре верные двери подряд — и четвёртая выведет. Странности: кувшин, урна, знаки, кости, цепь, паутина.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+shade = Color(0, 0, 0, 0)
+hero_lamp = 0.55
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_nmb5o")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_nmb5o")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_nmb5o")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_nmb5o")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
+[node name="Torch150_190" type="Area2D" parent="."]
+position = Vector2(150, 190)
+script = ExtResource("3_7mt65")
+start_lit = true
+
+[node name="Torch490_190" type="Area2D" parent="."]
+position = Vector2(490, 190)
+script = ExtResource("3_7mt65")
+start_lit = true
+
+[node name="LoopRoom" type="Node2D" parent="."]
+script = ExtResource("4_85h63")
+start = Vector2(320, 280)
+plaque = Vector2(320, 96)
+
+[node name="DoorBack" type="Area2D" parent="LoopRoom"]
+position = Vector2(60, 280)
+script = ExtResource("5_5o71f")
+back = true
+
+[node name="DoorForward" type="Area2D" parent="LoopRoom"]
+position = Vector2(580, 280)
+script = ExtResource("5_5o71f")
+back = false
+
+[node name="OddVase" type="Node2D" parent="LoopRoom"]
+position = Vector2(420, 280)
+script = ExtResource("6_b0vmh")
+kind = "vase"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="NormalUrn" type="Node2D" parent="LoopRoom"]
+position = Vector2(140, 280)
+script = ExtResource("6_b0vmh")
+kind = "urn"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="OddUrn" type="Node2D" parent="LoopRoom"]
+position = Vector2(140, 280)
+script = ExtResource("6_b0vmh")
+kind = "urn"
+length = 0.0
+color = Color(0.290196, 0.560784, 0.905882, 1)
+
+[node name="NormalBones" type="Node2D" parent="LoopRoom"]
+position = Vector2(230, 280)
+script = ExtResource("6_b0vmh")
+kind = "bones"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="OddBones" type="Node2D" parent="LoopRoom"]
+
+[node name="NormalChain" type="Node2D" parent="LoopRoom"]
+position = Vector2(260, 60)
+script = ExtResource("6_b0vmh")
+kind = "chain"
+length = 60.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="OddChain" type="Node2D" parent="LoopRoom"]
+position = Vector2(260, 60)
+script = ExtResource("6_b0vmh")
+kind = "chain"
+length = 120.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="OddWeb" type="Node2D" parent="LoopRoom"]
+position = Vector2(16, 60)
+script = ExtResource("6_b0vmh")
+kind = "web"
+length = 40.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="NormalGlyphs" type="Node2D" parent="LoopRoom"]
+position = Vector2(470, 120)
+script = ExtResource("7_bglqm")
+columns = 2
+signs = PackedStringArray("eye", "ankh", "sun", "reed")
+
+[node name="OddGlyphs" type="Node2D" parent="LoopRoom"]
+position = Vector2(470, 120)
+script = ExtResource("7_bglqm")
+columns = 2
+signs = PackedStringArray("eye", "ankh", "bird", "reed")
+
+[node name="Prop8" type="Node2D" parent="."]
+position = Vector2(400, 60)
+script = ExtResource("6_b0vmh")
+kind = "chain"
+length = 50.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(320, 280)
+script = ExtResource("8_3glpi")

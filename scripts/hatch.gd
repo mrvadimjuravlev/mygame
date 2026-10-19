@@ -15,6 +15,7 @@ func _ready() -> void:
 	z_index = 1  # поверх лестницы: сверху люк не выдаёт себя
 	if Engine.is_editor_hint():
 		return
+	add_to_group("hatch")
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
 	rect.size = size

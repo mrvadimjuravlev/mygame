@@ -119,6 +119,7 @@ func _physics_process(delta: float) -> void:
 			global_position.y = below.global_position.y + 2.0
 	if climbing and (ladder == null or dir != 0.0):
 		climbing = false
+	_pass_hatches(climbing)
 	if climbing:
 		_climb()
 	else:
@@ -164,6 +165,21 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 
 
+var _through_hatches := false
+
+
+## На лестнице герой пролезает сквозь люки в обе стороны; слез — люки снова держат.
+func _pass_hatches(value: bool) -> void:
+	if value == _through_hatches:
+		return
+	_through_hatches = value
+	for hatch in get_tree().get_nodes_in_group("hatch"):
+		if value:
+			add_collision_exception_with(hatch)
+		else:
+			remove_collision_exception_with(hatch)
+
+
 ## Стоит ли герой на верхней грани top_y между x1 и x2 (в мировых координатах): так рушащиеся плиты
 ## и вагонетка узнают, что на них встали.
 func stands_on(x1: float, x2: float, top_y: float) -> bool:
@@ -205,11 +221,14 @@ func _climb_out() -> void:
 		velocity.y = 0.0
 
 
-func _solid_at(point: Vector2) -> bool:
+func _solid_at(point: Vector2, skip_hatches := false) -> bool:
 	var query := PhysicsPointQueryParameters2D.new()
 	query.position = point
 	query.exclude = [get_rid()]
-	return not get_world_2d().direct_space_state.intersect_point(query, 1).is_empty()
+	for hit in get_world_2d().direct_space_state.intersect_point(query, 4):
+		if not (skip_hatches and hit.collider.is_in_group("hatch")):
+			return true
+	return false
 
 
 func _ladder_below() -> Node:
@@ -225,7 +244,7 @@ func _find_ladder_below() -> Node:
 		var top: float = node.global_position.y
 		# Ловим лестницу с запасом: игрок редко встаёт вплотную к краю площадки.
 		if absf(global_position.y - top) < 6.0 and absf(global_position.x - node.global_position.x) < LADDER_REACH \
-				and not _solid_at(Vector2(node.global_position.x, top + 3.0)):
+				and not _solid_at(Vector2(node.global_position.x, top + 3.0), true):
 			return node
 	return null
 

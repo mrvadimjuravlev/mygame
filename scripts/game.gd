@@ -37,7 +37,7 @@ const LEVELS := [
 ## Локации по порядку: id, название (ключ перевода), уровни. Пустой список — «Скоро».
 const WORLDS := [
 	{"id": "pyramid", "name": "Пирамида", "levels": LEVELS},
-	{"id": "dungeon", "name": "Подземелье", "levels": ["res://levels/dungeon_01.tscn", "res://levels/dungeon_02.tscn", "res://levels/dungeon_03.tscn", "res://levels/dungeon_04.tscn", "res://levels/dungeon_05.tscn", "res://levels/dungeon_06.tscn"]},
+	{"id": "dungeon", "name": "Подземелье", "levels": ["res://levels/dungeon_01.tscn", "res://levels/dungeon_02.tscn", "res://levels/dungeon_03.tscn", "res://levels/dungeon_04.tscn", "res://levels/dungeon_05.tscn", "res://levels/dungeon_06.tscn", "res://levels/dungeon_07.tscn", "res://levels/dungeon_08.tscn", "res://levels/dungeon_09.tscn", "res://levels/dungeon_10.tscn", "res://levels/dungeon_11.tscn", "res://levels/dungeon_12.tscn", "res://levels/dungeon_13.tscn"]},
 	{"id": "castle", "name": "Замок", "levels": ["res://levels/castle_01.tscn", "res://levels/castle_02.tscn"]},
 	{"id": "temple", "name": "Затонувший храм", "levels": ["res://levels/temple_01.tscn", "res://levels/temple_02.tscn"]},
 	{"id": "ice", "name": "Ледяные пещеры", "levels": []},

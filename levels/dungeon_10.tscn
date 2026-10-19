@@ -1,0 +1,491 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_ssiuq"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_mxxp1"]
+[ext_resource type="Script" path="res://scripts/glyphs.gd" id="3_m08xo"]
+[ext_resource type="Script" path="res://scripts/portal.gd" id="4_wtobu"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="5_3qqyu"]
+[ext_resource type="Script" path="res://scripts/key_item.gd" id="6_nj2qc"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="7_2pbqi"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="8_u53pf"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="9_f2dki"]
+
+[node name="Dungeon10" type="Node2D"]
+script = ExtResource("1_ssiuq")
+level_number = 10
+slogan = "Залы знаков"
+hints = PackedStringArray("Выход — в зале солнца. У каждого зала свой знак на стене.", "Знак над дверью-порталом — это знак зала, куда она ведёт.", "Глаз → птица (там ключ) → анх → волна → солнце.")
+tutorial_button = ""
+level_width = 3440.0
+level_height = 360.0
+fall_limit = 420.0
+restart_on_fall = false
+view_width = 640.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+shade = Color(0, 0, 0, 0)
+hero_lamp = 0.55
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 3440, 0, 3440, 360, 0, 360)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 60, 0, 60)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 280, 640, 280, 640, 360, 0, 360)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 360, 0, 360)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 360, 624, 360)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(640, 0, 700, 0, 700, 360, 640, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(640, 0, 700, 0, 700, 360, 640, 360)
+
+[node name="Emblem_eye" type="Node2D" parent="."]
+position = Vector2(290, 76)
+scale = Vector2(3, 3)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("eye")
+
+[node name="Portal_eye_bird" type="Area2D" parent="."]
+position = Vector2(180, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(1720, 280)
+room_left = 1400.0
+room_right = 2040.0
+color = Color(0.290196, 0.560784, 0.905882, 1)
+
+[node name="Sign_eye_bird" type="Node2D" parent="."]
+position = Vector2(170, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("bird")
+
+[node name="Portal_eye_ankh" type="Area2D" parent="."]
+position = Vector2(460, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(1020, 280)
+room_left = 700.0
+room_right = 1340.0
+color = Color(0.309804, 0.819608, 0.545098, 1)
+
+[node name="Sign_eye_ankh" type="Node2D" parent="."]
+position = Vector2(450, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("ankh")
+
+[node name="Torch80_190" type="Area2D" parent="."]
+position = Vector2(80, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Torch560_190" type="Area2D" parent="."]
+position = Vector2(560, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Back2" type="Polygon2D" parent="."]
+color = Color(0.85, 1, 0.85, 1)
+polygon = PackedVector2Array(700, 0, 1340, 0, 1340, 360, 700, 360)
+
+[node name="Solid14" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(700, 0, 1340, 0, 1340, 60, 700, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid14"]
+polygon = PackedVector2Array(700, 0, 1340, 0, 1340, 60, 700, 60)
+
+[node name="Solid15" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(700, 280, 1340, 280, 1340, 360, 700, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid15"]
+polygon = PackedVector2Array(700, 280, 1340, 280, 1340, 360, 700, 360)
+
+[node name="Solid16" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(700, 0, 716, 0, 716, 360, 700, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid16"]
+polygon = PackedVector2Array(700, 0, 716, 0, 716, 360, 700, 360)
+
+[node name="Solid17" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(1324, 0, 1340, 0, 1340, 360, 1324, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid17"]
+polygon = PackedVector2Array(1324, 0, 1340, 0, 1340, 360, 1324, 360)
+
+[node name="Solid18" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(1340, 0, 1400, 0, 1400, 360, 1340, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid18"]
+polygon = PackedVector2Array(1340, 0, 1400, 0, 1400, 360, 1340, 360)
+
+[node name="Emblem_ankh" type="Node2D" parent="."]
+position = Vector2(990, 76)
+scale = Vector2(3, 3)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("ankh")
+
+[node name="Portal_ankh_eye" type="Area2D" parent="."]
+position = Vector2(880, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(320, 280)
+room_left = 0.0
+room_right = 640.0
+color = Color(0.478431, 0.360784, 1, 1)
+
+[node name="Sign_ankh_eye" type="Node2D" parent="."]
+position = Vector2(870, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("eye")
+
+[node name="Portal_ankh_wave" type="Area2D" parent="."]
+position = Vector2(1160, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(2420, 280)
+room_left = 2100.0
+room_right = 2740.0
+color = Color(0.247059, 0.776471, 0.839216, 1)
+
+[node name="Sign_ankh_wave" type="Node2D" parent="."]
+position = Vector2(1150, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("wave")
+
+[node name="Torch780_190" type="Area2D" parent="."]
+position = Vector2(780, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Torch1260_190" type="Area2D" parent="."]
+position = Vector2(1260, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Back3" type="Polygon2D" parent="."]
+color = Color(0.85, 0.9, 1.1, 1)
+polygon = PackedVector2Array(1400, 0, 2040, 0, 2040, 360, 1400, 360)
+
+[node name="Solid27" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(1400, 0, 2040, 0, 2040, 60, 1400, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid27"]
+polygon = PackedVector2Array(1400, 0, 2040, 0, 2040, 60, 1400, 60)
+
+[node name="Solid28" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(1400, 280, 2040, 280, 2040, 360, 1400, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid28"]
+polygon = PackedVector2Array(1400, 280, 2040, 280, 2040, 360, 1400, 360)
+
+[node name="Solid29" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(1400, 0, 1416, 0, 1416, 360, 1400, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid29"]
+polygon = PackedVector2Array(1400, 0, 1416, 0, 1416, 360, 1400, 360)
+
+[node name="Solid30" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2024, 0, 2040, 0, 2040, 360, 2024, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid30"]
+polygon = PackedVector2Array(2024, 0, 2040, 0, 2040, 360, 2024, 360)
+
+[node name="Solid31" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2040, 0, 2100, 0, 2100, 360, 2040, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid31"]
+polygon = PackedVector2Array(2040, 0, 2100, 0, 2100, 360, 2040, 360)
+
+[node name="Emblem_bird" type="Node2D" parent="."]
+position = Vector2(1690, 76)
+scale = Vector2(3, 3)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("bird")
+
+[node name="Portal_bird_eye" type="Area2D" parent="."]
+position = Vector2(1580, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(320, 280)
+room_left = 0.0
+room_right = 640.0
+color = Color(0.478431, 0.360784, 1, 1)
+
+[node name="Sign_bird_eye" type="Node2D" parent="."]
+position = Vector2(1570, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("eye")
+
+[node name="Portal_bird_ankh" type="Area2D" parent="."]
+position = Vector2(1860, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(1020, 280)
+room_left = 700.0
+room_right = 1340.0
+color = Color(0.309804, 0.819608, 0.545098, 1)
+
+[node name="Sign_bird_ankh" type="Node2D" parent="."]
+position = Vector2(1850, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("ankh")
+
+[node name="Torch1480_190" type="Area2D" parent="."]
+position = Vector2(1480, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Torch1960_190" type="Area2D" parent="."]
+position = Vector2(1960, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Back4" type="Polygon2D" parent="."]
+color = Color(0.8, 1, 1.1, 1)
+polygon = PackedVector2Array(2100, 0, 2740, 0, 2740, 360, 2100, 360)
+
+[node name="Solid40" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2100, 0, 2740, 0, 2740, 60, 2100, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid40"]
+polygon = PackedVector2Array(2100, 0, 2740, 0, 2740, 60, 2100, 60)
+
+[node name="Solid41" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2100, 280, 2740, 280, 2740, 360, 2100, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid41"]
+polygon = PackedVector2Array(2100, 280, 2740, 280, 2740, 360, 2100, 360)
+
+[node name="Solid42" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2100, 0, 2116, 0, 2116, 360, 2100, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid42"]
+polygon = PackedVector2Array(2100, 0, 2116, 0, 2116, 360, 2100, 360)
+
+[node name="Solid43" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2724, 0, 2740, 0, 2740, 360, 2724, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid43"]
+polygon = PackedVector2Array(2724, 0, 2740, 0, 2740, 360, 2724, 360)
+
+[node name="Solid44" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2740, 0, 2800, 0, 2800, 360, 2740, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid44"]
+polygon = PackedVector2Array(2740, 0, 2800, 0, 2800, 360, 2740, 360)
+
+[node name="Emblem_wave" type="Node2D" parent="."]
+position = Vector2(2390, 76)
+scale = Vector2(3, 3)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("wave")
+
+[node name="Portal_wave_ankh" type="Area2D" parent="."]
+position = Vector2(2280, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(1020, 280)
+room_left = 700.0
+room_right = 1340.0
+color = Color(0.309804, 0.819608, 0.545098, 1)
+
+[node name="Sign_wave_ankh" type="Node2D" parent="."]
+position = Vector2(2270, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("ankh")
+
+[node name="Portal_wave_sun" type="Area2D" parent="."]
+position = Vector2(2560, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(3120, 280)
+room_left = 2800.0
+room_right = 3440.0
+color = Color(0.94902, 0.756863, 0.305882, 1)
+
+[node name="Sign_wave_sun" type="Node2D" parent="."]
+position = Vector2(2550, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("sun")
+
+[node name="Torch2180_190" type="Area2D" parent="."]
+position = Vector2(2180, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Torch2660_190" type="Area2D" parent="."]
+position = Vector2(2660, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Back5" type="Polygon2D" parent="."]
+color = Color(1.15, 1, 0.75, 1)
+polygon = PackedVector2Array(2800, 0, 3440, 0, 3440, 360, 2800, 360)
+
+[node name="Solid53" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2800, 0, 3440, 0, 3440, 60, 2800, 60)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid53"]
+polygon = PackedVector2Array(2800, 0, 3440, 0, 3440, 60, 2800, 60)
+
+[node name="Solid54" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2800, 280, 3440, 280, 3440, 360, 2800, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid54"]
+polygon = PackedVector2Array(2800, 280, 3440, 280, 3440, 360, 2800, 360)
+
+[node name="Solid55" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(2800, 0, 2816, 0, 2816, 360, 2800, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid55"]
+polygon = PackedVector2Array(2800, 0, 2816, 0, 2816, 360, 2800, 360)
+
+[node name="Solid56" type="StaticBody2D" parent="."]
+script = ExtResource("2_mxxp1")
+polygon = PackedVector2Array(3424, 0, 3440, 0, 3440, 360, 3424, 360)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid56"]
+polygon = PackedVector2Array(3424, 0, 3440, 0, 3440, 360, 3424, 360)
+
+[node name="Emblem_sun" type="Node2D" parent="."]
+position = Vector2(3090, 76)
+scale = Vector2(3, 3)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("sun")
+
+[node name="Portal_sun_wave" type="Area2D" parent="."]
+position = Vector2(2980, 280)
+script = ExtResource("4_wtobu")
+destination = Vector2(2420, 280)
+room_left = 2100.0
+room_right = 2740.0
+color = Color(0.247059, 0.776471, 0.839216, 1)
+
+[node name="Sign_sun_wave" type="Node2D" parent="."]
+position = Vector2(2970, 196)
+script = ExtResource("3_m08xo")
+columns = 1
+signs = PackedStringArray("wave")
+
+[node name="Torch2880_190" type="Area2D" parent="."]
+position = Vector2(2880, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Torch3360_190" type="Area2D" parent="."]
+position = Vector2(3360, 190)
+script = ExtResource("5_3qqyu")
+start_lit = true
+
+[node name="Key" type="Area2D" parent="."]
+position = Vector2(1980, 280)
+script = ExtResource("6_nj2qc")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(3360, 280)
+script = ExtResource("7_2pbqi")
+start_open = false
+needs_key = true
+upside_down = false
+trap = false
+
+[node name="Prop64" type="Node2D" parent="."]
+position = Vector2(2200, 280)
+script = ExtResource("8_u53pf")
+kind = "bones"
+length = 0.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Prop65" type="Node2D" parent="."]
+position = Vector2(1290, 280)
+script = ExtResource("8_u53pf")
+kind = "urn"
+length = 0.0
+color = Color(0.309804, 0.819608, 0.545098, 1)
+
+[node name="Prop66" type="Node2D" parent="."]
+position = Vector2(320, 60)
+script = ExtResource("8_u53pf")
+kind = "chain"
+length = 30.0
+color = Color(0.541176, 0.168627, 0.168627, 1)
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(320, 280)
+script = ExtResource("9_f2dki")

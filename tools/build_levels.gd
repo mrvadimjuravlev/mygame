@@ -53,6 +53,13 @@ func _initialize() -> void:
 	_dungeon_04()
 	_dungeon_05()
 	_dungeon_06()
+	_dungeon_07()
+	_dungeon_08()
+	_dungeon_09()
+	_dungeon_10()
+	_dungeon_11()
+	_dungeon_12()
+	_dungeon_13()
 	_castle_01()
 	_castle_02()
 	_temple_01()
@@ -1196,6 +1203,278 @@ func _dungeon_06() -> void:
 	_decor([[70, 220], [380, 100], [600, 190]], [[200, 80, 3, ["eye", "ankh", "sun", "reed", "bird", "wave"]], [540, 100, 2, ["wave", "eye", "sun", "ankh"]]], true)
 	_hero(50, 280)
 	_save_as("res://levels/dungeon_06.tscn")
+
+
+## Узел под parent (не под корнем уровня): так «Та же комната» прячет и показывает свои странности.
+func _add_in(parent: Node, node_name: String, node: Node, script: String, pos: Vector2) -> Node:
+	node.name = node_name
+	if script != "":
+		node.set_script(load("res://scripts/" + script))
+	if node is Node2D:
+		node.position = pos
+	parent.add_child(node)
+	node.owner = _root
+	return node
+
+
+func _prop_in(parent: Node, node_name: String, kind: String, pos: Vector2, length := 0.0, color := Color("8a2b2b")) -> Node:
+	var prop := _add_in(parent, node_name, Node2D.new(), "prop.gd", pos)
+	prop.kind = kind
+	prop.length = length
+	prop.color = color
+	return prop
+
+
+func _dungeon_07() -> void:
+	_begin_world("dungeon", 7, "Та же комната", ["Обе двери ведут в эту же комнату. Запомни, какая она.", "Заметил что-то странное — иди назад, в левую дверь. Всё как было — вперёд, в правую.", "Четыре верные двери подряд — и четвёртая выведет. Странности: кувшин, урна, знаки, кости, цепь, паутина."])
+	_room()
+	_box(0, 280, 640, 360)       # пол
+	_decor([[150, 190], [490, 190]], [], true)
+	var room := _add("LoopRoom", Node2D.new(), "loop_room.gd", Vector2.ZERO)
+	var back := _add_in(room, "DoorBack", Area2D.new(), "loop_door.gd", Vector2(60, 280))
+	back.back = true
+	_add_in(room, "DoorForward", Area2D.new(), "loop_door.gd", Vector2(580, 280))
+	# Странности: Odd* появляется вместо Normal* (если пара есть).
+	_prop_in(room, "OddVase", "vase", Vector2(420, 280))
+	_prop_in(room, "NormalUrn", "urn", Vector2(140, 280), 0.0, Color("8a2b2b"))
+	_prop_in(room, "OddUrn", "urn", Vector2(140, 280), 0.0, Color("4a8fe7"))
+	_prop_in(room, "NormalBones", "bones", Vector2(230, 280))
+	_add_in(room, "OddBones", Node2D.new(), "", Vector2.ZERO)
+	_prop_in(room, "NormalChain", "chain", Vector2(260, 60), 60.0)
+	_prop_in(room, "OddChain", "chain", Vector2(260, 60), 120.0)
+	_prop_in(room, "OddWeb", "web", Vector2(16, 60), 40.0)
+	var signs := [["eye", "ankh", "sun", "reed"], ["eye", "ankh", "bird", "reed"]]
+	for k in 2:
+		var panel := _add_in(room, ["NormalGlyphs", "OddGlyphs"][k], Node2D.new(), "glyphs.gd", Vector2(470, 120))
+		panel.columns = 2
+		panel.signs = PackedStringArray(signs[k])
+	_prop("chain", Vector2(400, 60), 50.0)
+	_hero(320, 280)
+	_save_as("res://levels/dungeon_07.tscn")
+
+
+func _dungeon_08() -> void:
+	_begin_world("dungeon", 8, "Пятнашки", ["Комнаты — это плиты. Плиту рядом с пустым местом можно сдвинуть пальцем.", "Нужен путь: два прохода наверху, потом комната с дырой в полу, под ней — комната с выходом вправо.", "Сдвигай плиты по кругу, как в пятнашках. Плиту, в которой стоит герой, не сдвинуть."])
+	_root.restart_on_fall = true
+	_back(640)
+	_box(0, 0, 640, 60)          # потолок
+	_box(0, 0, 16, 360)
+	_box(624, 0, 640, 360)
+	# Слева уступ на уровне верхнего ряда (с люком над лестницей) и пол внизу.
+	_box(16, 168, 25, 180)
+	var hatch := _add("Hatch", StaticBody2D.new(), "hatch.gd", Vector2(25, 168))
+	hatch.size = Vector2(30, 12)
+	_box(55, 168, 80, 180)
+	var ladder := _add("Ladder", Area2D.new(), "ladder.gd", Vector2(40, 168))
+	ladder.length = 120.0
+	ladder.start_unrolled = true
+	_box(16, 288, 80, 360)
+	_box(560, 288, 624, 360)     # пол справа, с выходом
+	_pit(80, 560)
+	var grid := _add("Grid", Node2D.new(), "slide_grid.gd", Vector2(80, 60))
+	grid.layout = PackedStringArray(["D", "H", "C", "H", "", "X"])
+	_exit(600, 288, true)
+	_decor([[40, 120], [592, 200]], [], true)
+	_hero(40, 168)
+	_save_as("res://levels/dungeon_08.tscn")
+
+
+# --- Лабиринты: этажи с люками, лестницы, перегородки ---------------------
+
+## Большой зал-лабиринт: фон, потолок, стены, пол. Камера ездит за героем.
+func _maze_hall(width: float, height: float) -> void:
+	_root.level_width = width
+	_root.level_height = height
+	_root.fall_limit = height + 80.0
+	var back := Polygon2D.new()
+	back.color = BACK
+	back.polygon = PackedVector2Array([Vector2(0, 0), Vector2(width, 0), Vector2(width, height), Vector2(0, height)])
+	_add("Back", back, "", Vector2.ZERO)
+	_box(0, 0, width, 40)              # потолок
+	_box(0, 0, 16, height)
+	_box(width - 16, 0, width, height)
+	_box(16, height - 80, width - 16, height)   # нижний этаж: пол над кнопками
+
+
+## Этаж толщиной 16 от x1 до x2 с люками над лестницами (середины люков — hatches).
+func _maze_floor(y: float, x1: float, x2: float, hatches: Array) -> void:
+	var x := x1
+	for h in hatches:
+		_box(x, y, h - 15.0, y + 16.0)
+		var hatch := _add("Hatch%d" % _root.get_child_count(), StaticBody2D.new(), "hatch.gd", Vector2(h - 15.0, y))
+		hatch.size = Vector2(30, 16)
+		x = h + 15.0
+	_box(x, y, x2, y + 16.0)
+
+
+## Лестница от люка на высоте top вниз на length.
+func _maze_ladder(x: float, top: float, length: float) -> void:
+	var ladder := _add("Ladder%d" % _root.get_child_count(), Area2D.new(), "ladder.gd", Vector2(x, top))
+	ladder.length = length
+	ladder.start_unrolled = true
+
+
+## Перегородка между этажами.
+func _maze_wall(x: float, y1: float, y2: float) -> void:
+	_box(x, y1, x + 16.0, y2)
+
+
+func _dungeon_09() -> void:
+	_begin_world("dungeon", 9, "Лабиринт", ["Ключ и выход в разных концах лабиринта.", "Люки в полу — это лестницы: с них можно спуститься кнопкой действия.", "Ключ на самом верху справа. Вниз — по лестницам справа, дальше всех от стены."])
+	_maze_hall(1280, 720)
+	# Этажи: 640 — низ, 470, 300, 130 — верх. Лестницы между ними по 170.
+	_maze_floor(470, 16, 1264, [60, 214, 774, 1150])
+	_maze_floor(300, 16, 1264, [434, 1014])
+	_maze_floor(130, 16, 1264, [150, 600, 874])
+	for l in [[60, 470], [214, 470], [774, 470], [1150, 470], [434, 300], [1014, 300], [150, 130], [600, 130], [874, 130]]:
+		_maze_ladder(l[0], l[1], 170.0)
+	_maze_wall(600, 486, 640)    # низ: левая половина отрезана от правой
+	_maze_wall(500, 316, 470)
+	_maze_wall(900, 316, 470)
+	_maze_wall(700, 146, 300)
+	_add("Key", Area2D.new(), "key_item.gd", Vector2(1220, 130))
+	var exit := _exit(1220, 640)
+	exit.needs_key = true
+	_decor([[120, 580], [480, 580], [700, 580], [1100, 580], [300, 410], [640, 410], [1000, 410], [1200, 410], [80, 240], [560, 240], [800, 240], [1150, 240], [300, 80], [700, 80], [1100, 80]],
+			[[330, 560, 2, ["eye", "ankh", "sun", "reed"]], [820, 380, 2, ["wave", "eye", "bird", "sun"]], [260, 200, 2, ["ankh", "reed", "eye", "wave"]]], true)
+	for x in [380, 1000]:
+		_prop("chain", Vector2(x, 40), 50.0)
+	_prop("bones", Vector2(980, 300), 0)
+	_prop("bones", Vector2(560, 640), 0)
+	_prop("web", Vector2(16, 40), 40)
+	_hero(110, 640)
+	_save_as("res://levels/dungeon_09.tscn")
+
+
+func _dungeon_10() -> void:
+	_begin_world("dungeon", 10, "Залы знаков", ["Выход — в зале солнца. У каждого зала свой знак на стене.", "Знак над дверью-порталом — это знак зала, куда она ведёт.", "Глаз → птица (там ключ) → анх → волна → солнце."])
+	# Пять залов в ряд, каждый со своим знаком и оттенком; между ними сплошной камень.
+	var halls := [["eye", Color(1, 1, 1)], ["ankh", Color(0.85, 1.0, 0.85)], ["bird", Color(0.85, 0.9, 1.1)], ["wave", Color(0.8, 1.0, 1.1)], ["sun", Color(1.15, 1.0, 0.75)]]
+	var doors := {"eye": ["bird", "ankh"], "ankh": ["eye", "wave"], "bird": ["eye", "ankh"], "wave": ["ankh", "sun"], "sun": ["wave"]}
+	var colors := {"eye": Color("7a5cff"), "ankh": Color("4fd18b"), "bird": Color("4a8fe7"), "wave": Color("3fc6d6"), "sun": Color("f2c14e")}
+	var width := 700.0 * halls.size() - 60.0
+	_root.level_width = width
+	_root.view_width = 640
+	_back(width)
+	var offset := {}
+	for i in halls.size():
+		offset[halls[i][0]] = 700.0 * i
+	for i in halls.size():
+		var sym: String = halls[i][0]
+		var x0: float = offset[sym]
+		if i > 0:
+			var tint := Polygon2D.new()
+			tint.color = halls[i][1]
+			tint.polygon = PackedVector2Array([Vector2(x0, 0), Vector2(x0 + 640, 0), Vector2(x0 + 640, 360), Vector2(x0, 360)])
+			_add("Back%d" % (i + 1), tint, "", Vector2.ZERO)
+		_box(x0, 0, x0 + 640, 60)
+		_box(x0, 280, x0 + 640, 360)
+		_box(x0, 0, x0 + 16, 360)
+		_box(x0 + 624, 0, x0 + 640, 360)
+		if i < halls.size() - 1:
+			_box(x0 + 640, 0, x0 + 700, 360)
+		# Знак зала крупно на стене.
+		var emblem := _add("Emblem_" + sym, Node2D.new(), "glyphs.gd", Vector2(x0 + 290, 76))
+		emblem.columns = 1
+		emblem.signs = PackedStringArray([sym])
+		emblem.scale = Vector2(3, 3)
+		var list: Array = doors[sym]
+		for k in list.size():
+			var to: String = list[k]
+			var dx: float = x0 + [180.0, 460.0][k]
+			var portal := _add("Portal_%s_%s" % [sym, to], Area2D.new(), "portal.gd", Vector2(dx, 280))
+			portal.destination = Vector2(offset[to] + 320, 280)
+			portal.room_left = offset[to]
+			portal.room_right = offset[to] + 640
+			portal.color = colors[to]
+			var mark := _add("Sign_%s_%s" % [sym, to], Node2D.new(), "glyphs.gd", Vector2(dx - 10, 196))
+			mark.columns = 1
+			mark.signs = PackedStringArray([to])
+		_decor([[x0 + 80, 190], [x0 + 560, 190]], [], true)
+	_add("Key", Area2D.new(), "key_item.gd", Vector2(offset["bird"] + 580, 280))
+	var exit := _exit(offset["sun"] + 560, 280)
+	exit.needs_key = true
+	_prop("bones", Vector2(offset["wave"] + 100, 280), 0)
+	_prop("urn", Vector2(offset["ankh"] + 590, 280), 0, Color("4fd18b"))
+	_prop("chain", Vector2(offset["eye"] + 320, 60), 30)
+	_hero(320, 280)
+	_save_as("res://levels/dungeon_10.tscn")
+
+
+func _dungeon_11() -> void:
+	_begin_world("dungeon", 11, "Сквозняк", ["Из выхода тянет воздухом. Пыль летит туда, где выход.", "Смотри, куда плывут пылинки, и иди за ними.", "Первая лестница вниз — справа, у дальней стены. Дальше — за пылью влево."])
+	_maze_hall(1280, 720)
+	_root.shade = Color(0.08, 0.08, 0.12)
+	_root.hero_lamp = 0.7
+	_maze_floor(130, 16, 1264, [300, 700, 1100])
+	_maze_floor(300, 16, 1264, [150, 520, 980])
+	_maze_floor(470, 16, 1264, [400, 820])
+	for l in [[300, 130], [700, 130], [1100, 130], [150, 300], [520, 300], [980, 300], [400, 470], [820, 470]]:
+		_maze_ladder(l[0], l[1], 170.0)
+	_maze_wall(420, 146, 300)
+	_maze_wall(850, 146, 300)
+	_maze_wall(650, 316, 470)
+	_maze_wall(1050, 316, 470)
+	_maze_wall(600, 486, 640)
+	_maze_wall(1000, 486, 640)
+	_exit(900, 640, true)
+	var draft := _add("Draft", Node2D.new(), "draft.gd", Vector2.ZERO)
+	draft.path = PackedVector2Array([Vector2(40, 130), Vector2(1100, 130), Vector2(1100, 300), Vector2(980, 300), Vector2(980, 470), Vector2(820, 470), Vector2(820, 640), Vector2(900, 640)])
+	_decor([], [[200, 560, 2, ["eye", "ankh", "sun", "reed"]], [760, 220, 2, ["wave", "eye", "bird", "sun"]]], false)
+	_prop("bones", Vector2(300, 640), 0)
+	_prop("bones", Vector2(560, 470), 0)
+	_prop("web", Vector2(16, 40), 40)
+	for x in [500, 1180]:
+		_prop("chain", Vector2(x, 40), 50.0)
+	_hero(60, 130)
+	_save_as("res://levels/dungeon_11.tscn")
+
+
+func _dungeon_12() -> void:
+	_begin_world("dungeon", 12, "Красное и синее", ["Рычаг меняет, какие стены стоят: красные или синие.", "Каждый рычаг переключает все стены сразу. Дёргай, когда цветная стена загораживает путь.", "Рычаги по очереди: внизу, на втором этаже, на третьем и наверху. Выход наверху слева."])
+	_maze_hall(640, 720)
+	_maze_floor(470, 16, 624, [560])
+	_maze_floor(300, 16, 624, [80])
+	_maze_floor(130, 16, 624, [560])
+	_maze_ladder(560, 470, 170.0)
+	_maze_ladder(80, 300, 170.0)
+	_maze_ladder(560, 130, 170.0)
+	var switch := _add("Switch", Node.new(), "wall_switch.gd", Vector2.ZERO)
+	for w in [["red", 300, 486, 154], ["blue", 320, 316, 154], ["red", 350, 146, 154], ["blue", 300, 40, 90], ["blue", 140, 486, 154], ["red", 450, 316, 154]]:
+		var wall := _add("Wall%d" % _root.get_child_count(), StaticBody2D.new(), "toggle_wall.gd", Vector2(w[1], w[2]))
+		wall.color = w[0]
+		wall.size = Vector2(16, w[3])
+	for l in [[200, 640], [400, 470], [200, 300], [500, 130]]:
+		var lever := _lever("Lever%d" % _root.get_child_count(), Vector2(l[0], l[1]), [switch])
+		lever.one_shot = false
+	_exit(60, 130, true)
+	_decor([[100, 580], [520, 410], [300, 240], [420, 80]], [], true)
+	_hero(60, 640)
+	_save_as("res://levels/dungeon_12.tscn")
+
+
+func _dungeon_13() -> void:
+	_begin_world("dungeon", 13, "Метки мелом", ["Лабиринт большой и запутанный. Коснись стены пальцем — останется метка мелом.", "Ставь метку у каждой лестницы, по которой уже прошёл. Коснись метки ещё раз — сотрёшь.", "Наверх по лестницам слева, по верхнему этажу почти до конца вправо, дальше вниз."])
+	_maze_hall(1920, 720)
+	_root.shade = Color(0.14, 0.14, 0.2)
+	_root.hero_lamp = 0.9
+	_maze_floor(130, 16, 1904, [300, 800, 1100, 1600])
+	_maze_floor(300, 16, 1904, [450, 950, 1450, 1750])
+	_maze_floor(470, 16, 1904, [200, 700, 1250, 1700])
+	for l in [[300, 130], [800, 130], [1100, 130], [1600, 130], [450, 300], [950, 300], [1450, 300], [1750, 300], [200, 470], [700, 470], [1250, 470], [1700, 470]]:
+		_maze_ladder(l[0], l[1], 170.0)
+	for w in [[700, 146, 300], [1300, 146, 300], [600, 316, 470], [1100, 316, 470], [1600, 316, 470], [450, 486, 640], [950, 486, 640], [1450, 486, 640]]:
+		_maze_wall(w[0], w[1], w[2])
+	_exit(1850, 640, true)
+	_add("Chalk", Node2D.new(), "chalk_marks.gd", Vector2.ZERO)
+	# Одинаковые факелы и знаки по всему лабиринту: по ним не сориентироваться.
+	var torches := []
+	for x in [200, 900, 1600]:
+		for y in [80, 240, 410, 580]:
+			torches.append([x + (y % 3) * 10, y])
+	_decor(torches, [], true)
+	_hero(60, 640)
+	_save_as("res://levels/dungeon_13.tscn")
 
 
 func _castle_01() -> void:

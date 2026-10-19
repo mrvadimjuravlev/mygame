@@ -489,6 +489,13 @@ func _run_worlds() -> void:
 		["res://levels/dungeon_04.tscn", _solve_dungeon_04],
 		["res://levels/dungeon_05.tscn", _solve_dungeon_05],
 		["res://levels/dungeon_06.tscn", _solve_dungeon_06],
+		["res://levels/dungeon_07.tscn", _solve_dungeon_07],
+		["res://levels/dungeon_08.tscn", _solve_dungeon_08],
+		["res://levels/dungeon_09.tscn", _solve_dungeon_09],
+		["res://levels/dungeon_10.tscn", _solve_dungeon_10],
+		["res://levels/dungeon_11.tscn", _solve_dungeon_11],
+		["res://levels/dungeon_12.tscn", _solve_dungeon_12],
+		["res://levels/dungeon_13.tscn", _solve_dungeon_13],
 		["res://levels/castle_01.tscn", _solve_castle_01],
 		["res://levels/castle_02.tscn", _solve_castle_02],
 		["res://levels/temple_01.tscn", _solve_temple_01],
@@ -845,6 +852,115 @@ func _solve_dungeon_06() -> void:
 	print("  название: ", lv.hud()._slogan.text)
 	await _frames(60)
 	await _walk_to(590.0)
+
+
+func _solve_dungeon_07() -> void:
+	var room: Node = current_scene.get_node("LoopRoom")
+	# Странность — назад, всё как было — вперёд, пока не выйдем.
+	var path := current_scene.scene_file_path
+	for k in 20:
+		if current_scene.scene_file_path != path:
+			return
+		var back: bool = room.anomaly != ""
+		print("  комната ", room.stage, ": ", room.anomaly if back else "как было")
+		await _walk_to(60.0 if back else 580.0)
+		_press("action")
+		await _frames(60)
+		if current_scene.scene_file_path != path:
+			return
+		await _until(func() -> bool: return not _hero().frozen)
+
+
+func _solve_dungeon_08() -> void:
+	var grid: Node2D = current_scene.get_node("Grid")
+	# Решение найдено перебором: какие места сдвигать по очереди.
+	for i in [1, 0, 3, 4, 5, 2, 1, 0, 3]:
+		await _tap(grid.global_position + grid._cell_pos(i) + Vector2(80, 60))
+		await _frames(25)
+	print("  плиты: ", grid.kinds())
+	await _walk_to(250.0)
+	await _walk_to(450.0)
+	await _walk_to(530.0)  # в дыру
+	await _until(func() -> bool: return _hero().is_on_floor() and _hero().global_position.y > 280.0)
+	await _walk_to(600.0)
+
+
+## Лестница: вверх (-1) или вниз (1) до площадки.
+func _ladder(direction: float) -> void:
+	var action := "jump" if direction < 0 else "action"
+	var y0 := _hero().global_position.y
+	for i in 900:
+		var h := _hero()
+		if not h or h._dead:
+			return
+		if absf(h.global_position.y - y0) > 100.0 and h.is_on_floor() and not h.climbing:
+			break
+		if direction > 0 and not h.climbing:
+			_press(action)
+			await _frames(3)
+			continue
+		Input.action_press(action)
+		await physics_frame
+	Input.action_release(action)
+	await _frames(5)
+
+
+func _solve_dungeon_09() -> void:
+	for step in [[214.0, -1], [434.0, -1], [600.0, -1], [1220.0, 0], [874.0, 1], [1014.0, 1], [1150.0, 1], [1220.0, 0]]:
+		await _walk_far(step[0])
+		if step[1] != 0:
+			await _ladder(step[1])
+		print("  у ", step[0], ": ", _hero().global_position if _hero() else "?", " ключ ", _hero().has_key if _hero() else false)
+
+
+## Дойти до x длинным путём (у _walk_to предел в пять секунд ходьбы).
+func _walk_far(x: float) -> void:
+	for i in 6:
+		if not _hero() or absf(_hero().global_position.x - x) < 3.0:
+			return
+		await _walk_to(x)
+
+
+func _solve_dungeon_10() -> void:
+	# Глаз → птица (ключ) → анх → волна → солнце.
+	for step in [[180.0, true], [1980.0, false], [1860.0, true], [1160.0, true], [2560.0, true], [3360.0, false]]:
+		await _walk_far(step[0])
+		if step[1]:
+			_press("action")
+			await _frames(10)
+		print("  ", _hero().global_position if _hero() else "?", " ключ ", _hero().has_key if _hero() else false)
+
+
+func _solve_dungeon_11() -> void:
+	for step in [[1100.0, 1], [980.0, 1], [820.0, 1], [900.0, 0]]:
+		await _walk_far(step[0])
+		if step[1] != 0:
+			await _ladder(step[1])
+		print("  ", _hero().global_position if _hero() else "?")
+
+
+func _solve_dungeon_12() -> void:
+	# Рычаг — лестница — рычаг — лестница…
+	for step in [[200.0, 0, true], [560.0, -1, false], [400.0, 0, true], [80.0, -1, false], [200.0, 0, true], [560.0, -1, false], [500.0, 0, true], [60.0, 0, false]]:
+		await _walk_far(step[0])
+		if step[2]:
+			_press("action")
+			await _frames(10)
+		if step[1] != 0:
+			await _ladder(step[1])
+		var sw := current_scene.get_node_or_null("Switch")
+		print("  ", _hero().global_position if _hero() else "?", " красные: ", sw.red_on if sw else "-")
+
+
+func _solve_dungeon_13() -> void:
+	var chalk: Node = current_scene.get_node("Chalk")
+	await _tap(Vector2(200, 600))
+	print("  меток: ", chalk.marks.size())
+	for step in [[200.0, -1], [450.0, -1], [300.0, -1], [1600.0, 1], [1750.0, 1], [1700.0, 1], [1850.0, 0]]:
+		await _walk_far(step[0])
+		if step[1] != 0:
+			await _ladder(step[1])
+		print("  ", _hero().global_position if _hero() else "?")
 
 
 func _solve_castle_01() -> void:

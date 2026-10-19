@@ -1,0 +1,256 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_vx2pt"]
+[ext_resource type="Script" path="res://scripts/solid.gd" id="2_5al3u"]
+[ext_resource type="Script" path="res://scripts/hatch.gd" id="3_x7ha8"]
+[ext_resource type="Script" path="res://scripts/ladder.gd" id="4_tns7c"]
+[ext_resource type="Script" path="res://scripts/wall_switch.gd" id="5_wjn6b"]
+[ext_resource type="Script" path="res://scripts/toggle_wall.gd" id="6_nsp1c"]
+[ext_resource type="Script" path="res://scripts/lever.gd" id="7_fplvy"]
+[ext_resource type="Script" path="res://scripts/exit_door.gd" id="8_bnoaj"]
+[ext_resource type="Script" path="res://scripts/torch.gd" id="9_dndrd"]
+[ext_resource type="Script" path="res://scripts/hero.gd" id="10_6r8qq"]
+
+[node name="Dungeon12" type="Node2D"]
+script = ExtResource("1_vx2pt")
+level_number = 12
+slogan = "Красное и синее"
+hints = PackedStringArray("Рычаг меняет, какие стены стоят: красные или синие.", "Каждый рычаг переключает все стены сразу. Дёргай, когда цветная стена загораживает путь.", "Рычаги по очереди: внизу, на втором этаже, на третьем и наверху. Выход наверху слева.")
+tutorial_button = ""
+level_width = 640.0
+level_height = 720.0
+fall_limit = 800.0
+restart_on_fall = false
+view_width = 0.0
+view_left = 0.0
+hero_grab = false
+wrap_horizontal = false
+dark = true
+dust = true
+theme = "dungeon"
+shade = Color(0, 0, 0, 0)
+hero_lamp = 0.55
+
+[node name="Back" type="Polygon2D" parent="."]
+color = Color(0.164706, 0.121569, 0.0901961, 1)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 720, 0, 720)
+
+[node name="Solid1" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 40, 0, 40)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid1"]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 40, 0, 40)
+
+[node name="Solid2" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 720, 0, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid2"]
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 720, 0, 720)
+
+[node name="Solid3" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 720, 624, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid3"]
+polygon = PackedVector2Array(624, 0, 640, 0, 640, 720, 624, 720)
+
+[node name="Solid4" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(16, 640, 624, 640, 624, 720, 16, 720)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid4"]
+polygon = PackedVector2Array(16, 640, 624, 640, 624, 720, 16, 720)
+
+[node name="Solid5" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(16, 470, 545, 470, 545, 486, 16, 486)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid5"]
+polygon = PackedVector2Array(16, 470, 545, 470, 545, 486, 16, 486)
+
+[node name="Hatch6" type="StaticBody2D" parent="."]
+position = Vector2(545, 470)
+script = ExtResource("3_x7ha8")
+size = Vector2(30, 16)
+
+[node name="Solid7" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(575, 470, 624, 470, 624, 486, 575, 486)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid7"]
+polygon = PackedVector2Array(575, 470, 624, 470, 624, 486, 575, 486)
+
+[node name="Solid8" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(16, 300, 65, 300, 65, 316, 16, 316)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid8"]
+polygon = PackedVector2Array(16, 300, 65, 300, 65, 316, 16, 316)
+
+[node name="Hatch9" type="StaticBody2D" parent="."]
+position = Vector2(65, 300)
+script = ExtResource("3_x7ha8")
+size = Vector2(30, 16)
+
+[node name="Solid10" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(95, 300, 624, 300, 624, 316, 95, 316)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid10"]
+polygon = PackedVector2Array(95, 300, 624, 300, 624, 316, 95, 316)
+
+[node name="Solid11" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(16, 130, 545, 130, 545, 146, 16, 146)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid11"]
+polygon = PackedVector2Array(16, 130, 545, 130, 545, 146, 16, 146)
+
+[node name="Hatch12" type="StaticBody2D" parent="."]
+position = Vector2(545, 130)
+script = ExtResource("3_x7ha8")
+size = Vector2(30, 16)
+
+[node name="Solid13" type="StaticBody2D" parent="."]
+script = ExtResource("2_5al3u")
+polygon = PackedVector2Array(575, 130, 624, 130, 624, 146, 575, 146)
+color = Color(0.541176, 0.415686, 0.262745, 1)
+
+[node name="Shape" type="CollisionPolygon2D" parent="Solid13"]
+polygon = PackedVector2Array(575, 130, 624, 130, 624, 146, 575, 146)
+
+[node name="Ladder14" type="Area2D" parent="."]
+position = Vector2(560, 470)
+script = ExtResource("4_tns7c")
+length = 170.0
+rolled_length = 24.0
+start_unrolled = true
+
+[node name="Ladder15" type="Area2D" parent="."]
+position = Vector2(80, 300)
+script = ExtResource("4_tns7c")
+length = 170.0
+rolled_length = 24.0
+start_unrolled = true
+
+[node name="Ladder16" type="Area2D" parent="."]
+position = Vector2(560, 130)
+script = ExtResource("4_tns7c")
+length = 170.0
+rolled_length = 24.0
+start_unrolled = true
+
+[node name="Switch" type="Node" parent="."]
+script = ExtResource("5_wjn6b")
+red_on = true
+
+[node name="Wall18" type="StaticBody2D" parent="."]
+position = Vector2(300, 486)
+script = ExtResource("6_nsp1c")
+size = Vector2(16, 154)
+color = "red"
+
+[node name="Wall19" type="StaticBody2D" parent="."]
+position = Vector2(320, 316)
+script = ExtResource("6_nsp1c")
+size = Vector2(16, 154)
+color = "blue"
+
+[node name="Wall20" type="StaticBody2D" parent="."]
+position = Vector2(350, 146)
+script = ExtResource("6_nsp1c")
+size = Vector2(16, 154)
+color = "red"
+
+[node name="Wall21" type="StaticBody2D" parent="."]
+position = Vector2(300, 40)
+script = ExtResource("6_nsp1c")
+size = Vector2(16, 90)
+color = "blue"
+
+[node name="Wall22" type="StaticBody2D" parent="."]
+position = Vector2(140, 486)
+script = ExtResource("6_nsp1c")
+size = Vector2(16, 154)
+color = "blue"
+
+[node name="Wall23" type="StaticBody2D" parent="."]
+position = Vector2(450, 316)
+script = ExtResource("6_nsp1c")
+size = Vector2(16, 154)
+color = "red"
+
+[node name="Lever24" type="Area2D" parent="."]
+position = Vector2(200, 640)
+script = ExtResource("7_fplvy")
+targets = Array[NodePath]([NodePath("../Switch")])
+effect = &"activate"
+one_shot = false
+style = "lever"
+
+[node name="Lever25" type="Area2D" parent="."]
+position = Vector2(400, 470)
+script = ExtResource("7_fplvy")
+targets = Array[NodePath]([NodePath("../Switch")])
+effect = &"activate"
+one_shot = false
+style = "lever"
+
+[node name="Lever26" type="Area2D" parent="."]
+position = Vector2(200, 300)
+script = ExtResource("7_fplvy")
+targets = Array[NodePath]([NodePath("../Switch")])
+effect = &"activate"
+one_shot = false
+style = "lever"
+
+[node name="Lever27" type="Area2D" parent="."]
+position = Vector2(500, 130)
+script = ExtResource("7_fplvy")
+targets = Array[NodePath]([NodePath("../Switch")])
+effect = &"activate"
+one_shot = false
+style = "lever"
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(60, 130)
+script = ExtResource("8_bnoaj")
+start_open = true
+needs_key = false
+upside_down = false
+trap = false
+
+[node name="Torch100_580" type="Area2D" parent="."]
+position = Vector2(100, 580)
+script = ExtResource("9_dndrd")
+start_lit = true
+
+[node name="Torch520_410" type="Area2D" parent="."]
+position = Vector2(520, 410)
+script = ExtResource("9_dndrd")
+start_lit = true
+
+[node name="Torch300_240" type="Area2D" parent="."]
+position = Vector2(300, 240)
+script = ExtResource("9_dndrd")
+start_lit = true
+
+[node name="Torch420_80" type="Area2D" parent="."]
+position = Vector2(420, 80)
+script = ExtResource("9_dndrd")
+start_lit = true
+
+[node name="Hero" type="CharacterBody2D" parent="."]
+position = Vector2(60, 640)
+script = ExtResource("10_6r8qq")
